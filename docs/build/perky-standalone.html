@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  .markdown-body {
+    --base-size-4: 0.25rem;
+    --base-size-8: 0.5rem;
+    --base-size-16: 1rem;
+    --base-size-24: 1.5rem;
+    --base-size-40: 2.5rem;
+    --base-text-weight-normal: 400;
+    --base-text-weight-medium: 500;
+    --base-text-weight-semibold: 600;
+    --fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    --fgColor-accent: Highlight;
+  }
+  @media (prefers-color-scheme: dark) {
+    .markdown-body, [data-theme="dark"] {
+      /* dark */
+      color-scheme: dark;
+      --focus-outlineColor: #1f6feb;
+      --fgColor-default: #f0f6fc;
+      --fgColor-muted: #9198a1;
+      --fgColor-accent: #4493f8;
+      --fgColor-success: #3fb950;
+      --fgColor-attention: #d29922;
+      --fgColor-danger: #f85149;
+      --fgColor-done: #ab7df8;
+      --bgColor-default: #0d1117;
+      --bgColor-muted: #151b23;
+      --bgColor-neutral-muted: #656c7633;
+      --bgColor-attention-muted: #bb800926;
+      --borderColor-default: #3d444d;
+      --borderColor-muted: #3d444db3;
+      --borderColor-neutral-muted: #3d444db3;
+      --borderColor-accent-emphasis: #1f6feb;
+      --borderColor-success-emphasis: #238636;
+      --borderColor-attention-emphasis: #9e6a03;
+      --borderColor-danger-emphasis: #da3633;
+      --borderColor-done-emphasis: #8957e5;
+      --color-prettylights-syntax-comment: #9198a1;
+      --color-prettylights-syntax-constant: #79c0ff;
+      --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
+      --color-prettylights-syntax-entity: #d2a8ff;
+      --color-prettylights-syntax-storage-modifier-import: #f0f6fc;
+      --color-prettylights-syntax-entity-tag: #7ee787;
+      --color-prettylights-syntax-keyword: #ff7b72;
+      --color-prettylights-syntax-string: #a5d6ff;
+      --color-prettylights-syntax-variable: #ffa657;
+      --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
+      --color-prettylights-syntax-brackethighlighter-angle: #9198a1;
+      --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
+      --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
+      --color-prettylights-syntax-carriage-return-text: #f0f6fc;
+      --color-prettylights-syntax-carriage-return-bg: #b62324;
+      --color-prettylights-syntax-string-regexp: #7ee787;
+      --color-prettylights-syntax-markup-list: #f2cc60;
+      --color-prettylights-syntax-markup-heading: #1f6feb;
+      --color-prettylights-syntax-markup-italic: #f0f6fc;
+      --color-prettylights-syntax-markup-bold: #f0f6fc;
+      --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
+      --color-prettylights-syntax-markup-deleted-bg: #67060c;
+      --color-prettylights-syntax-markup-inserted-text: #aff5b4;
+      --color-prettylights-syntax-markup-inserted-bg: #033a16;
+      --color-prettylights-syntax-markup-changed-text: #ffdfb6;
+      --color-prettylights-syntax-markup-changed-bg: #5a1e02;
+      --color-prettylights-syntax-markup-ignored-text: #f0f6fc;
+      --color-prettylights-syntax-markup-ignored-bg: #1158c7;
+      --color-prettylights-syntax-meta-diff-range: #d2a8ff;
+      --color-prettylights-syntax-sublimelinter-gutter-mark: #3d444d;
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    .markdown-body, [data-theme="light"] {
+      /* light */
+      color-scheme: light;
+      --focus-outlineColor: #0969da;
+      --fgColor-default: #1f2328;
+      --fgColor-muted: #59636e;
+      --fgColor-accent: #0969da;
+      --fgColor-success: #1a7f37;
+      --fgColor-attention: #9a6700;
+      --fgColor-danger: #d1242f;
+      --fgColor-done: #8250df;
+      --bgColor-default: #ffffff;
+      --bgColor-muted: #f6f8fa;
+      --bgColor-neutral-muted: #818b981f;
+      --bgColor-attention-muted: #fff8c5;
+      --borderColor-default: #d1d9e0;
+      --borderColor-muted: #d1d9e0b3;
+      --borderColor-neutral-muted: #d1d9e0b3;
+      --borderColor-accent-emphasis: #0969da;
+      --borderColor-success-emphasis: #1a7f37;
+      --borderColor-attention-emphasis: #9a6700;
+      --borderColor-danger-emphasis: #cf222e;
+      --borderColor-done-emphasis: #8250df;
+      --color-prettylights-syntax-comment: #59636e;
+      --color-prettylights-syntax-constant: #0550ae;
+      --color-prettylights-syntax-constant-other-reference-link: #0a3069;
+      --color-prettylights-syntax-entity: #6639ba;
+      --color-prettylights-syntax-storage-modifier-import: #1f2328;
+      --color-prettylights-syntax-entity-tag: #0550ae;
+      --color-prettylights-syntax-keyword: #cf222e;
+      --color-prettylights-syntax-string: #0a3069;
+      --color-prettylights-syntax-variable: #953800;
+      --color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
+      --color-prettylights-syntax-brackethighlighter-angle: #59636e;
+      --color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
+      --color-prettylights-syntax-invalid-illegal-bg: #82071e;
+      --color-prettylights-syntax-carriage-return-text: #f6f8fa;
+      --color-prettylights-syntax-carriage-return-bg: #cf222e;
+      --color-prettylights-syntax-string-regexp: #116329;
+      --color-prettylights-syntax-markup-list: #3b2300;
+      --color-prettylights-syntax-markup-heading: #0550ae;
+      --color-prettylights-syntax-markup-italic: #1f2328;
+      --color-prettylights-syntax-markup-bold: #1f2328;
+      --color-prettylights-syntax-markup-deleted-text: #82071e;
+      --color-prettylights-syntax-markup-deleted-bg: #ffebe9;
+      --color-prettylights-syntax-markup-inserted-text: #116329;
+      --color-prettylights-syntax-markup-inserted-bg: #dafbe1;
+      --color-prettylights-syntax-markup-changed-text: #953800;
+      --color-prettylights-syntax-markup-changed-bg: #ffd8b5;
+      --color-prettylights-syntax-markup-ignored-text: #d1d9e0;
+      --color-prettylights-syntax-markup-ignored-bg: #0550ae;
+      --color-prettylights-syntax-meta-diff-range: #8250df;
+      --color-prettylights-syntax-sublimelinter-gutter-mark: #818b98;
+    }
+  }
+
+  .markdown-body {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    margin: 0;
+    color: var(--fgColor-default);
+    background-color: var(--bgColor-default);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 16px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+
+  .markdown-body .octicon {
+    display: inline-block;
+    fill: currentColor;
+    vertical-align: text-bottom;
+  }
+
+  .markdown-body h1:hover .anchor .octicon-link:before,
+  .markdown-body h2:hover .anchor .octicon-link:before,
+  .markdown-body h3:hover .anchor .octicon-link:before,
+  .markdown-body h4:hover .anchor .octicon-link:before,
+  .markdown-body h5:hover .anchor .octicon-link:before,
+  .markdown-body h6:hover .anchor .octicon-link:before {
+    width: 16px;
+    height: 16px;
+    content: ' ';
+    display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  }
+
+  .markdown-body details,
+  .markdown-body figcaption,
+  .markdown-body figure {
+    display: block;
+  }
+
+  .markdown-body summary {
+    display: list-item;
+  }
+
+  .markdown-body [hidden] {
+    display: none !important;
+  }
+
+  .markdown-body a {
+    background-color: transparent;
+    color: var(--fgColor-accent);
+    text-decoration: none;
+  }
+
+  .markdown-body abbr[title] {
+    border-bottom: none;
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+
+  .markdown-body b,
+  .markdown-body strong {
+    font-weight: var(--base-text-weight-semibold, 600);
+  }
+
+  .markdown-body dfn {
+    font-style: italic;
+  }
+
+  .markdown-body h1 {
+    margin: .67em 0;
+    font-weight: var(--base-text-weight-semibold, 600);
+    padding-bottom: .3em;
+    font-size: 2em;
+    border-bottom: 1px solid var(--borderColor-muted);
+  }
+
+  .markdown-body mark {
+    background-color: var(--bgColor-attention-muted);
+    color: var(--fgColor-default);
+  }
+
+  .markdown-body small {
+    font-size: 90%;
+  }
+
+  .markdown-body sub,
+  .markdown-body sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  .markdown-body sub {
+    bottom: -0.25em;
+  }
+
+  .markdown-body sup {
+    top: -0.5em;
+  }
+
+  .markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+  }
+
+  .markdown-body code,
+  .markdown-body kbd,
+  .markdown-body pre,
+  .markdown-body samp {
+    font-family: monospace;
+    font-size: 1em;
+  }
+
+  .markdown-body figure {
+    margin: 1em var(--base-size-40);
+  }
+
+  .markdown-body hr {
+    box-sizing: content-box;
+    overflow: hidden;
+    background: transparent;
+    border-bottom: 1px solid var(--borderColor-muted);
+    height: .25em;
+    padding: 0;
+    margin: var(--base-size-24) 0;
+    background-color: var(--borderColor-default);
+    border: 0;
+  }
+
+  .markdown-body input {
+    font: inherit;
+    margin: 0;
+    overflow: visible;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .markdown-body [type=button],
+  .markdown-body [type=reset],
+  .markdown-body [type=submit] {
+    -webkit-appearance: button;
+    appearance: button;
+  }
+
+  .markdown-body [type=checkbox],
+  .markdown-body [type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .markdown-body [type=number]::-webkit-inner-spin-button,
+  .markdown-body [type=number]::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  .markdown-body [type=search]::-webkit-search-cancel-button,
+  .markdown-body [type=search]::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .markdown-body ::-webkit-input-placeholder {
+    color: inherit;
+    opacity: .54;
+  }
+
+  .markdown-body ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    appearance: button;
+    font: inherit;
+  }
+
+  .markdown-body a:hover {
+    text-decoration: underline;
+  }
+
+  .markdown-body ::placeholder {
+    color: var(--fgColor-muted);
+    opacity: 1;
+  }
+
+  .markdown-body hr::before {
+    display: table;
+    content: "";
+  }
+
+  .markdown-body hr::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+
+  .markdown-body table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    font-variant: tabular-nums;
+  }
+
+  .markdown-body td,
+  .markdown-body th {
+    padding: 0;
+  }
+
+  .markdown-body details summary {
+    cursor: pointer;
+  }
+
+  .markdown-body a:focus,
+  .markdown-body [role=button]:focus,
+  .markdown-body input[type=radio]:focus,
+  .markdown-body input[type=checkbox]:focus {
+    outline: 2px solid var(--focus-outlineColor);
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+
+  .markdown-body a:focus:not(:focus-visible),
+  .markdown-body [role=button]:focus:not(:focus-visible),
+  .markdown-body input[type=radio]:focus:not(:focus-visible),
+  .markdown-body input[type=checkbox]:focus:not(:focus-visible) {
+    outline: solid 1px transparent;
+  }
+
+  .markdown-body a:focus-visible,
+  .markdown-body [role=button]:focus-visible,
+  .markdown-body input[type=radio]:focus-visible,
+  .markdown-body input[type=checkbox]:focus-visible {
+    outline: 2px solid var(--focus-outlineColor);
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+
+  .markdown-body a:not([class]):focus,
+  .markdown-body a:not([class]):focus-visible,
+  .markdown-body input[type=radio]:focus,
+  .markdown-body input[type=radio]:focus-visible,
+  .markdown-body input[type=checkbox]:focus,
+  .markdown-body input[type=checkbox]:focus-visible {
+    outline-offset: 0;
+  }
+
+  .markdown-body kbd {
+    display: inline-block;
+    padding: var(--base-size-4);
+    font: 11px var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);
+    line-height: 10px;
+    color: var(--fgColor-default);
+    vertical-align: middle;
+    background-color: var(--bgColor-muted);
+    border: solid 1px var(--borderColor-neutral-muted);
+    border-bottom-color: var(--borderColor-neutral-muted);
+    border-radius: 6px;
+    box-shadow: inset 0 -1px 0 var(--borderColor-neutral-muted);
+  }
+
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4,
+  .markdown-body h5,
+  .markdown-body h6 {
+    margin-top: var(--base-size-24);
+    margin-bottom: var(--base-size-16);
+    font-weight: var(--base-text-weight-semibold, 600);
+    line-height: 1.25;
+  }
+
+  .markdown-body h2 {
+    font-weight: var(--base-text-weight-semibold, 600);
+    padding-bottom: .3em;
+    font-size: 1.5em;
+    border-bottom: 1px solid var(--borderColor-muted);
+  }
+
+  .markdown-body h3 {
+    font-weight: var(--base-text-weight-semibold, 600);
+    font-size: 1.25em;
+  }
+
+  .markdown-body h4 {
+    font-weight: var(--base-text-weight-semibold, 600);
+    font-size: 1em;
+  }
+
+  .markdown-body h5 {
+    font-weight: var(--base-text-weight-semibold, 600);
+    font-size: .875em;
+  }
+
+  .markdown-body h6 {
+    font-weight: var(--base-text-weight-semibold, 600);
+    font-size: .85em;
+    color: var(--fgColor-muted);
+  }
+
+  .markdown-body p {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .markdown-body blockquote {
+    margin: 0;
+    padding: 0 1em;
+    color: var(--fgColor-muted);
+    border-left: .25em solid var(--borderColor-default);
+  }
+
+  .markdown-body ul,
+  .markdown-body ol {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2em;
+  }
+
+  .markdown-body ol ol,
+  .markdown-body ul ol {
+    list-style-type: lower-roman;
+  }
+
+  .markdown-body ul ul ol,
+  .markdown-body ul ol ol,
+  .markdown-body ol ul ol,
+  .markdown-body ol ol ol {
+    list-style-type: lower-alpha;
+  }
+
+  .markdown-body dd {
+    margin-left: 0;
+  }
+
+  .markdown-body tt,
+  .markdown-body code,
+  .markdown-body samp {
+    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);
+    font-size: 12px;
+  }
+
+  .markdown-body pre {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);
+    font-size: 12px;
+    word-wrap: normal;
+  }
+
+  .markdown-body .octicon {
+    display: inline-block;
+    overflow: visible !important;
+    vertical-align: text-bottom;
+    fill: currentColor;
+  }
+
+  .markdown-body input::-webkit-outer-spin-button,
+  .markdown-body input::-webkit-inner-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+
+  .markdown-body .mr-2 {
+    margin-right: var(--base-size-8, 8px) !important;
+  }
+
+  .markdown-body::before {
+    display: table;
+    content: "";
+  }
+
+  .markdown-body::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+
+  .markdown-body>*:first-child {
+    margin-top: 0 !important;
+  }
+
+  .markdown-body>*:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .markdown-body a:not([href]) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .markdown-body .absent {
+    color: var(--fgColor-danger);
+  }
+
+  .markdown-body .anchor {
+    float: left;
+    padding-right: var(--base-size-4);
+    margin-left: -20px;
+    line-height: 1;
+  }
+
+  .markdown-body .anchor:focus {
+    outline: none;
+  }
+
+  .markdown-body p,
+  .markdown-body blockquote,
+  .markdown-body ul,
+  .markdown-body ol,
+  .markdown-body dl,
+  .markdown-body table,
+  .markdown-body pre,
+  .markdown-body details {
+    margin-top: 0;
+    margin-bottom: var(--base-size-16);
+  }
+
+  .markdown-body blockquote>:first-child {
+    margin-top: 0;
+  }
+
+  .markdown-body blockquote>:last-child {
+    margin-bottom: 0;
+  }
+
+  .markdown-body h1 .octicon-link,
+  .markdown-body h2 .octicon-link,
+  .markdown-body h3 .octicon-link,
+  .markdown-body h4 .octicon-link,
+  .markdown-body h5 .octicon-link,
+  .markdown-body h6 .octicon-link {
+    color: var(--fgColor-default);
+    vertical-align: middle;
+    visibility: hidden;
+  }
+
+  .markdown-body h1:hover .anchor,
+  .markdown-body h2:hover .anchor,
+  .markdown-body h3:hover .anchor,
+  .markdown-body h4:hover .anchor,
+  .markdown-body h5:hover .anchor,
+  .markdown-body h6:hover .anchor {
+    text-decoration: none;
+  }
+
+  .markdown-body h1:hover .anchor .octicon-link,
+  .markdown-body h2:hover .anchor .octicon-link,
+  .markdown-body h3:hover .anchor .octicon-link,
+  .markdown-body h4:hover .anchor .octicon-link,
+  .markdown-body h5:hover .anchor .octicon-link,
+  .markdown-body h6:hover .anchor .octicon-link {
+    visibility: visible;
+  }
+
+  .markdown-body h1 tt,
+  .markdown-body h1 code,
+  .markdown-body h2 tt,
+  .markdown-body h2 code,
+  .markdown-body h3 tt,
+  .markdown-body h3 code,
+  .markdown-body h4 tt,
+  .markdown-body h4 code,
+  .markdown-body h5 tt,
+  .markdown-body h5 code,
+  .markdown-body h6 tt,
+  .markdown-body h6 code {
+    padding: 0 .2em;
+    font-size: inherit;
+  }
+
+  .markdown-body summary h1,
+  .markdown-body summary h2,
+  .markdown-body summary h3,
+  .markdown-body summary h4,
+  .markdown-body summary h5,
+  .markdown-body summary h6 {
+    display: inline-block;
+  }
+
+  .markdown-body summary h1 .anchor,
+  .markdown-body summary h2 .anchor,
+  .markdown-body summary h3 .anchor,
+  .markdown-body summary h4 .anchor,
+  .markdown-body summary h5 .anchor,
+  .markdown-body summary h6 .anchor {
+    margin-left: -40px;
+  }
+
+  .markdown-body summary h1,
+  .markdown-body summary h2 {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .markdown-body ul.no-list,
+  .markdown-body ol.no-list {
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .markdown-body ol[type="a s"] {
+    list-style-type: lower-alpha;
+  }
+
+  .markdown-body ol[type="A s"] {
+    list-style-type: upper-alpha;
+  }
+
+  .markdown-body ol[type="i s"] {
+    list-style-type: lower-roman;
+  }
+
+  .markdown-body ol[type="I s"] {
+    list-style-type: upper-roman;
+  }
+
+  .markdown-body ol[type="1"] {
+    list-style-type: decimal;
+  }
+
+  .markdown-body div>ol:not([type]) {
+    list-style-type: decimal;
+  }
+
+  .markdown-body ul ul,
+  .markdown-body ul ol,
+  .markdown-body ol ol,
+  .markdown-body ol ul {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .markdown-body li>p {
+    margin-top: var(--base-size-16);
+  }
+
+  .markdown-body li+li {
+    margin-top: .25em;
+  }
+
+  .markdown-body dl {
+    padding: 0;
+  }
+
+  .markdown-body dl dt {
+    padding: 0;
+    margin-top: var(--base-size-16);
+    font-size: 1em;
+    font-style: italic;
+    font-weight: var(--base-text-weight-semibold, 600);
+  }
+
+  .markdown-body dl dd {
+    padding: 0 var(--base-size-16);
+    margin-bottom: var(--base-size-16);
+  }
+
+  .markdown-body table th {
+    font-weight: var(--base-text-weight-semibold, 600);
+  }
+
+  .markdown-body table th,
+  .markdown-body table td {
+    padding: 6px 13px;
+    border: 1px solid var(--borderColor-default);
+  }
+
+  .markdown-body table td>:last-child {
+    margin-bottom: 0;
+  }
+
+  .markdown-body table tr {
+    background-color: var(--bgColor-default);
+    border-top: 1px solid var(--borderColor-muted);
+  }
+
+  .markdown-body table tr:nth-child(2n) {
+    background-color: var(--bgColor-muted);
+  }
+
+  .markdown-body table img {
+    background-color: transparent;
+  }
+
+  .markdown-body img[align=right] {
+    padding-left: 20px;
+  }
+
+  .markdown-body img[align=left] {
+    padding-right: 20px;
+  }
+
+  .markdown-body .emoji {
+    max-width: none;
+    vertical-align: text-top;
+    background-color: transparent;
+  }
+
+  .markdown-body span.frame {
+    display: block;
+    overflow: hidden;
+  }
+
+  .markdown-body span.frame>span {
+    display: block;
+    float: left;
+    width: auto;
+    padding: 7px;
+    margin: 13px 0 0;
+    overflow: hidden;
+    border: 1px solid var(--borderColor-default);
+  }
+
+  .markdown-body span.frame span img {
+    display: block;
+    float: left;
+  }
+
+  .markdown-body span.frame span span {
+    display: block;
+    padding: 5px 0 0;
+    clear: both;
+    color: var(--fgColor-default);
+  }
+
+  .markdown-body span.align-center {
+    display: block;
+    overflow: hidden;
+    clear: both;
+  }
+
+  .markdown-body span.align-center>span {
+    display: block;
+    margin: 13px auto 0;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .markdown-body span.align-center span img {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .markdown-body span.align-right {
+    display: block;
+    overflow: hidden;
+    clear: both;
+  }
+
+  .markdown-body span.align-right>span {
+    display: block;
+    margin: 13px 0 0;
+    overflow: hidden;
+    text-align: right;
+  }
+
+  .markdown-body span.align-right span img {
+    margin: 0;
+    text-align: right;
+  }
+
+  .markdown-body span.float-left {
+    display: block;
+    float: left;
+    margin-right: 13px;
+    overflow: hidden;
+  }
+
+  .markdown-body span.float-left span {
+    margin: 13px 0 0;
+  }
+
+  .markdown-body span.float-right {
+    display: block;
+    float: right;
+    margin-left: 13px;
+    overflow: hidden;
+  }
+
+  .markdown-body span.float-right>span {
+    display: block;
+    margin: 13px auto 0;
+    overflow: hidden;
+    text-align: right;
+  }
+
+  .markdown-body code,
+  .markdown-body tt {
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    white-space: break-spaces;
+    background-color: var(--bgColor-neutral-muted);
+    border-radius: 6px;
+  }
+
+  .markdown-body code br,
+  .markdown-body tt br {
+    display: none;
+  }
+
+  .markdown-body del code {
+    text-decoration: inherit;
+  }
+
+  .markdown-body samp {
+    font-size: 85%;
+  }
+
+  .markdown-body pre code {
+    font-size: 100%;
+  }
+
+  .markdown-body pre>code {
+    padding: 0;
+    margin: 0;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  .markdown-body .highlight {
+    margin-bottom: var(--base-size-16);
+  }
+
+  .markdown-body .highlight pre {
+    margin-bottom: 0;
+    word-break: normal;
+  }
+
+  .markdown-body .highlight pre,
+  .markdown-body pre {
+    padding: var(--base-size-16);
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    color: var(--fgColor-default);
+    background-color: var(--bgColor-muted);
+    border-radius: 6px;
+  }
+
+  .markdown-body pre code,
+  .markdown-body pre tt {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  .markdown-body .csv-data td,
+  .markdown-body .csv-data th {
+    padding: 5px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .markdown-body .csv-data .blob-num {
+    padding: 10px var(--base-size-8) 9px;
+    text-align: right;
+    background: var(--bgColor-default);
+    border: 0;
+  }
+
+  .markdown-body .csv-data tr {
+    border-top: 0;
+  }
+
+  .markdown-body .csv-data th {
+    font-weight: var(--base-text-weight-semibold, 600);
+    background: var(--bgColor-muted);
+    border-top: 0;
+  }
+
+  .markdown-body [data-footnote-ref]::before {
+    content: "[";
+  }
+
+  .markdown-body [data-footnote-ref]::after {
+    content: "]";
+  }
+
+  .markdown-body .footnotes {
+    font-size: 12px;
+    color: var(--fgColor-muted);
+    border-top: 1px solid var(--borderColor-default);
+  }
+
+  .markdown-body .footnotes ol {
+    padding-left: var(--base-size-16);
+  }
+
+  .markdown-body .footnotes ol ul {
+    display: inline-block;
+    padding-left: var(--base-size-16);
+    margin-top: var(--base-size-16);
+  }
+
+  .markdown-body .footnotes li {
+    position: relative;
+  }
+
+  .markdown-body .footnotes li:target::before {
+    position: absolute;
+    top: calc(var(--base-size-8)*-1);
+    right: calc(var(--base-size-8)*-1);
+    bottom: calc(var(--base-size-8)*-1);
+    left: calc(var(--base-size-24)*-1);
+    pointer-events: none;
+    content: "";
+    border: 2px solid var(--borderColor-accent-emphasis);
+    border-radius: 6px;
+  }
+
+  .markdown-body .footnotes li:target {
+    color: var(--fgColor-default);
+  }
+
+  .markdown-body .footnotes .data-footnote-backref g-emoji {
+    font-family: monospace;
+  }
+
+  .markdown-body body:has(:modal) {
+    padding-right: var(--dialog-scrollgutter) !important;
+  }
+
+  .markdown-body .pl-c {
+    color: var(--color-prettylights-syntax-comment);
+  }
+
+  .markdown-body .pl-c1,
+  .markdown-body .pl-s .pl-v {
+    color: var(--color-prettylights-syntax-constant);
+  }
+
+  .markdown-body .pl-e,
+  .markdown-body .pl-en {
+    color: var(--color-prettylights-syntax-entity);
+  }
+
+  .markdown-body .pl-smi,
+  .markdown-body .pl-s .pl-s1 {
+    color: var(--color-prettylights-syntax-storage-modifier-import);
+  }
+
+  .markdown-body .pl-ent {
+    color: var(--color-prettylights-syntax-entity-tag);
+  }
+
+  .markdown-body .pl-k {
+    color: var(--color-prettylights-syntax-keyword);
+  }
+
+  .markdown-body .pl-s,
+  .markdown-body .pl-pds,
+  .markdown-body .pl-s .pl-pse .pl-s1,
+  .markdown-body .pl-sr,
+  .markdown-body .pl-sr .pl-cce,
+  .markdown-body .pl-sr .pl-sre,
+  .markdown-body .pl-sr .pl-sra {
+    color: var(--color-prettylights-syntax-string);
+  }
+
+  .markdown-body .pl-v,
+  .markdown-body .pl-smw {
+    color: var(--color-prettylights-syntax-variable);
+  }
+
+  .markdown-body .pl-bu {
+    color: var(--color-prettylights-syntax-brackethighlighter-unmatched);
+  }
+
+  .markdown-body .pl-ii {
+    color: var(--color-prettylights-syntax-invalid-illegal-text);
+    background-color: var(--color-prettylights-syntax-invalid-illegal-bg);
+  }
+
+  .markdown-body .pl-c2 {
+    color: var(--color-prettylights-syntax-carriage-return-text);
+    background-color: var(--color-prettylights-syntax-carriage-return-bg);
+  }
+
+  .markdown-body .pl-sr .pl-cce {
+    font-weight: bold;
+    color: var(--color-prettylights-syntax-string-regexp);
+  }
+
+  .markdown-body .pl-ml {
+    color: var(--color-prettylights-syntax-markup-list);
+  }
+
+  .markdown-body .pl-mh,
+  .markdown-body .pl-mh .pl-en,
+  .markdown-body .pl-ms {
+    font-weight: bold;
+    color: var(--color-prettylights-syntax-markup-heading);
+  }
+
+  .markdown-body .pl-mi {
+    font-style: italic;
+    color: var(--color-prettylights-syntax-markup-italic);
+  }
+
+  .markdown-body .pl-mb {
+    font-weight: bold;
+    color: var(--color-prettylights-syntax-markup-bold);
+  }
+
+  .markdown-body .pl-md {
+    color: var(--color-prettylights-syntax-markup-deleted-text);
+    background-color: var(--color-prettylights-syntax-markup-deleted-bg);
+  }
+
+  .markdown-body .pl-mi1 {
+    color: var(--color-prettylights-syntax-markup-inserted-text);
+    background-color: var(--color-prettylights-syntax-markup-inserted-bg);
+  }
+
+  .markdown-body .pl-mc {
+    color: var(--color-prettylights-syntax-markup-changed-text);
+    background-color: var(--color-prettylights-syntax-markup-changed-bg);
+  }
+
+  .markdown-body .pl-mi2 {
+    color: var(--color-prettylights-syntax-markup-ignored-text);
+    background-color: var(--color-prettylights-syntax-markup-ignored-bg);
+  }
+
+  .markdown-body .pl-mdr {
+    font-weight: bold;
+    color: var(--color-prettylights-syntax-meta-diff-range);
+  }
+
+  .markdown-body .pl-ba {
+    color: var(--color-prettylights-syntax-brackethighlighter-angle);
+  }
+
+  .markdown-body .pl-sg {
+    color: var(--color-prettylights-syntax-sublimelinter-gutter-mark);
+  }
+
+  .markdown-body .pl-corl {
+    text-decoration: underline;
+    color: var(--color-prettylights-syntax-constant-other-reference-link);
+  }
+
+  .markdown-body [role=button]:focus:not(:focus-visible),
+  .markdown-body [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),
+  .markdown-body button:focus:not(:focus-visible),
+  .markdown-body summary:focus:not(:focus-visible),
+  .markdown-body a:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .markdown-body [tabindex="0"]:focus:not(:focus-visible),
+  .markdown-body details-dialog:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .markdown-body g-emoji {
+    display: inline-block;
+    min-width: 1ch;
+    font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 1em;
+    font-style: normal !important;
+    font-weight: var(--base-text-weight-normal, 400);
+    line-height: 1;
+    vertical-align: -0.075em;
+  }
+
+  .markdown-body g-emoji img {
+    width: 1em;
+    height: 1em;
+  }
+
+  .markdown-body .task-list-item {
+    list-style-type: none;
+  }
+
+  .markdown-body .task-list-item label {
+    font-weight: var(--base-text-weight-normal, 400);
+  }
+
+  .markdown-body .task-list-item.enabled label {
+    cursor: pointer;
+  }
+
+  .markdown-body .task-list-item+.task-list-item {
+    margin-top: var(--base-size-4);
+  }
+
+  .markdown-body .task-list-item .handle {
+    display: none;
+  }
+
+  .markdown-body .task-list-item-checkbox {
+    margin: 0 .2em .25em -1.4em;
+    vertical-align: middle;
+  }
+
+  .markdown-body ul:dir(rtl) .task-list-item-checkbox {
+    margin: 0 -1.6em .25em .2em;
+  }
+
+  .markdown-body ol:dir(rtl) .task-list-item-checkbox {
+    margin: 0 -1.6em .25em .2em;
+  }
+
+  .markdown-body .contains-task-list:hover .task-list-item-convert-container,
+  .markdown-body .contains-task-list:focus-within .task-list-item-convert-container {
+    display: block;
+    width: auto;
+    height: 24px;
+    overflow: visible;
+    clip: auto;
+  }
+
+  .markdown-body ::-webkit-calendar-picker-indicator {
+    filter: invert(50%);
+  }
+
+  .markdown-body .markdown-alert {
+    padding: var(--base-size-8) var(--base-size-16);
+    margin-bottom: var(--base-size-16);
+    color: inherit;
+    border-left: .25em solid var(--borderColor-default);
+  }
+
+  .markdown-body .markdown-alert>:first-child {
+    margin-top: 0;
+  }
+
+  .markdown-body .markdown-alert>:last-child {
+    margin-bottom: 0;
+  }
+
+  .markdown-body .markdown-alert .markdown-alert-title {
+    display: flex;
+    font-weight: var(--base-text-weight-medium, 500);
+    align-items: center;
+    line-height: 1;
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-note {
+    border-left-color: var(--borderColor-accent-emphasis);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {
+    color: var(--fgColor-accent);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-important {
+    border-left-color: var(--borderColor-done-emphasis);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {
+    color: var(--fgColor-done);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-warning {
+    border-left-color: var(--borderColor-attention-emphasis);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {
+    color: var(--fgColor-attention);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-tip {
+    border-left-color: var(--borderColor-success-emphasis);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {
+    color: var(--fgColor-success);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-caution {
+    border-left-color: var(--borderColor-danger-emphasis);
+  }
+
+  .markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {
+    color: var(--fgColor-danger);
+  }
+
+  .markdown-body>*:first-child>.heading-element:first-child {
+    margin-top: 0 !important;
+  }
+
+  .markdown-body .highlight pre:has(+.zeroclipboard-container) {
+    min-height: 52px;
+  }
+
+
+  </style>
+  <style>
+    .markdown-body {
+      box-sizing: border-box;
+      margin: 0 auto;
+      max-width: 980px;
+      min-width: 200px;
+      padding: 45px;
+    }
+
+    .markdown-body code, .markdown-body kbd {
+      hyphens: none;
+      overflow-wrap: normal;
+      white-space: nowrap;
+      word-break: normal;
+    }
+
+    @media (max-width: 767px) {
+      .markdown-body {
+        padding: 15px;
+      }
+    }
+  </style>
+  <title>Perky</title>
+</head>
+<body class="markdown-body">
+  <h1 id="perky--chipmunk">Perky  🐿️</h1>
+  <p>Perky is a library and command-line interface (CLI) for evaluating and optimizing keyboard layouts.</p>
+  <p>It is intended for use by designers, researchers, and enthusiasts who want a principled, data-driven method to quantitatively assess and improve the efficiency of keyboard layouts, using metrics derived from <a href="#n-gram-tables">n‑gram tables</a> and the ergonomics of the hand.</p>
+  <p>Perky's unique feature is a high-performance, parallelized, and permutation-based analysis engine that can exhaustively determine the best keyboard layouts given specific constraints.</p>
+  <h2 id="table-of-contents">Table of contents</h2>
+  <ul>
+  <li><a href="#features">Features</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#installation">Installation</a>
+  <ul>
+  <li><a href="#install-the-binary-from-cratesio">Install the binary from crates.io</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#install-the-binary-from-source">Install the binary from source</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#add-the-library-to-another-project-as-a-dependency">Add the library to another project as a dependency</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#usage">Usage</a>
+  <ul>
+  <li><a href="#introduction">Introduction</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#layout-tables">Layout tables</a>
+  <ul>
+  <li><a href="#format">Format</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#key-tables">Key tables</a>
+  <ul>
+  <li><a href="#format-1">Format</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-1">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#n-gram-tables">N-gram tables</a>
+  <ul>
+  <li><a href="#default-tables">Default tables</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#included-tables">Included tables</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#specifying-tables">Specifying tables</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#format-2">Format</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-2">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#scoring">Scoring</a>
+  <ul>
+  <li><a href="#metrics">Metrics</a>
+  <ul>
+  <li><a href="#unigram-metrics">Unigram metrics</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#bigram-metrics">Bigram metrics</a>
+  <ul>
+  <li><a href="#fsb---full-scissor-bigram">Fsb - Full Scissor Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#hsb---half-scissor-bigram">Hsb - Half Scissor Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#irb---inward-roll-bigram">Irb - Inward Roll Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#lsb---lateral-stretch-bigram">Lsb - Lateral Stretch Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#orb---outward-roll-bigram">Orb - Outward Roll Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#sfb---same-finger-bigram">Sfb - Same Finger Bigram</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#trigram-metrics">Trigram metrics</a>
+  <ul>
+  <li><a href="#alt---alternating-trigram">Alt - Alternating Trigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#one---one-handed-trigram">One - One-Handed Trigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#red---redirect-trigram">Red - Redirect Trigram</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#rol---roll-trigram">Rol - Roll Trigram</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#calculation">Calculation</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#summary-report">Summary report</a>
+  <ul>
+  <li><a href="#examples-3">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#detail-reports">Detail reports</a>
+  <ul>
+  <li><a href="#examples-4">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#permuting">Permuting</a>
+  <ul>
+  <li><a href="#metric">Metric</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#goal">Goal</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#weight">Weight</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#progress-and-metadata-reporting">Progress and metadata reporting</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-5">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#parallelization">Parallelization</a>
+  <ul>
+  <li><a href="#examples-6">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#practical-limits">Practical limits</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#truncating">Truncating</a>
+  <ul>
+  <li><a href="#examples-7">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#deduplicating">Deduplicating</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#sorting">Sorting</a>
+  <ul>
+  <li><a href="#syntax">Syntax</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-8">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#filtering">Filtering</a>
+  <ul>
+  <li><a href="#syntax-1">Syntax</a>
+  <ul>
+  <li><a href="#operators-by-precedence">Operators by precedence</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#examples-9">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  <li><a href="#selecting">Selecting</a>
+  <ul>
+  <li><a href="#syntax-2">Syntax</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-10">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#printing">Printing</a>
+  <ul>
+  <li><a href="#metadata">Metadata</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#selected-records">Selected records</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#format-3">Format</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#examples-11">Examples</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#author-and-copyright">Author and copyright</a>
+  <ul class="task-list">
+  </ul></li>
+  <li><a href="#license">License</a>
+  <ul class="task-list">
+  </ul></li>
+  </ul>
+  <h2 id="features">Features</h2>
+  <ul>
+  <li><p>🔧 Customizable input</p>
+  <p>Specify your layout, key assignments, and the n‑gram frequency data to be used for analysis. Defaults are included to get you started quickly.</p></li>
+  <li><p>⚖️ Comprehensive scoring engine</p>
+  <p>Evaluate your layout using a wide range of <a href="#metrics">metrics</a>. Scores are calculated based on digit (finger or thumb) movement and n‑gram frequency data, reflecting real-world usage patterns.</p></li>
+  <li><p>🔢 High-performance permutation engine</p>
+  <p>(Optionally) use placeholders for certain key assignments and provide the set of characters that should be assigned to those and Perky will permute all possibilities, ranking the (potentially trillions of) records according to your desired metric.</p></li>
+  <li><p>🎯 Expressive sorting, filtering, and selection</p>
+  <p>Sort records by one or more metrics (each in ascending or descending order), filter by multiple criteria using a built-in mini-language, and select a specific subset for output.</p></li>
+  <li><p>📈 Rich output</p>
+  <p>Export human-readable (and colourful) text or structured <a href="https://jsonlines.org">JSON Lines</a>, with optional metadata, details, and summaries.</p></li>
+  </ul>
+  <h2 id="installation">Installation</h2>
+  <p>Perky can run on macOS, Linux, and Windows.</p>
+  <p>To install Perky, first ensure that you have installed <a href="https://www.rust-lang.org/tools/install">Rust</a>, which includes <a href="https://doc.rust-lang.org/cargo/">Cargo</a>.</p>
+  <blockquote>
+  <p>Note: Perky requires Rust version 1.89.0 or later.</p>
+  </blockquote>
+  <p>Then choose one of the following options based on the type of installation you prefer:</p>
+  <h3 id="install-the-binary-from-cratesio">Install the binary from crates.io</h3>
+  <p>To install the binary from <a href="https://crates.io/crates/perky">crates.io</a>, follow these steps:</p>
+  <ol type="1">
+  <li><p>Install the binary to your Cargo bin directory (typically <code>$HOME/.cargo/bin</code>):</p>
+  <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> install perky</span></code></pre></div></li>
+  <li><p>(Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the <code>--help</code> argument.</p>
+  <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="at">--help</span></span></code></pre></div></li>
+  </ol>
+  <h3 id="install-the-binary-from-source">Install the binary from source</h3>
+  <p>To install the binary from source, follow these steps:</p>
+  <ol type="1">
+  <li><p>Clone the <a href="https://github.com/csmclaren/perky">official repository</a> from GitHub</p>
+  <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/csmclaren/perky.git</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> perky</span></code></pre></div></li>
+  <li><p>Build the binary, which will be placed in your target directory (typically <code>target/release/perky</code>):</p>
+  <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">--release</span></span></code></pre></div></li>
+  <li><p>(Optional) Copy the binary to your Cargo bin directory (typically <code>$HOME/.cargo/bin</code>):</p>
+  <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> target/release/perky ~/.cargo/bin/</span></code></pre></div></li>
+  <li><p>(Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the <code>--help</code> argument.</p>
+  <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="at">--help</span></span></code></pre></div></li>
+  </ol>
+  <h3 id="add-the-library-to-another-project-as-a-dependency">Add the library to another project as a dependency</h3>
+  <p>To include Perky as a library in your own Rust project, add the following to your <code>Cargo.toml</code> file:</p>
+  <div class="sourceCode" id="cb7"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependencies]</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">perky</span> <span class="op">=</span> <span class="st">&quot;0.1&quot;</span>  <span class="co"># Replace with the latest available version on crates.io</span></span></code></pre></div>
+  <p>The latest version can be found on <a href="https://crates.io/crates/perky">crates.io</a>.</p>
+  <h2 id="usage">Usage</h2>
+  <blockquote>
+  <p>Note: The test machine used to run all examples in this section is an Apple MacBook Pro, 16 inch, Nov 2023, M3 Max, 16-core, 128 GB RAM.</p>
+  </blockquote>
+  <h3 id="introduction">Introduction</h3>
+  <p>Perky is designed primarily to be run as a command-line tool.</p>
+  <p>It requires two inputs:</p>
+  <ul>
+  <li><p>A layout table (specified using <code>--layout-table</code>, or <code>-l</code>) defines the structure of a keyboard, including which digits (fingers and thumbs) are recommended for pressing each physical key.</p></li>
+  <li><p>A key table (specified using <code>--key-table</code>, or <code>-k</code>), defines the mapping of logical keys (letters, numbers, symbols, etc.) to physical keys.</p></li>
+  </ul>
+  <p>The format of these files will be explained in subsequent sections and there are a number of example files of each type in the <a href="https://github.com/csmclaren/perky">official repository</a>, but for purposes of this introductory example, here is an example file of each type:</p>
+  <ul>
+  <li><p><a href="https://github.com/csmclaren/perky/examples/docs/example.lt.json">example.lt.json</a> - A layout table in the shape of the central part of a standard <a href="https://en.wikipedia.org/wiki/Keyboard_layout">ANSI or ISO keyboard layout</a>.</p></li>
+  <li><p><a href="https://github.com/csmclaren/perky/examples/docs/example-introduction.kt.json">example-introduction.kt.json</a> - A key table corresponding to the shape of the layout table and representing a standard <a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY</a> keyboard.</p></li>
+  </ul>
+  <p>After downloading these to your working directory, you can run Perky as follows:</p>
+  <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="at">-l</span> example.lt.json <span class="at">-k</span> example-introduction.kt.json</span></code></pre></div>
+  <blockquote>
+  <p>Note: If either or both of these arguments are omitted, Perky will look for the files <code>default.lt.json</code> and/or <code>default.kt.json</code>, respectively, in your working directory.</p>
+  </blockquote>
+  <p>Given the above example files and no further arguments, Perky will produce the following output:</p>
+  <pre><code>Q W E R T Y U I O P [ ] \
+A S D F G H J K L ; &#39;
+Z X C V B N M , . /
+
+Unigram summaries:
+Lt ↑: 0, 0.000%, 0, 0.000%
+Li ↑: 796991792591, 22.365%, 796991792591, 22.365%
+Lm ↑: 700328467558, 19.653%, 700328467558, 19.653%
+Lr ↓: 300164341769, 8.423%, 300164341769, 8.423%
+Lp ↓: 294025744233, 8.251%, 294025744233, 8.251%
+Lh ↑: 2091510346151, 58.692%, 2091510346151, 58.692%
+Rt ↑: 0, 0.000%, 0, 0.000%
+Ri ↑: 689614872654, 19.352%, 689614872654, 19.352%
+Rm ↑: 288992871918, 8.110%, 288992871918, 8.110%
+Rr ↓: 417275087248, 11.710%, 417275087248, 11.710%
+Rp ↓: 76112599849, 2.136%, 76112599849, 2.136%
+Rh ↑: 1471995431669, 41.308%, 1471995431669, 41.308%
+TOTALS: 3563505777820, 3563505777820
+
+Bigram summaries:
+Fsb ↓: 29561207813, 1.075%, 76155339763, 1.809%
+Hsb ↓: 223473410253, 8.129%, 449964114055, 10.688%
+Irb ↑: 107185097537, 3.899%, 107185097537, 2.546%
+Lsb ↓: 195655811929, 7.117%, 490785251171, 11.658%
+Orb ↑: 98315980469, 3.576%, 98315980469, 2.335%
+Sfb ↓: 195686888871, 7.119%, 270316925501, 6.421%
+TOTALS: 2748955989650, 4209833679358
+
+Trigram summaries:
+Alt ↓: 547770117520, 28.921%, 547770117520, 12.191%
+One ↓: 58813867491, 3.105%, 164484663333, 3.661%
+Red ↓: 138042336404, 7.288%, 798736382372, 17.777%
+Rol ↓: 783296865779, 41.357%, 1866401805671, 41.539%
+TOTALS: 1893998506314, 4493113390239</code></pre>
+  <blockquote>
+  <p>Note: Output shown herein is rendered without colour. When run in a terminal, Perky automatically uses colour and text effects for improved readability, unless piped into another command or explicitly disabled.</p>
+  </blockquote>
+  <p>By default, Perky outputs a textual view of the keyboard and summaries of how that keyboard scored against a series of metrics, a complete description of which will be provided in subsequent sections.</p>
+  <h3 id="layout-tables">Layout tables</h3>
+  <p>A layout table defines the structure of a keyboard, including which digits (fingers and thumbs) are recommended for pressing each physical key. This mapping is critical for ergonomic evaluation. For example, it helps assess whether or not two consecutive keys are typed with the same digit, a key requires a stretch or contraction, or the total effort is well balanced across the hands.</p>
+  <h4 id="format">Format</h4>
+  <p>Layout tables are JSON objects with the following structure:</p>
+  <div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="er">...</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <p><code>data</code> is a 2-dimensional matrix:</p>
+  <ul>
+  <li><p>Each cell must contain null or a string of exactly two characters representing a digit. Null indicates the absence of a key in that position. A string defines how the key in that position would typically be pressed. The first character must be either "l" or "r", for the left or right hand, respectively. The second character must be "p", "r", "m", "i", or "t" for the pinky, ring, middle, index, or thumb digit, respectively.</p></li>
+  <li><p>The size of the matrix is 16 columns by 8 rows. Any row may contain fewer than 16 columns, in which case the trailing cells of that row are treated as if they contained <code>null</code>. Any table may contain fewer than 8 rows, in which case all cells of the trailing rows of that table are treated as if they contained <code>null</code>.</p></li>
+  </ul>
+  <p><code>version</code> must be 1.</p>
+  <h4 id="examples">Examples</h4>
+  <p>This example describes the digit assignments for the central part of a ANSI or ISO keyboard layout:</p>
+  <p><a href="https://github.com/csmclaren/perky/examples/docs/example.lt.json">example.lt.json</a></p>
+  <div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;lp&quot;</span><span class="ot">,</span> <span class="st">&quot;lr&quot;</span><span class="ot">,</span> <span class="st">&quot;lm&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;rm&quot;</span><span class="ot">,</span> <span class="st">&quot;rr&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">],</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;lp&quot;</span><span class="ot">,</span> <span class="st">&quot;lr&quot;</span><span class="ot">,</span> <span class="st">&quot;lm&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;rm&quot;</span><span class="ot">,</span> <span class="st">&quot;rr&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">],</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;lp&quot;</span><span class="ot">,</span> <span class="st">&quot;lr&quot;</span><span class="ot">,</span> <span class="st">&quot;lm&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;li&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;ri&quot;</span><span class="ot">,</span> <span class="st">&quot;rm&quot;</span><span class="ot">,</span> <span class="st">&quot;rr&quot;</span><span class="ot">,</span> <span class="st">&quot;rp&quot;</span><span class="ot">]</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <h3 id="key-tables">Key tables</h3>
+  <p>A key table defines the mapping of logical keys (letters, numbers, symbols, etc.) to physical keys. Together with the layout table, it forms the basis for ergonomic and statistical analysis of a keyboard layout. The key table identifies what is being typed and the layout table determines how it is typed. Key tables may include placeholders to allow permutation of many alternatives.</p>
+  <h4 id="format-1">Format</h4>
+  <p>Key tables are JSON objects with the following structure:</p>
+  <div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="er">...</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <p><code>data</code> is a 2-dimensional matrix.</p>
+  <ul>
+  <li><p>Each cell must contain null; a string of exactly one character; or the number 1, 2, or 3.</p>
+  <ul>
+  <li><p>Null indicates the absence of a key in that position.</p></li>
+  <li><p>A string assigns a character to that key. Characters must be ASCII, and the control characters SOH, STX, and ETX are reserved.</p></li>
+  <li><p>A number represents a <em>placeholder</em>.</p>
+  <blockquote>
+  <p>Note: The numbers 1, 2, and 3 are different from the strings "1", "2", or "3", which represent characters.</p>
+  </blockquote></li>
+  </ul></li>
+  <li><p>Placeholders of the same numeric value form a <code>region</code>. The size of a region is defined as the number of placeholders in that region. Placeholders in the same region do not need to be adjacent to one another. It is their numeric value (1, 2, or 3), not their physical location, that binds them to a region. Regions are used for permutation, which will be described in subsequent sections.</p></li>
+  <li><p>The size of the matrix is 16 columns by 8 rows. Any row may contain fewer than 16 columns, in which case the trailing cells of that row are treated as if they contained <code>null</code>. Any table may contain fewer than 8 rows, in which case all cells of the trailing rows of that table are treated as if they contained <code>null</code>.</p></li>
+  </ul>
+  <p><code>version</code> must be 1.</p>
+  <p>Perky expects the layout table and key table to have matching structures; that is, if a cell in the layout table defines a digit, the corresponding cell in the key table must not be null.</p>
+  <h4 id="examples-1">Examples</h4>
+  <p>This is an example of the central part of an ANSI or ISO keyboard layout in the standard QWERTY configuration:</p>
+  <p><a href="https://github.com/csmclaren/perky/examples/docs/example-introduction.kt.json">example-introduction.kt.json</a></p>
+  <div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Q&quot;</span><span class="ot">,</span>  <span class="st">&quot;W&quot;</span><span class="ot">,</span>  <span class="st">&quot;E&quot;</span><span class="ot">,</span>  <span class="st">&quot;R&quot;</span><span class="ot">,</span>  <span class="st">&quot;T&quot;</span><span class="ot">,</span>  <span class="st">&quot;Y&quot;</span><span class="ot">,</span>  <span class="st">&quot;U&quot;</span><span class="ot">,</span>  <span class="st">&quot;I&quot;</span><span class="ot">,</span>  <span class="st">&quot;O&quot;</span><span class="ot">,</span>  <span class="st">&quot;P&quot;</span><span class="ot">,</span>  <span class="st">&quot;[&quot;</span><span class="ot">,</span>  <span class="st">&quot;]&quot;</span><span class="ot">,</span>  <span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span><span class="ot">],</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;A&quot;</span><span class="ot">,</span>  <span class="st">&quot;S&quot;</span><span class="ot">,</span>  <span class="st">&quot;D&quot;</span><span class="ot">,</span>  <span class="st">&quot;F&quot;</span><span class="ot">,</span>  <span class="st">&quot;G&quot;</span><span class="ot">,</span>  <span class="st">&quot;H&quot;</span><span class="ot">,</span>  <span class="st">&quot;J&quot;</span><span class="ot">,</span>  <span class="st">&quot;K&quot;</span><span class="ot">,</span>  <span class="st">&quot;L&quot;</span><span class="ot">,</span>  <span class="st">&quot;;&quot;</span><span class="ot">,</span>  <span class="st">&quot;&#39;&quot;</span><span class="ot">],</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Z&quot;</span><span class="ot">,</span>  <span class="st">&quot;X&quot;</span><span class="ot">,</span>  <span class="st">&quot;C&quot;</span><span class="ot">,</span>  <span class="st">&quot;V&quot;</span><span class="ot">,</span>  <span class="st">&quot;B&quot;</span><span class="ot">,</span>  <span class="st">&quot;N&quot;</span><span class="ot">,</span>  <span class="st">&quot;M&quot;</span><span class="ot">,</span>  <span class="st">&quot;,&quot;</span><span class="ot">,</span>  <span class="st">&quot;.&quot;</span><span class="ot">,</span>  <span class="st">&quot;/&quot;</span><span class="ot">]</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <p>This is an example of the central part of an ANSI or ISO keyboard layout in the standard QWERTY configuration, where the home row has been replaced by a single permutation region of size 9:</p>
+  <p><a href="https://github.com/csmclaren/perky/examples/docs/example-permuting.kt.json">example-permuting.kt.json</a></p>
+  <div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Q&quot;</span><span class="ot">,</span>  <span class="st">&quot;W&quot;</span><span class="ot">,</span>  <span class="st">&quot;E&quot;</span><span class="ot">,</span>  <span class="st">&quot;R&quot;</span><span class="ot">,</span>  <span class="st">&quot;T&quot;</span><span class="ot">,</span>  <span class="st">&quot;Y&quot;</span><span class="ot">,</span>  <span class="st">&quot;U&quot;</span><span class="ot">,</span>  <span class="st">&quot;I&quot;</span><span class="ot">,</span>  <span class="st">&quot;O&quot;</span><span class="ot">,</span>  <span class="st">&quot;P&quot;</span><span class="ot">,</span>  <span class="st">&quot;[&quot;</span><span class="ot">,</span>  <span class="st">&quot;]&quot;</span><span class="ot">,</span>  <span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span><span class="ot">],</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span> <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>   <span class="st">&quot;;&quot;</span><span class="ot">,</span>  <span class="st">&quot;&#39;&quot;</span><span class="ot">],</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Z&quot;</span><span class="ot">,</span>  <span class="st">&quot;X&quot;</span><span class="ot">,</span>  <span class="st">&quot;C&quot;</span><span class="ot">,</span>  <span class="st">&quot;V&quot;</span><span class="ot">,</span>  <span class="st">&quot;B&quot;</span><span class="ot">,</span>  <span class="st">&quot;N&quot;</span><span class="ot">,</span>  <span class="st">&quot;M&quot;</span><span class="ot">,</span>  <span class="st">&quot;,&quot;</span><span class="ot">,</span>  <span class="st">&quot;.&quot;</span><span class="ot">,</span>  <span class="st">&quot;/&quot;</span><span class="ot">]</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <p>If one or more placeholders for a particular region are present in a key table, and Perky is given a set of possible characters for that region, Perky will permute all possible combinations of those characters in that region. This feature is explained in detail in subsequent sections.</p>
+  <h3 id="n-gram-tables">N-gram tables</h3>
+  <p>An <a href="https://en.wikipedia.org/wiki/N-gram">n‑gram</a> is a contiguous sequence of <em>n</em> characters drawn from a larger text (a "corpus").</p>
+  <p>Perky supports three kinds of n‑grams:</p>
+  <ul>
+  <li>Unigrams (or "1-grams"): one-character sequences like "E", "T", and "A".</li>
+  <li>Bigrams (or "2-grams"): two-character sequences like "TH", "HE", and "IN".</li>
+  <li>Trigrams (or "3-grams"): three-character sequences like "THE", "AND", and "ING".</li>
+  </ul>
+  <p>An n‑gram table is one or more pairs of n‑grams and the number of times that n‑gram occurred in the corpus.</p>
+  <p>Unigram tables show the relative frequency of characters in a corpus. This information can be used, for example, to assign commonly used characters to stronger or more accessible digits.</p>
+  <p>Bigram and trigram tables show the relative frequency of sequences of characters in a corpus. This information can be used, for example, to assign commonly used sequences of characters to the most ergonomic movements.</p>
+  <p>Perky uses n‑grams tables to analyze how often individual characters and sequences of characters appear in real-world usage. This allows it to score keyboard layouts based on realistic workloads.</p>
+  <h4 id="default-tables">Default tables</h4>
+  <p>By default, Perky uses n‑gram data derived from <a href="https://norvig.com/mayzner.html">Peter Norvig’s analysis of the Google Books corpus</a> and copied from <a href="https://github.com/csmclaren/charfreq-google">charfreq-google</a>. These tables are part of Perky itself, providing a high-quality and standard starting point for most analyses out-of-the-box.</p>
+  <h4 id="included-tables">Included tables</h4>
+  <p>In the <a href="https://github.com/csmclaren/perky/resources">resources</a> folder of the official repository, various n‑gram tables are included:</p>
+  <ul>
+  <li><a href="https://github.com/csmclaren/charfreq-dfko">charfreq-dfko</a></li>
+  <li><a href="https://github.com/csmclaren/charfreq-google">charfreq-google</a> (the <a href="#default-tables">default tables</a>)</li>
+  <li><a href="https://github.com/csmclaren/charfreq-linux">charfreq-linux</a></li>
+  <li><a href="https://github.com/csmclaren/charfreq-shakespeare">charfreq-shakespeare</a></li>
+  </ul>
+  <p>These are described in their respective repositories.</p>
+  <h4 id="specifying-tables">Specifying tables</h4>
+  <p>To override the default unigram, bigram, or trigram tables, specify the following arguments, respectively:</p>
+  <ul>
+  <li><code>--unigram-table &lt;FPATH&gt;</code> or <code>-u &lt;FPATH&gt;</code></li>
+  <li><code>--bigram-table &lt;FPATH&gt;</code> or <code>-b &lt;FPATH&gt;</code></li>
+  <li><code>--trigram-table &lt;FPATH&gt;</code> or <code>-t &lt;FPATH&gt;</code></li>
+  </ul>
+  <p>For example, to override all three tables to the (included) uppercase tables in charfreq-linux (representing n‑gram frequency in the Linux source code):</p>
+  <div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-introduction.kt.json <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> resources/charfreq-linux/1-grams-uc.tsv <span class="dt">\</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-b</span> resources/charfreq-linux/2-grams-uc.tsv <span class="dt">\</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-t</span> resources/charfreq-linux/3-grams-uc.tsv</span></code></pre></div>
+  <h4 id="format-2">Format</h4>
+  <p>Each n‑gram table is stored as a TSV (tab-separated values) file with one entry per line.</p>
+  <p>Each line must contain at least two columns:</p>
+  <ul>
+  <li><p>The first column must be an n‑gram, represented as a string of 1, 2, or 3 Unicode characters, depending on the kind of table. Strings may contain escape sequences as follows:</p>
+  <ul>
+  <li><code>\0</code> → NUL</li>
+  <li><code>\\</code> → <code>\</code></li>
+  <li><code>\n</code> → LF</li>
+  <li><code>\r</code> → CR</li>
+  <li><code>\t</code> → HT</li>
+  <li><code>\x##</code> → ASCII <code>##</code>, where <code>##</code> is two hexadecimal digits.</li>
+  </ul></li>
+  <li><p>The second column must be an unsigned integer (with a maximum value of 2^64 - 1) representing the number of times that n‑gram occurred in a corpus.</p></li>
+  <li><p>Any additional columns are ignored.</p></li>
+  </ul>
+  <blockquote>
+  <p>Note: Characters must be ASCII, and the control characters SOH, STX, and ETX are reserved. All other n‑grams will be ignored.</p>
+  </blockquote>
+  <h4 id="examples-2">Examples</h4>
+  <p>A unigram table containing three 1-grams and their number of occurences in the corpus:</p>
+  <pre class="tsv"><code>E   445155370175
+T   330535289102
+A   286527429118</code></pre>
+  <p>A bigram table containing three 2-grams and their number of occurences in the corpus:</p>
+  <pre class="tsv"><code>TH  100272945963
+HE  86697336727
+IN  68595215308</code></pre>
+  <p>A trigram table containing three 3-grams and their number of occurences in the corpus:</p>
+  <pre class="tsv"><code>THE 69221160871
+AND 26468697834
+ING 21289988294</code></pre>
+  <h3 id="scoring">Scoring</h3>
+  <p>Scoring is formalized by set of "metrics", each of which measure the ergonomic and statistical performance of a keyboard layout against certain quantitative criteria. Given a layout table, a key table, and one or more n‑gram tables, Perky can produce a score for each metric. These scores, represented as numerical values and percentages, can be used to compare, optimize, and iterate on keyboard layouts.</p>
+  <h4 id="metrics">Metrics</h4>
+  <p>The following tables describe the metrics used by Perky to score a keyboard layout.</p>
+  <p>Some metrics reflect effort or strain (for these, lower values are generally considered better), while others measure efficiency (for these, higher values are generally considered better). In the tables below, this is called the direction: "↓" indicates that lower is generally considered better and "↑" indicates that higher is generally considered better.</p>
+  <h5 id="unigram-metrics">Unigram metrics</h5>
+  <table>
+  <thead>
+  <tr>
+  <th>Metric</th>
+  <th style="text-align: center;">Direction</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>Lt</td>
+  <td style="text-align: center;">↑</td>
+  <td>Left thumb unigram</td>
+  </tr>
+  <tr>
+  <td>Li</td>
+  <td style="text-align: center;">↑</td>
+  <td>Left index unigram</td>
+  </tr>
+  <tr>
+  <td>Lm</td>
+  <td style="text-align: center;">↑</td>
+  <td>Left middle unigram</td>
+  </tr>
+  <tr>
+  <td>Lr</td>
+  <td style="text-align: center;">↓</td>
+  <td>Left ring unigram</td>
+  </tr>
+  <tr>
+  <td>Lp</td>
+  <td style="text-align: center;">↓</td>
+  <td>Left pinky unigram</td>
+  </tr>
+  <tr>
+  <td>Lh</td>
+  <td style="text-align: center;">↑</td>
+  <td>Left hand unigram (sum of the above five)</td>
+  </tr>
+  <tr>
+  <td>Rt</td>
+  <td style="text-align: center;">↑</td>
+  <td>Right thumb unigram</td>
+  </tr>
+  <tr>
+  <td>Ri</td>
+  <td style="text-align: center;">↑</td>
+  <td>Right index unigram</td>
+  </tr>
+  <tr>
+  <td>Rm</td>
+  <td style="text-align: center;">↑</td>
+  <td>Right middle unigram</td>
+  </tr>
+  <tr>
+  <td>Rr</td>
+  <td style="text-align: center;">↓</td>
+  <td>Right ring unigram</td>
+  </tr>
+  <tr>
+  <td>Rp</td>
+  <td style="text-align: center;">↓</td>
+  <td>Right pinky unigram</td>
+  </tr>
+  <tr>
+  <td>Rh</td>
+  <td style="text-align: center;">↑</td>
+  <td>Right hand unigram (sum of the above five)</td>
+  </tr>
+  </tbody>
+  </table>
+  <p>Each of these metrics are self-explanatory from the description: they measure the number of occurences of a single character pressed by a particular digit or hand.</p>
+  <h5 id="bigram-metrics">Bigram metrics</h5>
+  <table>
+  <thead>
+  <tr>
+  <th>Metric</th>
+  <th style="text-align: center;">Direction</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>Fsb</td>
+  <td style="text-align: center;">↓</td>
+  <td>Full scissor bigram</td>
+  </tr>
+  <tr>
+  <td>Hsb</td>
+  <td style="text-align: center;">↓</td>
+  <td>Half scissor bigram</td>
+  </tr>
+  <tr>
+  <td>Irb</td>
+  <td style="text-align: center;">↑</td>
+  <td>Inward roll bigram</td>
+  </tr>
+  <tr>
+  <td>Lsb</td>
+  <td style="text-align: center;">↓</td>
+  <td>Lateral stretch bigram</td>
+  </tr>
+  <tr>
+  <td>Orb</td>
+  <td style="text-align: center;">↑</td>
+  <td>Outward roll bigram</td>
+  </tr>
+  <tr>
+  <td>Sfb</td>
+  <td style="text-align: center;">↓</td>
+  <td>Same finger bigram</td>
+  </tr>
+  </tbody>
+  </table>
+  <h6 id="fsb---full-scissor-bigram">Fsb - Full Scissor Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>The keys are least <em>one</em> column apart and at least <em>two</em> rows apart from each other</li>
+  <li>One key is pressed by a middle or ring finger and closer to the bottom of the keyboard than the other key</li>
+  </ul>
+  <h6 id="hsb---half-scissor-bigram">Hsb - Half Scissor Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>The keys are least <em>one</em> column apart and exactly <em>one</em> row apart from each other</li>
+  <li>One key is pressed by a middle or ring finger and closer to the bottom of the keyboard than the other key</li>
+  </ul>
+  <h6 id="irb---inward-roll-bigram">Irb - Inward Roll Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>The keys are <em>one</em> column apart from and on the same row as each other</li>
+  <li>The digit movement proceeds inward: pinky → ring, ring → middle, or middle → index</li>
+  </ul>
+  <h6 id="lsb---lateral-stretch-bigram">Lsb - Lateral Stretch Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>The keys are least <em>two</em> columns apart from each other</li>
+  <li>The keys are pressed by the index and middle fingers, in either order</li>
+  </ul>
+  <h6 id="orb---outward-roll-bigram">Orb - Outward Roll Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>The keys are <em>one</em> column apart from and on the same row as each other</li>
+  <li>The digit movement proceeds outward: index → middle, middle → ring, or ring → pinky</li>
+  </ul>
+  <h6 id="sfb---same-finger-bigram">Sfb - Same Finger Bigram</h6>
+  <ul>
+  <li>Both keys are pressed by the same hand</li>
+  <li>Both keys are pressed by the same digit</li>
+  </ul>
+  <h5 id="trigram-metrics">Trigram metrics</h5>
+  <table>
+  <thead>
+  <tr>
+  <th>Metric</th>
+  <th style="text-align: center;">Direction</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>Alt</td>
+  <td style="text-align: center;">↓</td>
+  <td>Alternating trigram</td>
+  </tr>
+  <tr>
+  <td>One</td>
+  <td style="text-align: center;">↓</td>
+  <td>One handed trigram</td>
+  </tr>
+  <tr>
+  <td>Red</td>
+  <td style="text-align: center;">↓</td>
+  <td>Redirect trigram</td>
+  </tr>
+  <tr>
+  <td>Rol</td>
+  <td style="text-align: center;">↓</td>
+  <td>Roll trigram</td>
+  </tr>
+  </tbody>
+  </table>
+  <h6 id="alt---alternating-trigram">Alt - Alternating Trigram</h6>
+  <ul>
+  <li>The first and third key are pressed by the same hand</li>
+  <li>The second key is pressed by the other hand</li>
+  </ul>
+  <h6 id="one---one-handed-trigram">One - One-Handed Trigram</h6>
+  <ul>
+  <li>All three keys are pressed by the same hand but by different digits</li>
+  <li>The columns of all three keys are different and strictly increase or decrease</li>
+  </ul>
+  <h6 id="red---redirect-trigram">Red - Redirect Trigram</h6>
+  <ul>
+  <li>All three keys are pressed by the same hand but by different digits</li>
+  <li>The columns of all three keys are different but do not strictly increase or decrease</li>
+  </ul>
+  <h6 id="rol---roll-trigram">Rol - Roll Trigram</h6>
+  <ul>
+  <li>Two adjacent keys are pressed by the same hand but by different digits</li>
+  <li>The other key is pressed by the other hand</li>
+  </ul>
+  <h4 id="calculation">Calculation</h4>
+  <p>A metric is scored as follows:</p>
+  <ul>
+  <li>All possible 1, 2, or 3 physical key combinations (depending on the type of metric: unigram, bigram, and trigram, respectively) are determined by consulting the layout table.</li>
+  <li>These key combinations are filtered to exclude those that do not meet the criteria of the metric.</li>
+  <li>For each combination remaining, the key assignments for the keys in the combination are determined by consulting the key table. This determines the n‑gram.</li>
+  <li>For each n‑gram, the number of occurences is determined by consulting the appropriate n‑gram table.</li>
+  <li>The number of occurences are summed to provide the raw frequency-based score for that metric.</li>
+  <li>The key combinations are also used to produce an effort factor. This is a function of distance between keys in the layout table and is used for weighting key combinations based on the relative physical effort. The raw frequency-based score is multiplied by the effort factor to produce the effort-weighted score.</li>
+  <li>Both of the raw frequency-based and effort-weighted scores are then represented as a percentage of the sum of n‑gram occurences and the effort-weighted sum of n‑gram occurences, respectfully.</li>
+  </ul>
+  <p>All metrics are deterministic given the same inputs.</p>
+  <h4 id="summary-report">Summary report</h4>
+  <p>A summary report is table showing the scores for each metric. The scores are grouped by the type of metric - unigram, bigram, and trigram - and the header of each group is <code>Unigram summaries</code>, <code>Bigram summaries</code>, and <code>Trigram summaries</code>, respectively. Each row contains the following columns:</p>
+  <ul>
+  <li>Metric name</li>
+  <li>Metric direction</li>
+  <li>Sum of occurences of all n‑grams within the metric</li>
+  <li>Percentage representation of all n‑grams within the metric</li>
+  <li>Sum of occurences of all n‑grams within the metric, effort-weighted</li>
+  <li>Percentage representation of all n‑grams within the metric, effort-weighted</li>
+  </ul>
+  <p>By default, summary reports are printed (equivalent to <code>--print-summaries true</code>). To suppress summary reports, specify <code>--print-summaries false</code></p>
+  <h5 id="examples-3">Examples</h5>
+  <p>Here is the summary report from the example in the <a href="#introduction">Introduction</a> section:</p>
+  <pre><code>Unigram summaries:
+Lt ↑: 0, 0.000%, 0, 0.000%
+Li ↑: 796991792591, 22.365%, 796991792591, 22.365%
+Lm ↑: 700328467558, 19.653%, 700328467558, 19.653%
+Lr ↓: 300164341769, 8.423%, 300164341769, 8.423%
+Lp ↓: 294025744233, 8.251%, 294025744233, 8.251%
+Lh ↑: 2091510346151, 58.692%, 2091510346151, 58.692%
+Rt ↑: 0, 0.000%, 0, 0.000%
+Ri ↑: 689614872654, 19.352%, 689614872654, 19.352%
+Rm ↑: 288992871918, 8.110%, 288992871918, 8.110%
+Rr ↓: 417275087248, 11.710%, 417275087248, 11.710%
+Rp ↓: 76112599849, 2.136%, 76112599849, 2.136%
+Rh ↑: 1471995431669, 41.308%, 1471995431669, 41.308%
+
+Bigram summaries:
+Fsb ↓: 29561207813, 1.048%, 76155339763, 1.779%
+Hsb ↓: 223473410253, 7.926%, 449964114055, 10.512%
+Irb ↑: 107185097537, 3.801%, 107185097537, 2.504%
+Lsb ↓: 195655811929, 6.939%, 490785251171, 11.465%
+Orb ↑: 98315980469, 3.487%, 98315980469, 2.297%
+Sfb ↓: 195686888871, 6.940%, 270316925501, 6.315%
+
+Trigram summaries:
+Alt ↓: 547770117520, 26.108%, 547770117520, 11.662%
+One ↓: 58813867491, 2.803%, 164484663333, 3.502%
+Red ↓: 138042336404, 6.579%, 798736382372, 17.004%
+Rol ↓: 783296865779, 37.333%, 1866401805671, 39.734%</code></pre>
+  <h4 id="detail-reports">Detail reports</h4>
+  <p>A detail report is table showing how each individual n‑gram scored within a given metric. The header of the table is the name of the metric and its direction. Each row contains the following columns:</p>
+  <ul>
+  <li>N‑gram</li>
+  <li>Number of occurences</li>
+  <li>Number of occurences, cumulative</li>
+  <li>Percentage representation within the metric</li>
+  <li>Percentage representation within the metric, cumulative</li>
+  <li>Percentage representation</li>
+  <li>Percentage representation, cumulative</li>
+  <li>Number of occurences, effort-weighted</li>
+  <li>Number of occurences, effort-weighted and cumulative</li>
+  <li>Percentage representation within the metric, effort-weighted</li>
+  <li>Percentage representation within the metric, effort-weighted and cumulative</li>
+  <li>Percentage representation, effort-weighted</li>
+  <li>Percentage representation, effort-weighted and cumulative</li>
+  </ul>
+  <p>By default, detail reports are not printed. To print a detail report, specify the <code>--print-details [&lt;METRIC&gt;...]</code> argument. This argument accepts one or more metric names (e.g., <code>li</code>, <code>orb</code>, <code>alt</code>, etc.)</p>
+  <p>Multiple detail reports are printed in the order defined in <a href="#metrics">Metrics</a>. Detail reports are printed before the summary report, if any.</p>
+  <h5 id="examples-4">Examples</h5>
+  <div class="sourceCode" id="cb20"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-introduction.kt.json <span class="dt">\</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--print-details</span> irb <span class="dt">\</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--print-summaries</span> false</span></code></pre></div>
+  <pre><code>Q W E R T Y U I O P [ ] \
+A S D F G H J K L ; &#39;
+Z X C V B N M , . /
+
+Irb ↑:
+ER, 57754162106, 57754162106, 53.883%, 53.883%, 2.101%, 2.101%, 57754162106, 57754162106, 53.883%, 53.883%, 1.372%, 1.372%
+AS, 24561944198, 82316106304, 22.915%, 76.798%, 0.894%, 2.994%, 24561944198, 82316106304, 22.915%, 76.798%, 0.583%, 1.955%
+PO, 10189505383, 92505611687, 9.506%, 86.305%, 0.371%, 3.365%, 10189505383, 92505611687, 9.506%, 86.305%, 0.242%, 2.197%
+WE, 10176141608, 102681753295, 9.494%, 95.799%, 0.370%, 3.735%, 10176141608, 102681753295, 9.494%, 95.799%, 0.242%, 2.439%
+OI, 2474275212, 105156028507, 2.308%, 98.107%, 0.090%, 3.825%, 2474275212, 105156028507, 2.308%, 98.107%, 0.059%, 2.498%
+XC, 746076293, 105902104800, 0.696%, 98.803%, 0.027%, 3.852%, 746076293, 105902104800, 0.696%, 98.803%, 0.018%, 2.516%
+LK, 555883002, 106457987802, 0.519%, 99.322%, 0.020%, 3.873%, 555883002, 106457987802, 0.519%, 99.322%, 0.013%, 2.529%
+IU, 490874936, 106948862738, 0.458%, 99.780%, 0.018%, 3.891%, 490874936, 106948862738, 0.458%, 99.780%, 0.012%, 2.540%
+SD, 148275222, 107097137960, 0.138%, 99.918%, 0.005%, 3.896%, 148275222, 107097137960, 0.138%, 99.918%, 0.004%, 2.544%
+DF, 78347492, 107175485452, 0.073%, 99.991%, 0.003%, 3.899%, 78347492, 107175485452, 0.073%, 99.991%, 0.002%, 2.546%
+CV, 5869407, 107181354859, 0.005%, 99.997%, 0.000%, 3.899%, 5869407, 107181354859, 0.005%, 99.997%, 0.000%, 2.546%
+KJ, 3471162, 107184826021, 0.003%, 100.000%, 0.000%, 3.899%, 3471162, 107184826021, 0.003%, 100.000%, 0.000%, 2.546%
+QW, 163292, 107184989313, 0.000%, 100.000%, 0.000%, 3.899%, 163292, 107184989313, 0.000%, 100.000%, 0.000%, 2.546%
+ZX, 108224, 107185097537, 0.000%, 100.000%, 0.000%, 3.899%, 108224, 107185097537, 0.000%, 100.000%, 0.000%, 2.546%</code></pre>
+  <h3 id="permuting">Permuting</h3>
+  <p>Key tables can include up to three <em>permutation regions</em>. A permutation region is a set of keys that are assigned by permuting every possibility of a particular set of characters. The characters must be provided by the user.</p>
+  <p>This process creates a new key table for each permutation. Each key table is then scored against a chosen metric and only key tables with the best scores are retained. This enables an exhaustive search of variations to identify those with the most favourable ergonomic or statistical properties.</p>
+  <p>Permutation regions are particularly useful when designing or refining keyboard layouts where some parts are fixed (e.g., numbers or punctuation) and others are open to optimization (e.g., letters).</p>
+  <p>To permute region 1, 2, or 3, you must provide on the command line a set of characters for that region using <code>--region1</code> (or <code>-1</code>), <code>--region2</code> (or <code>-2</code>), or <code>--region3</code> (or <code>-3</code>), respectively. The option arguments for each must be a set of characters of the same size as the number of placeholders in that region (a region can not be partially permuted). Characters must be ASCII, and the control characters SOH, STX, and ETX are reserved.</p>
+  <p>You can choose to permute all, some, or no regions. A region is only permuted if a set of characters is provided for that region, otherwise it is left unpermuted (with its placeholders intact). This allows you to optimize regions in sequence.</p>
+  <p>There is a difference between permuting two or more regions in sequence (running Perky two or more times) vs simultaneously (running Perky once). Permuting a region of size 9 (i.e., 9 placeholders) produces 9! (read as "9 <a href="https://en.wikipedia.org/wiki/Factorial">factorial</a>") (or 362,880) key tables. Permuting a region of size 5 (i.e., 5 placeholders) produces 5! (or 120) key tables. If the region of size 9 is permuted first, then the best key table is chosen, then the region of size 5 is permuted (on that key table only), the total number of permutations is 9! + 5!, or 362,800 + 120 = 363,000 key tables. If the regions of size 9 and size 5 are permuted simultaneously, however, the total number of permutations is 9! * 5!, or 362,800 * 120 = 43,536,000.</p>
+  <p>Simultaneous permutation can take much longer to execute, but unlike sequential permutation it guarantees that the best possible key table will be found. This is because it is possible that a high-scoring but not the best key table from the first region will combine with a permutation in the second region in such a way as to produce a better score overall.</p>
+  <h4 id="metric">Metric</h4>
+  <p>When permuting, Perky scores every candidate layout according to the specified <a href="#metrics">metric</a>. The default metric is <code>sfb</code> (Same finger bigrams), but any metric can be specified using <code>--metric &lt;METRIC&gt;</code> (or <code>-m &lt;METRIC&gt;</code>).</p>
+  <p>For example, to score against <code>hsb</code> (Half scissor bigrams), specify <code>--metric hsb</code>.</p>
+  <h4 id="goal">Goal</h4>
+  <p>When permuting, Perky scores the specified <a href="#metrics">metric</a> by its direction, with the goal of finding the key tables generally considered better for that metric. To explicitly choose the goal for the metric, specify <code>--goal &lt;GOAL&gt;</code> (or <code>-g &lt;GOAL&gt;</code>), where <code>&lt;GOAL&gt;</code> is <code>max</code> or <code>min</code>. In this way, you can choose to find key tables generally considered <em>worse</em> for that metric.</p>
+  <p>For example, one can score against <code>fsb</code> (Full scissor bigrams) to find the worse performing key tables by specifying <code>--metric fsb</code> and <code>--goal max</code>.</p>
+  <h4 id="weight">Weight</h4>
+  <p>When permuting, Perky retains the records with the best raw scores for the specified <a href="#metrics">metric</a>. To specify that Perky should retain the records with the best effort-weighted scores, specify <code>--weight effort</code> (or <code>-w effort</code>).</p>
+  <h4 id="progress-and-metadata-reporting">Progress and metadata reporting</h4>
+  <p>While permutations are being scored, Perky prints a progress indicator letting you know how many permutations have been completed, how many remain, the time elapsed, and the estimated time remaining.</p>
+  <p>Perky will then output <a href="#metadata">metadata</a> about its run, including the total number of permutations and the elapsed duration.</p>
+  <h4 id="examples-5">Examples</h4>
+  <p>In our QWERTY example from the <a href="#introduction">Introduction</a> section, the same finger bigram score is 6.315%. Same finger bigrams are generally considered undesirable. Can we reduce this number by making a few changes? Let's permute the nine letters of the home row ("A", "S", "D", "F", "G", "H", "J", "K", and "L") by assigning them to permutation region 1.</p>
+  <p><a href="https://github.com/csmclaren/perky/examples/docs/example-permutingn.kt.json">example-permuting.kt.json</a>:</p>
+  <div class="sourceCode" id="cb22"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Q&quot;</span><span class="ot">,</span>  <span class="st">&quot;W&quot;</span><span class="ot">,</span>  <span class="st">&quot;E&quot;</span><span class="ot">,</span>  <span class="st">&quot;R&quot;</span><span class="ot">,</span>  <span class="st">&quot;T&quot;</span><span class="ot">,</span>  <span class="st">&quot;Y&quot;</span><span class="ot">,</span>  <span class="st">&quot;U&quot;</span><span class="ot">,</span>  <span class="st">&quot;I&quot;</span><span class="ot">,</span>  <span class="st">&quot;O&quot;</span><span class="ot">,</span>  <span class="st">&quot;P&quot;</span><span class="ot">,</span>  <span class="st">&quot;[&quot;</span><span class="ot">,</span>  <span class="st">&quot;]&quot;</span><span class="ot">,</span>  <span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span><span class="ot">],</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span> <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>    <span class="dv">1</span><span class="ot">,</span>   <span class="st">&quot;;&quot;</span><span class="ot">,</span>  <span class="st">&quot;&#39;&quot;</span><span class="ot">],</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Z&quot;</span><span class="ot">,</span>  <span class="st">&quot;X&quot;</span><span class="ot">,</span>  <span class="st">&quot;C&quot;</span><span class="ot">,</span>  <span class="st">&quot;V&quot;</span><span class="ot">,</span>  <span class="st">&quot;B&quot;</span><span class="ot">,</span>  <span class="st">&quot;N&quot;</span><span class="ot">,</span>  <span class="st">&quot;M&quot;</span><span class="ot">,</span>  <span class="st">&quot;,&quot;</span><span class="ot">,</span>  <span class="st">&quot;.&quot;</span><span class="ot">,</span>  <span class="st">&quot;/&quot;</span><span class="ot">]</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <p>Then, let's ask Perky to permute this region by running it against a particular set of characters. Permutation requires that the number of characters provided exactly match the number of placeholders in the corresponding region.</p>
+  <p>We also choose the scoring metric here to be <code>sfb</code> or "same finger bigrams" and to use effort-weighted scores.</p>
+  <div class="sourceCode" id="cb23"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-permuting.kt.json <span class="dt">\</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-1</span> <span class="st">&quot;ASDFGHJKL&quot;</span> <span class="dt">\</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-m</span> sfb <span class="dt">\</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-w</span> effort</span></code></pre></div>
+  <p>Perky will permute all 362,880, and in this case it has found a single record better than all others, one that reduces same finger bigrams from 6.315% to 4.590%.</p>
+  <p>On the test machine, the permutation took about 206ms to run at a rate of about 567ns/permutation. Ironically, it finished so quickly that it wasn't able to reach its top speed (which often can be lower than 10ns/permutation).</p>
+  <pre><code>[████████████████████]  100.0%  362880 / 362880  0.2s  (~ 0.0s remaining)
+
+unigram table sum:      3563505777820
+bigram table sum:       2819662855499
+trigram table sum:      2098121156991
+goal:                   ↓
+metric:                 sfb
+weight:                 effort
+total permutations:     362880
+elapsed duration:       205.881375ms
+efficiency:             567ns / permutation
+score:                  197912380083
+total records:          1
+total unique records:   1
+total selected records: 1
+
+Q W E R T Y U I O P [ ] \
+S L J D K H F G A ; &#39;
+Z X C V B N M , . /
+
+Unigram summaries:
+Lt ↑: 0, 0.000%, 0, 0.000%
+Li ↑: 800019793948, 22.450%, 800019793948, 22.450%
+Lm ↑: 569968849603, 15.995%, 569968849603, 15.995%
+Lr ↓: 213080081925, 5.980%, 213080081925, 5.980%
+Lp ↓: 239581127870, 6.723%, 239581127870, 6.723%
+Lh ↑: 1822649853346, 51.148%, 1822649853346, 51.148%
+Rt ↑: 0, 0.000%, 0, 0.000%
+Ri ↑: 769592402453, 21.596%, 769592402453, 21.596%
+Rm ↑: 336346958717, 9.439%, 336346958717, 9.439%
+Rr ↓: 558803963455, 15.681%, 558803963455, 15.681%
+Rp ↓: 76112599849, 2.136%, 76112599849, 2.136%
+Rh ↑: 1740855924474, 48.852%, 1740855924474, 48.852%
+TOTALS: 3563505777820, 3563505777820
+
+Bigram summaries:
+Fsb ↓: 29561207813, 1.075%, 76155339763, 1.796%
+Hsb ↓: 119201219669, 4.336%, 206698488517, 4.874%
+Irb ↑: 89225122898, 3.246%, 89225122898, 2.104%
+Lsb ↓: 223417437565, 8.127%, 551594885948, 13.007%
+Orb ↑: 96612684929, 3.515%, 96612684929, 2.278%
+Sfb ↓: 125722436580, 4.573%, 197912380083, 4.667%
+TOTALS: 2748955989650, 4240671685029
+
+Trigram summaries:
+Alt ↓: 543584137693, 28.700%, 543584137693, 12.618%
+One ↓: 57629888036, 3.043%, 170482717331, 3.957%
+Red ↓: 99165522192, 5.236%, 531069391569, 12.328%
+Rol ↓: 877169028524, 46.313%, 2007502245228, 46.600%
+TOTALS: 1893998506314, 4307952135713</code></pre>
+  <h4 id="parallelization">Parallelization</h4>
+  <p>Permutation is computationally expensive: even small regions can result in billions of combinations.</p>
+  <p>To manage this efficiently, Perky's code is highly-optimized and designed for parallel execution across multiple logical cores.</p>
+  <p>On the test machine, for example, the efficiency (i.e., effective throughput) is in the sub-10ns range per permutation. For example, a permutation region of size 10 will have 10! (read as "10 <a href="https://en.wikipedia.org/wiki/Factorial">factorial</a>") or 3,628,800 possible permutations. At ~10ns/permutation, Perky will require only 36 ms to score all permutations.</p>
+  <p>In its quest to brute-force all possibilities, Perky will happily consume 100% of your CPU across all logical cores. You can ask it to chill out a bit (without reducing the total number of permutations) in two ways:</p>
+  <ul>
+  <li>Have each thread yield by a given number of nanoseconds using the argument <code>-—sleep-ns &lt;SLEEP_NS&gt;</code></li>
+  <li>Limit the number of threads using <code>-—threads &lt;THREADS&gt;</code></li>
+  </ul>
+  <p>Modern CPUs have very sophisticated power and thermal management subsystems, so it's difficult to assess which option is better, but the former may help distribute the thermal load more evenly across your CPU's die. How much time should you yield? On the test machine, yielding for 50,000 nanoseconds (<code>--sleep-ns 50000</code>) is sufficient to drop the CPU usage to about two-thirds, which is typically sufficient to keep those annoying fans off.</p>
+  <h5 id="examples-6">Examples</h5>
+  <p>To cause each thread to yield for 50,000ns between permutation batches, and limit execution to 8 logical cores, specify <code>--sleep-ns 50000 --threads 8</code>.</p>
+  <h4 id="practical-limits">Practical limits</h4>
+  <p>Assuming you are using a fast machine and leveraging all its logical cores, you should be able to achieve an efficiency of less than 10ns/permutation. That said, it is important to design your keyboard layout carefully, possibly in multiple steps using partial permutation; or in one step using multiple, smaller permutation regions simultaneously; as the number of permutations explodes as the size of a permutation region grows.</p>
+  <p>Here are the number of permutations and estimates of the time required (assuming an efficiency of 10ns/permutation) to permute regions of size 8 through 18 (regions of size 7 or less are effectively instantaneous and regions of size 19 or greater take far too long):</p>
+  <table>
+  <thead>
+  <tr>
+  <th style="text-align: center;">#</th>
+  <th>Permutations</th>
+  <th>Estimated time</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="text-align: center;">8</td>
+  <td>8! (40,320)</td>
+  <td>403.2 μs</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">9</td>
+  <td>9! (362,880)</td>
+  <td>3.6 ms</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">10</td>
+  <td>10! (3,628,800)</td>
+  <td>36 ms</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">11</td>
+  <td>11! (39,916,800)</td>
+  <td>400 ms</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">12</td>
+  <td>12! (479,001,600)</td>
+  <td>4.79 s</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">13</td>
+  <td>13! (6,227,020,800)</td>
+  <td>62.27 s</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">14</td>
+  <td>14! (87,178,291,200)</td>
+  <td>14.53 minutes</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">15</td>
+  <td>15! (1,307,674,368,000)</td>
+  <td>3.63 hours</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">16</td>
+  <td>16! (20,922,789,888,000)</td>
+  <td>2.42 days</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">17</td>
+  <td>17! (355,687,428,096,000)</td>
+  <td>41.17 days</td>
+  </tr>
+  <tr>
+  <td style="text-align: center;">18</td>
+  <td>18! (6,402,373,705,728,000)</td>
+  <td>2.03 years</td>
+  </tr>
+  </tbody>
+  </table>
+  <p>At this rate, to permute all 26 characters of the English alphabet in a single permutation region would require about 128 billion years (and our sun is <a href="https://www.space.com/14732-sun-burns-star-death.html">expected to die</a> in only 5 billion years!).</p>
+  <p>It is clear that the practical limit for a permutation region is about 15, and for interactive analysis, about 13.</p>
+  <h4 id="truncating">Truncating</h4>
+  <p>The permutation process will retain up to 10,000 records <em>with identical scores</em> at any given time.</p>
+  <blockquote>
+  <p>Note: This limit does not affect the number of permutations considered, only the number retained <em>simultaneously</em> (because their scores are identical).</p>
+  </blockquote>
+  <p>This limit helps prevent running out of memory or slowing down the sorting and filtering steps (explained in subsequent sections) in pathological cases where too many records have identical scores for a given metric.</p>
+  <p>The default limit should be more than sufficient for most analyses, but you can increase (or decrease) it using <code>--truncate &lt;N&gt;</code>.</p>
+  <h5 id="examples-7">Examples</h5>
+  <p>To increase the truncation limit to 25,000, specify <code>--truncate 25000</code>.</p>
+  <h4 id="deduplicating">Deduplicating</h4>
+  <p>After truncation, any duplicate records are discarded. Duplicate records will occur if (and only if) Perky is given a set of possible characters for a permutation region that contains duplicates.</p>
+  <h4 id="sorting">Sorting</h4>
+  <p>Sorting allows you to order the deduplicated set of records to present them in a consistent and meaningful way.</p>
+  <p>Sorting is by raw or effort-weighted score, depending on the value of <code>--weight</code>.</p>
+  <h5 id="syntax">Syntax</h5>
+  <p>Specify <code>--sort-asc [&lt;METRIC&gt;...]</code> or <code>--sort-desc [&lt;METRIC&gt;...]</code> to sort by the value of the given metric or metrics in ascending or descending order, respectively.</p>
+  <p>You may use each option multiple times and include multiple metrics per argument. Records are sorted based on the argument order.</p>
+  <h5 id="examples-8">Examples</h5>
+  <p>To sort the records first by the highest-scoring outward roll bigrams and then by the lowest-scoring full scissor bigrams, specify <code>--sort-desc orb --sort-asc fsb</code></p>
+  <h4 id="filtering">Filtering</h4>
+  <p>Filtering allows you to narrow the sorted set of records to those that satisfy certain conditions.</p>
+  <h5 id="syntax-1">Syntax</h5>
+  <p>Specify <code>--filter [&lt;EXPRESSION&gt;...]</code> to narrow records based on a filtering expression.</p>
+  <p>Filtering expressions are written in a mini-language based on standard mathematical operations.</p>
+  <p>The filter expression language supports:</p>
+  <ul>
+  <li>Metric names: <code>lh</code>, <code>ri</code>, <code>orb</code>, <code>sfb</code>, etc.</li>
+  <li>Numeric values: <code>42</code>, <code>3.14</code>, etc.</li>
+  <li>Negation operator: <code>-</code></li>
+  <li>Arithmetic operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+  <li>Comparison operators: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, and <code>&gt;=</code></li>
+  <li>Logical operators: <code>&amp;</code> (AND), <code>|</code> (OR), and <code>!</code> (NOT)</li>
+  <li>Parentheses (to control order of evaluation): e.g., <code>(irb &gt; 5 | orb &gt; 5) &amp; sfb &lt; 2</code></li>
+  </ul>
+  <p>A metric name evaluates to its raw or effort-weighted score, depending on the value of <code>--weight</code>, expressed as a percentage.</p>
+  <p>You may specify <code>--filter</code> multiple times, in which case all must evaluate to true for a record to be retained.</p>
+  <h6 id="operators-by-precedence">Operators by precedence</h6>
+  <table>
+  <thead>
+  <tr>
+  <th>Precedence</th>
+  <th>Operators</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>1 Unary</td>
+  <td><code>-</code> (negation), <code>!</code></td>
+  </tr>
+  <tr>
+  <td>2 Factor</td>
+  <td><code>*</code>, <code>/</code></td>
+  </tr>
+  <tr>
+  <td>3 Term</td>
+  <td><code>+</code>, <code>-</code></td>
+  </tr>
+  <tr>
+  <td>4 Relational</td>
+  <td><code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></td>
+  </tr>
+  <tr>
+  <td>5 Equality</td>
+  <td><code>==</code>, <code>!=</code></td>
+  </tr>
+  <tr>
+  <td>6 Logical AND</td>
+  <td><code>&amp;</code></td>
+  </tr>
+  <tr>
+  <td>7 Logical OR</td>
+  <td><code>|</code></td>
+  </tr>
+  </tbody>
+  </table>
+  <h5 id="examples-9">Examples</h5>
+  <p>To retain only those records where the left and right hand efforts are within 5% of even, specify <code>--filter "lh &gt;= 45 &amp; lh &lt;= 55"</code></p>
+  <h4 id="selecting">Selecting</h4>
+  <p>Selection allows you to extract specific records from the filtered set. By default, all records are selected.</p>
+  <h5 id="syntax-2">Syntax</h5>
+  <p>Specify <code>--max-records &lt;N&gt;</code> to limit the records to the first <em>n</em>. <code>N</code> must fall within the bounds of the available records.</p>
+  <p>Specify <code>--index &lt;N&gt;</code> to select the record at the <em>nth</em> index. <code>N</code> must fall within the bounds of the available records.</p>
+  <p>If both <code>--index</code> and <code>--max-records</code> are used, <code>--max-records</code> is applied first.</p>
+  <p>Indices are 0-based, i.e., <code>--index 0</code> selects the first record. Negative indices count from the end, i.e., <code>--index=-1</code> selects the last record.</p>
+  <blockquote>
+  <p>Note: You should specify negative option arguments using the "=" syntax, such that your shell does not confuse a negative option argument with an option</p>
+  </blockquote>
+  <h5 id="examples-10">Examples</h5>
+  <p>To show only the first record, specify <code>--index 0</code>.</p>
+  <p>To show only the first 10 records, specify <code>--max-records 10</code>.</p>
+  <p>To show only the last record of the first 10, specify <code>--max-records 10 --index=-1</code></p>
+  <h3 id="printing">Printing</h3>
+  <p>After Perky loads its input files; permutes the key table (if requested); and scores, filters, sorts, and selects its records; it will print:</p>
+  <ul>
+  <li>Metadata (if permuting), followed by;</li>
+  <li>Selected records (in sorted order).</li>
+  </ul>
+  <h4 id="metadata">Metadata</h4>
+  <p>If permuting, Perky will print the following metadata:</p>
+  <ul>
+  <li><p>N‑gram table sums</p>
+  <ul>
+  <li>Unigram table sum</li>
+  <li>Bigram table sum</li>
+  <li>Trigram table sum</li>
+  </ul></li>
+  <li><p>Scoring options</p>
+  <ul>
+  <li>Goal</li>
+  <li>Metric</li>
+  <li>Weight</li>
+  </ul></li>
+  <li><p>Permutation-specific metadata</p>
+  <ul>
+  <li>Total permutations</li>
+  <li>Elapsed duration</li>
+  <li>Efficiency</li>
+  <li>Score</li>
+  <li>Total records</li>
+  <li>Total unique records</li>
+  <li>Total selected records</li>
+  </ul>
+  <p>Efficiency is the elapsed duration divided by the total permutations.</p></li>
+  </ul>
+  <p>To force printing the metadata (even when not permuting), specify <code>--print-metadata true</code>. To suppress printing the metadata (even when permuting), specify <code>--print-metadata false</code>.</p>
+  <h4 id="selected-records">Selected records</h4>
+  <p>For each selected record, Perky will print the following:</p>
+  <ul>
+  <li>A key table</li>
+  <li>Any detail reports requested via <code>--print-details [&lt;METRIC&gt;...]</code>, printed in order by <a href="#metrics">metric</a>, followed by;</li>
+  <li>A summary report, unless suppressed using <code>--print-summaries false</code></li>
+  </ul>
+  <p>By default, all scores include both raw and percentage representations (equivalent to <code>--print-perc true</code>). To suppress the percentage representations always, specify <code>--print-perc false</code>.</p>
+  <h4 id="format-3">Format</h4>
+  <p>By default, Perky will output text, which is easy to read. This is equivalent to specifying <code>--format text</code>.</p>
+  <p>Perky can also output <a href="https://jsonlines.org">JSON Lines</a>, which is easy to analyze programmatically. For JSON Lines output, specify <code>--format json</code>.</p>
+  <p>For the text format, output can be styled using colours and text effects to improve readability by specifying <code>--style &lt;STYLE&gt;</code>. By default, output will be styled when printed to a terminal but not when piped or redirected (equivalent to <code>--style auto</code>). To always style text (including when the output is piped or redirected), specify <code>--style always</code>. To never style text, specify <code>--style never</code>.</p>
+  <p>When styles are enabled, key tables will be printed in colour, representing the relative unigram frequency for that key. Bright red indicates the highest frequency and darker, desaturated red represents the frequency.</p>
+  <p>For JSON Lines format, <code>--style &lt;STYLE&gt;</code> is ignored.</p>
+  <p>With the exception of the colouring of the key tables in text format, both formats output the same information.</p>
+  <h4 id="examples-11">Examples</h4>
+  <p>Using the example from the <a href="#permuting">Permuting</a> section, but specifying <code>--print-metadata false</code>:</p>
+  <div class="sourceCode" id="cb25"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-permuting.kt.json <span class="dt">\</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-1</span> <span class="st">&quot;ASDFGHJKL&quot;</span> <span class="dt">\</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-m</span> sfb <span class="dt">\</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-w</span> effort <span class="dt">\</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--print-metadata</span> false</span></code></pre></div>
+  <pre><code>[████████████████████]  100.0%  362880 / 362880  0.2s  (~ 0.0s remaining)
+
+Q W E R T Y U I O P [ ] \
+S L J D K H F G A ; &#39;
+Z X C V B N M , . /
+
+Unigram summaries:
+Lt ↑: 0, 0.000%, 0, 0.000%
+Li ↑: 800019793948, 22.450%, 800019793948, 22.450%
+Lm ↑: 569968849603, 15.995%, 569968849603, 15.995%
+Lr ↓: 213080081925, 5.980%, 213080081925, 5.980%
+Lp ↓: 239581127870, 6.723%, 239581127870, 6.723%
+Lh ↑: 1822649853346, 51.148%, 1822649853346, 51.148%
+Rt ↑: 0, 0.000%, 0, 0.000%
+Ri ↑: 769592402453, 21.596%, 769592402453, 21.596%
+Rm ↑: 336346958717, 9.439%, 336346958717, 9.439%
+Rr ↓: 558803963455, 15.681%, 558803963455, 15.681%
+Rp ↓: 76112599849, 2.136%, 76112599849, 2.136%
+Rh ↑: 1740855924474, 48.852%, 1740855924474, 48.852%
+TOTALS: 3563505777820, 3563505777820
+
+Bigram summaries:
+Fsb ↓: 29561207813, 1.075%, 76155339763, 1.796%
+Hsb ↓: 119201219669, 4.336%, 206698488517, 4.874%
+Irb ↑: 89225122898, 3.246%, 89225122898, 2.104%
+Lsb ↓: 223417437565, 8.127%, 551594885948, 13.007%
+Orb ↑: 96612684929, 3.515%, 96612684929, 2.278%
+Sfb ↓: 125722436580, 4.573%, 197912380083, 4.667%
+TOTALS: 2748955989650, 4240671685029
+
+Trigram summaries:
+Alt ↓: 543584137693, 28.700%, 543584137693, 12.618%
+One ↓: 57629888036, 3.043%, 170482717331, 3.957%
+Red ↓: 99165522192, 5.236%, 531069391569, 12.328%
+Rol ↓: 877169028524, 46.313%, 2007502245228, 46.600%
+TOTALS: 1893998506314, 4307952135713</code></pre>
+  <p>Using the example from the <a href="#introduction">Introduction</a> section but specifying <code>--print-perc false</code>:</p>
+  <div class="sourceCode" id="cb27"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-introduction.kt.json <span class="dt">\</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--print-perc</span> false</span></code></pre></div>
+  <pre><code>Q W E R T Y U I O P [ ] \
+A S D F G H J K L ; &#39;
+Z X C V B N M , . /
+
+Unigram summaries:
+Lt ↑: 0, 0
+Li ↑: 796991792591, 796991792591
+Lm ↑: 700328467558, 700328467558
+Lr ↓: 300164341769, 300164341769
+Lp ↓: 294025744233, 294025744233
+Lh ↑: 2091510346151, 2091510346151
+Rt ↑: 0, 0
+Ri ↑: 689614872654, 689614872654
+Rm ↑: 288992871918, 288992871918
+Rr ↓: 417275087248, 417275087248
+Rp ↓: 76112599849, 76112599849
+Rh ↑: 1471995431669, 1471995431669
+TOTALS: 3563505777820, 3563505777820
+
+Bigram summaries:
+Fsb ↓: 29561207813, 76155339763
+Hsb ↓: 223473410253, 449964114055
+Irb ↑: 107185097537, 107185097537
+Lsb ↓: 195655811929, 490785251171
+Orb ↑: 98315980469, 98315980469
+Sfb ↓: 195686888871, 270316925501
+TOTALS: 2748955989650, 4209833679358
+
+Trigram summaries:
+Alt ↓: 547770117520, 547770117520
+One ↓: 58813867491, 164484663333
+Red ↓: 138042336404, 798736382372
+Rol ↓: 783296865779, 1866401805671
+TOTALS: 1893998506314, 4493113390239</code></pre>
+  <p>Using the example in the <a href="#introduction">Introduction</a> section but with <code>--format json</code> and <code>--print-metadata true</code>:</p>
+  <div class="sourceCode" id="cb29"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">perky</span> <span class="dt">\</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-l</span> example.lt.json <span class="dt">\</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-k</span> example-introduction.kt.json <span class="dt">\</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--format</span> json <span class="dt">\</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--print-metadata</span> true</span></code></pre></div>
+  <div class="sourceCode" id="cb30"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;unigram_table_sum&quot;</span><span class="fu">:</span> <span class="dv">3563505777820</span><span class="fu">,</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;bigram_table_sum&quot;</span><span class="fu">:</span> <span class="dv">2819662855499</span><span class="fu">,</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;trigram_table_sum&quot;</span><span class="fu">:</span> <span class="dv">2098121156991</span><span class="fu">,</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;goal&quot;</span><span class="fu">:</span> <span class="st">&quot;↓&quot;</span><span class="fu">,</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;metric&quot;</span><span class="fu">:</span> <span class="st">&quot;sfb&quot;</span><span class="fu">,</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;weight&quot;</span><span class="fu">:</span> <span class="st">&quot;raw&quot;</span><span class="fu">,</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_permutations&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;elapsed_duration&quot;</span><span class="fu">:</span> <span class="st">&quot;280.583µs&quot;</span><span class="fu">,</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;efficiency&quot;</span><span class="fu">:</span> <span class="st">&quot;280.583µs&quot;</span><span class="fu">,</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;score&quot;</span><span class="fu">:</span> <span class="dv">195686888871</span><span class="fu">,</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_records&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_unique_records&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_selected_records&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;index&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;key_table&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Q&quot;</span><span class="ot">,</span> <span class="st">&quot;W&quot;</span><span class="ot">,</span> <span class="st">&quot;E&quot;</span><span class="ot">,</span> <span class="st">&quot;R&quot;</span><span class="ot">,</span> <span class="st">&quot;T&quot;</span><span class="ot">,</span> <span class="st">&quot;Y&quot;</span><span class="ot">,</span> <span class="st">&quot;U&quot;</span><span class="ot">,</span> <span class="st">&quot;I&quot;</span><span class="ot">,</span> <span class="st">&quot;O&quot;</span><span class="ot">,</span> <span class="st">&quot;P&quot;</span><span class="ot">,</span> <span class="st">&quot;[&quot;</span><span class="ot">,</span> <span class="st">&quot;]&quot;</span><span class="ot">,</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span><span class="ot">],</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;A&quot;</span><span class="ot">,</span> <span class="st">&quot;S&quot;</span><span class="ot">,</span> <span class="st">&quot;D&quot;</span><span class="ot">,</span> <span class="st">&quot;F&quot;</span><span class="ot">,</span> <span class="st">&quot;G&quot;</span><span class="ot">,</span> <span class="st">&quot;H&quot;</span><span class="ot">,</span> <span class="st">&quot;J&quot;</span><span class="ot">,</span> <span class="st">&quot;K&quot;</span><span class="ot">,</span> <span class="st">&quot;L&quot;</span><span class="ot">,</span> <span class="st">&quot;;&quot;</span><span class="ot">,</span> <span class="st">&quot;&#39;&quot;</span><span class="ot">],</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="ot">[</span><span class="st">&quot;Z&quot;</span><span class="ot">,</span> <span class="st">&quot;X&quot;</span><span class="ot">,</span> <span class="st">&quot;C&quot;</span><span class="ot">,</span> <span class="st">&quot;V&quot;</span><span class="ot">,</span> <span class="st">&quot;B&quot;</span><span class="ot">,</span> <span class="st">&quot;N&quot;</span><span class="ot">,</span> <span class="st">&quot;M&quot;</span><span class="ot">,</span> <span class="st">&quot;,&quot;</span><span class="ot">,</span> <span class="st">&quot;.&quot;</span><span class="ot">,</span> <span class="st">&quot;/&quot;</span><span class="ot">]</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;measurements&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;unigram&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;details&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;summaries&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lh&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">2091510346151</span><span class="ot">,</span> <span class="fl">58.69249207252574</span><span class="ot">],</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">2091510346151</span><span class="ot">,</span> <span class="fl">58.69249207252574</span><span class="ot">]</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Li&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">796991792591</span><span class="ot">,</span> <span class="fl">22.365385165127062</span><span class="ot">],</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">796991792591</span><span class="ot">,</span> <span class="fl">22.365385165127062</span><span class="ot">]</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lm&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">700328467558</span><span class="ot">,</span> <span class="fl">19.652794501330398</span><span class="ot">],</span></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">700328467558</span><span class="ot">,</span> <span class="fl">19.652794501330398</span><span class="ot">]</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lp&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">294025744233</span><span class="ot">,</span> <span class="fl">8.251024765080423</span><span class="ot">],</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">294025744233</span><span class="ot">,</span> <span class="fl">8.251024765080423</span><span class="ot">]</span></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lr&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">300164341769</span><span class="ot">,</span> <span class="fl">8.42328764098785</span><span class="ot">],</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">300164341769</span><span class="ot">,</span> <span class="fl">8.42328764098785</span><span class="ot">]</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lt&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="fl">0.0</span><span class="ot">],</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="fl">0.0</span><span class="ot">]</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rh&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">1471995431669</span><span class="ot">,</span> <span class="fl">41.30750792747427</span><span class="ot">],</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">1471995431669</span><span class="ot">,</span> <span class="fl">41.30750792747427</span><span class="ot">]</span></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Ri&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">689614872654</span><span class="ot">,</span> <span class="fl">19.35214689271184</span><span class="ot">],</span></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">689614872654</span><span class="ot">,</span> <span class="fl">19.35214689271184</span><span class="ot">]</span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rm&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">288992871918</span><span class="ot">,</span> <span class="fl">8.10979102985469</span><span class="ot">],</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">288992871918</span><span class="ot">,</span> <span class="fl">8.10979102985469</span><span class="ot">]</span></span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rp&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">76112599849</span><span class="ot">,</span> <span class="fl">2.1358910184105953</span><span class="ot">],</span></span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">76112599849</span><span class="ot">,</span> <span class="fl">2.1358910184105953</span><span class="ot">]</span></span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rr&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">417275087248</span><span class="ot">,</span> <span class="fl">11.709678986497138</span><span class="ot">],</span></span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">417275087248</span><span class="ot">,</span> <span class="fl">11.709678986497138</span><span class="ot">]</span></span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rt&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="fl">0.0</span><span class="ot">],</span></span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="fl">0.0</span><span class="ot">]</span></span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;TOTALS&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">3563505777820</span><span class="ot">,</span> <span class="dv">3563505777820</span><span class="ot">]</span></span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;bigram&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;details&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;summaries&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Fsb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">29561207813</span><span class="ot">,</span> <span class="fl">1.0753612616680621</span><span class="ot">],</span></span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">76155339763</span><span class="ot">,</span> <span class="fl">1.8089868998010794</span><span class="ot">]</span></span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Hsb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">223473410253</span><span class="ot">,</span> <span class="fl">8.129392070822234</span><span class="ot">],</span></span>
+<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">449964114055</span><span class="ot">,</span> <span class="fl">10.688405963905433</span><span class="ot">]</span></span>
+<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Irb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">107185097537</span><span class="ot">,</span> <span class="fl">3.8991201729150613</span><span class="ot">],</span></span>
+<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">107185097537</span><span class="ot">,</span> <span class="fl">2.5460648971136015</span><span class="ot">]</span></span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Lsb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">195655811929</span><span class="ot">,</span> <span class="fl">7.117458870409603</span><span class="ot">],</span></span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">490785251171</span><span class="ot">,</span> <span class="fl">11.658067480847482</span><span class="ot">]</span></span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Orb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">98315980469</span><span class="ot">,</span> <span class="fl">3.57648433947892</span><span class="ot">],</span></span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">98315980469</span><span class="ot">,</span> <span class="fl">2.335388710273067</span><span class="ot">]</span></span>
+<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Sfb&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">195686888871</span><span class="ot">,</span> <span class="fl">7.118589370210874</span><span class="ot">],</span></span>
+<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">270316925501</span><span class="ot">,</span> <span class="fl">6.421083256244541</span><span class="ot">]</span></span>
+<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;TOTALS&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">2748955989650</span><span class="ot">,</span> <span class="dv">4209833679358</span><span class="ot">]</span></span>
+<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;trigram&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;details&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;summaries&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Alt&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-112"><a href="#cb30-112" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">547770117520</span><span class="ot">,</span> <span class="fl">28.921359530849966</span><span class="ot">],</span></span>
+<span id="cb30-113"><a href="#cb30-113" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">547770117520</span><span class="ot">,</span> <span class="fl">12.191326368704502</span><span class="ot">]</span></span>
+<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;One&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">58813867491</span><span class="ot">,</span> <span class="fl">3.105275283741403</span><span class="ot">],</span></span>
+<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">164484663333</span><span class="ot">,</span> <span class="fl">3.6608171004616166</span><span class="ot">]</span></span>
+<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Red&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">138042336404</span><span class="ot">,</span> <span class="fl">7.288407881200007</span><span class="ot">],</span></span>
+<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">798736382372</span><span class="ot">,</span> <span class="fl">17.77690240596205</span><span class="ot">]</span></span>
+<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Rol&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">783296865779</span><span class="ot">,</span> <span class="fl">41.35678371275018</span><span class="ot">],</span></span>
+<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a>          <span class="ot">[</span><span class="dv">1866401805671</span><span class="ot">,</span> <span class="fl">41.53916546432231</span><span class="ot">]</span></span>
+<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;TOTALS&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">1893998506314</span><span class="ot">,</span> <span class="dv">4493113390239</span><span class="ot">]</span></span>
+<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+  <!--
+  ## Contributing
+
+  Pull requests are welcome. Please open an issue first to discuss what you would like to change.
+  -->
+
+  <h2 id="author-and-copyright">Author and copyright</h2>
+  <p>This project was written and copyrighted in 2025 by Chris McLaren (<a href="https://www.github.com/csmclaren">@csmclaren</a>).</p>
+  <h2 id="license">License</h2>
+  <p>Unless otherwise noted, all files in this project are licensed under the <a href="https://choosealicense.com/licenses/mit/">MIT License</a>. See the <a href="LICENSE.txt">LICENSE</a> file for details.</p>
+  <footer>
+  <p>This document was produced on <time datetime="2025-08-20">August 20, 2025</time>.</p>
+  </footer>
+</body>
+</html>
