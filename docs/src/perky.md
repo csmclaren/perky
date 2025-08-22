@@ -638,7 +638,7 @@ Perky will then output [metadata](#metadata) about its run, including the total 
 
 In our QWERTY example from the [Introduction](#introduction) section, the same finger bigram score is 6.315%. Same finger bigrams are generally considered undesirable. Can we reduce this number by making a few changes? Let's permute the nine letters of the home row ("A", "S", "D", "F", "G", "H", "J", "K", and "L") by assigning them to permutation region 1.
 
-[example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permutingn.kt.json):
+[example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permuting.kt.json):
 
 ```json
 {
