@@ -1232,6 +1232,6 @@ This project was written and copyrighted in 2025 by Chris McLaren ([@csmclaren](
 
 ## License
 
-Unless otherwise noted, all files in this project are licensed under the [MIT License](https://choosealicense.com/licenses/mit/). See the [LICENSE](LICENSE.txt) file for details.
+Unless otherwise noted, all files in this project are licensed under the [MIT License](https://choosealicense.com/licenses/mit/). See the [LICENSE](/LICENSE.txt) file for details.
 
 This document was produced on August 22, 2025.
