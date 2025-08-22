@@ -55,13 +55,13 @@ To install the binary from [crates.io](https://crates.io/crates/perky), follow t
 
 1. Install the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
 
-    ``` sh
+    ```sh
     cargo install perky
     ```
 
 2. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
 
-    ``` sh
+    ```sh
     perky --help
     ```
 
@@ -71,26 +71,26 @@ To install the binary from source, follow these steps:
 
 1. Clone the [official repository](https://github.com/csmclaren/perky) from GitHub
 
-    ``` sh
+    ```sh
     git clone https://github.com/csmclaren/perky.git
     cd perky
     ```
 
 2. Build the binary, which will be placed in your target directory (typically `target/release/perky`):
 
-    ``` sh
+    ```sh
     cargo build --release
     ```
 
 3. (Optional) Copy the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
 
-    ``` sh
+    ```sh
     cp target/release/perky ~/.cargo/bin/
     ```
 
 4. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
 
-    ``` sh
+    ```sh
     perky --help
     ```
 
@@ -98,7 +98,7 @@ To install the binary from source, follow these steps:
 
 To include Perky as a library in your own Rust project, add the following to your `Cargo.toml` file:
 
-``` toml
+```toml
 [dependencies]
 perky = "0.1"  # Replace with the latest available version on crates.io
 ```
@@ -127,7 +127,7 @@ The format of these files will be explained in subsequent sections and there are
 
 After downloading these to your working directory, you can run Perky as follows:
 
-``` sh
+```sh
 perky -l example.lt.json -k example-introduction.kt.json
 ```
 
@@ -182,7 +182,7 @@ A layout table defines the structure of a keyboard, including which digits (fing
 
 Layout tables are JSON objects with the following structure:
 
-``` json
+```json
 {
   "data": [...],
   "version": 1
@@ -203,7 +203,7 @@ This example describes the digit assignments for the central part of a ANSI or I
 
 [example.lt.json](https://github.com/csmclaren/perky/examples/docs/example.lt.json)
 
-``` json
+```json
 {
   "data": [
     ["lp", "lr", "lm", "li", "li", "ri", "ri", "rm", "rr", "rp", "rp", "rp", "rp"],
@@ -222,7 +222,7 @@ A key table defines the mapping of logical keys (letters, numbers, symbols, etc.
 
 Key tables are JSON objects with the following structure:
 
-``` json
+```json
 {
   "data": [...],
   "version": 1
@@ -255,7 +255,7 @@ This is an example of the central part of an ANSI or ISO keyboard layout in the 
 
 [example-introduction.kt.json](https://github.com/csmclaren/perky/examples/docs/example-introduction.kt.json)
 
-``` json
+```json
 {
   "data": [
     ["Q",  "W",  "E",  "R",  "T",  "Y",  "U",  "I",  "O",  "P",  "[",  "]",  "\\"],
@@ -270,7 +270,7 @@ This is an example of the central part of an ANSI or ISO keyboard layout in the 
 
 [example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permuting.kt.json)
 
-``` json
+```json
 {
   "data": [
     ["Q",  "W",  "E",  "R",  "T",  "Y",  "U",  "I",  "O",  "P",  "[",  "]",  "\\"],
@@ -326,7 +326,7 @@ To override the default unigram, bigram, or trigram tables, specify the followin
 
 For example, to override all three tables to the (included) uppercase tables in charfreq-linux (representing n&#8209;gram frequency in the Linux source code):
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-introduction.kt.json \
@@ -359,7 +359,7 @@ Each line must contain at least two columns:
 
 A unigram table containing three 1-grams and their number of occurences in the corpus:
 
-``` tsv
+```tsv
 E	445155370175
 T	330535289102
 A	286527429118
@@ -367,7 +367,7 @@ A	286527429118
 
 A bigram table containing three 2-grams and their number of occurences in the corpus:
 
-``` tsv
+```tsv
 TH	100272945963
 HE	86697336727
 IN	68595215308
@@ -375,7 +375,7 @@ IN	68595215308
 
 A trigram table containing three 3-grams and their number of occurences in the corpus:
 
-``` tsv
+```tsv
 THE	69221160871
 AND	26468697834
 ING	21289988294
@@ -568,7 +568,7 @@ Multiple detail reports are printed in the order defined in [Metrics](#metrics).
 
 ##### Examples
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-introduction.kt.json \
@@ -640,7 +640,7 @@ In our QWERTY example from the [Introduction](#introduction) section, the same f
 
 [example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permutingn.kt.json):
 
-``` json
+```json
 {
   "data": [
     ["Q",  "W",  "E",  "R",  "T",  "Y",  "U",  "I",  "O",  "P",  "[",  "]",  "\\"],
@@ -655,7 +655,7 @@ Then, let's ask Perky to permute this region by running it against a particular 
 
 We also choose the scoring metric here to be `sfb` or "same finger bigrams" and to use effort-weighted scores.
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-permuting.kt.json \
@@ -922,7 +922,7 @@ With the exception of the colouring of the key tables in text format, both forma
 
 Using the example from the [Permuting](#permuting) section, but specifying `--print-metadata false`:
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-permuting.kt.json \
@@ -971,7 +971,7 @@ perky \
 
 Using the example from the [Introduction](#introduction) section but specifying `--print-perc false`:
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-introduction.kt.json \
@@ -1015,7 +1015,7 @@ perky \
 
 Using the example in the [Introduction](#introduction) section but with `--format json` and `--print-metadata true`:
 
-``` sh
+```sh
 perky \
   -l example.lt.json \
   -k example-introduction.kt.json \
@@ -1023,7 +1023,7 @@ perky \
   --print-metadata true
 ```
 
-``` json
+```json
 {
   "unigram_table_sum": 3563505777820,
   "bigram_table_sum": 2819662855499,
