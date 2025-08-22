@@ -260,7 +260,12 @@ fn read_ngram_table<const N: usize, K: Into<usize>, R: Read>(
     reader: R,
     key_fn: impl Fn(&str) -> Result<K, String>,
 ) -> Result<Box<[u64; N]>, Box<dyn Error>> {
-    let mut array = Box::new([0u64; N]);
+    // NOTE This can cause a stack overflow for large values of N.
+    // let mut array = Box::new([0u64; N]);
+    let mut array: Box<[u64; N]> = vec![0u64; N]
+        .into_boxed_slice()
+        .try_into()
+        .map_err(|_| format!("Unable to allocate an array of {} elements", N))?;
     for result in get_tsv_reader(reader).records() {
         let record: StringRecord = result?;
         let key_str = unescape::<true>(record.get(0).ok_or("Missing key column")?)?;
