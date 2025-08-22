@@ -181,9 +181,9 @@ It requires two inputs:
 
 The format of these files will be explained in subsequent sections and there are a number of example files of each type in the [official repository](https://github.com/csmclaren/perky), but for purposes of this introductory example, here is an example file of each type:
 
-- [example.lt.json](https://github.com/csmclaren/perky/examples/docs/example.lt.json) - A layout table in the shape of the central part of a standard [ANSI or ISO keyboard layout](https://en.wikipedia.org/wiki/Keyboard_layout).
+- [example.lt.json](/examples/docs/example.lt.json) - A layout table in the shape of the central part of a standard [ANSI or ISO keyboard layout](https://en.wikipedia.org/wiki/Keyboard_layout).
 
-- [example-introduction.kt.json](https://github.com/csmclaren/perky/examples/docs/example-introduction.kt.json) - A key table corresponding to the shape of the layout table and representing a standard [QWERTY](https://en.wikipedia.org/wiki/QWERTY) keyboard.
+- [example-introduction.kt.json](/examples/docs/example-introduction.kt.json) - A key table corresponding to the shape of the layout table and representing a standard [QWERTY](https://en.wikipedia.org/wiki/QWERTY) keyboard.
 
 After downloading these to your working directory, you can run Perky as follows:
 
@@ -261,7 +261,7 @@ Layout tables are JSON objects with the following structure:
 
 This example describes the digit assignments for the central part of a ANSI or ISO keyboard layout:
 
-[example.lt.json](https://github.com/csmclaren/perky/examples/docs/example.lt.json)
+[example.lt.json](/examples/docs/example.lt.json)
 
 ``` json
 {
@@ -313,7 +313,7 @@ Perky expects the layout table and key table to have matching structures; that i
 
 This is an example of the central part of an ANSI or ISO keyboard layout in the standard QWERTY configuration:
 
-[example-introduction.kt.json](https://github.com/csmclaren/perky/examples/docs/example-introduction.kt.json)
+[example-introduction.kt.json](/examples/docs/example-introduction.kt.json)
 
 ``` json
 {
@@ -328,7 +328,7 @@ This is an example of the central part of an ANSI or ISO keyboard layout in the 
 
 This is an example of the central part of an ANSI or ISO keyboard layout in the standard QWERTY configuration, where the home row has been replaced by a single permutation region of size 9:
 
-[example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permuting.kt.json)
+[example-permuting.kt.json](/examples/docs/example-permuting.kt.json)
 
 ``` json
 {
@@ -367,7 +367,7 @@ By default, Perky uses n‑gram data derived from [Peter Norvig’s analysis of 
 
 #### Included tables
 
-In the [resources](https://github.com/csmclaren/perky/resources) folder of the official repository, various n‑gram tables are included:
+In the [resources](/resources) folder of the official repository, various n‑gram tables are included:
 
 - [charfreq-dfko](https://github.com/csmclaren/charfreq-dfko)
 - [charfreq-google](https://github.com/csmclaren/charfreq-google) (the [default tables](#default-tables))
@@ -699,7 +699,7 @@ Perky will then output [metadata](#metadata) about its run, including the total 
 
 In our QWERTY example from the [Introduction](#introduction) section, the same finger bigram score is 6.315%. Same finger bigrams are generally considered undesirable. Can we reduce this number by making a few changes? Let's permute the nine letters of the home row ("A", "S", "D", "F", "G", "H", "J", "K", and "L") by assigning them to permutation region 1.
 
-[example-permuting.kt.json](https://github.com/csmclaren/perky/examples/docs/example-permuting.kt.json):
+[example-permuting.kt.json](/examples/docs/example-permuting.kt.json):
 
 ``` json
 {
