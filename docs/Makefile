@@ -20,8 +20,8 @@ build-dir:
 build/$(NAME).md: | build-dir
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/filter-append-default-footer.lua \
-		--lua-filter=$(FILTER_DIR)/filter-toc.lua \
+		--lua-filter=$(FILTER_DIR)/append-default-footer.lua \
+		--lua-filter=$(FILTER_DIR)/toc.lua \
 		--output $@ \
 		--to gfm \
 		--wrap none \
@@ -33,11 +33,11 @@ build/$(NAME).css: | build-dir
 build/$(NAME).html: | build-dir
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/filter-append-html-footer.lua \
-		--lua-filter=$(FILTER_DIR)/filter-link-stylesheet.lua \
-		--lua-filter=$(FILTER_DIR)/filter-toc.lua \
+		--lua-filter=$(FILTER_DIR)/append-html-footer.lua \
+		--lua-filter=$(FILTER_DIR)/link-stylesheet.lua \
+		--lua-filter=$(FILTER_DIR)/toc.lua \
 		--output $@ \
-		--template $(TEMPLATE_DIR)/template.html \
+		--template $(TEMPLATE_DIR)/default.html \
 		--to html \
 		--wrap none \
 		src/$(NAME).md
@@ -45,11 +45,11 @@ build/$(NAME).html: | build-dir
 build/$(NAME)-standalone.html: | build-dir
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/filter-append-html-footer.lua \
-		--lua-filter=$(FILTER_DIR)/filter-embed-stylesheet.lua \
-		--lua-filter=$(FILTER_DIR)/filter-toc.lua \
+		--lua-filter=$(FILTER_DIR)/append-html-footer.lua \
+		--lua-filter=$(FILTER_DIR)/embed-stylesheet.lua \
+		--lua-filter=$(FILTER_DIR)/toc.lua \
 		--output $@ \
-		--template $(TEMPLATE_DIR)/template.html \
+		--template $(TEMPLATE_DIR)/default.html \
 		--to html \
 		--wrap none \
 		src/$(NAME).md
@@ -57,7 +57,7 @@ build/$(NAME)-standalone.html: | build-dir
 build/README.md: | build-dir
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/filter-toc.lua \
+		--lua-filter=$(FILTER_DIR)/toc.lua \
 		--output $@ \
 		--to gfm \
 		--wrap none \
