@@ -1,6 +1,10 @@
 ---
 filter_embed_stylesheet_fpath: 'build/perky.css'
 filter_link_stylesheet_fpath: 'perky.css'
+filter_process_github_links:
+  org: csmclaren
+  repo: perky
+  root: docs/build
 filter_toc_exclude_pattern: 'table%-of%-contents'
 title: 'Perky'
 ---
@@ -307,7 +311,7 @@ By default, Perky uses n&#8209;gram data derived from [Peter Norvig’s analysis
 
 #### Included tables
 
-In the [resources](/resources) folder of the official repository, various n&#8209;gram tables are included:
+In the [resources](/resources/) folder of the official repository, various n&#8209;gram tables are included:
 
 - [charfreq-dfko](https://github.com/csmclaren/charfreq-dfko)
 - [charfreq-google](https://github.com/csmclaren/charfreq-google) (the [default tables](#default-tables))

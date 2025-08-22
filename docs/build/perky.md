@@ -367,7 +367,7 @@ By default, Perky uses n‑gram data derived from [Peter Norvig’s analysis of 
 
 #### Included tables
 
-In the [resources](/resources) folder of the official repository, various n‑gram tables are included:
+In the [resources](/resources/) folder of the official repository, various n‑gram tables are included:
 
 - [charfreq-dfko](https://github.com/csmclaren/charfreq-dfko)
 - [charfreq-google](https://github.com/csmclaren/charfreq-google) (the [default tables](#default-tables))
