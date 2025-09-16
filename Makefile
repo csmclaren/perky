@@ -1,24 +1,50 @@
-.PHONY: all build check-jq check-python clean docs docs-build-dir set-permissions set-timestamps clean-resources collect-resources
+include meta.mk
+export NAME REF REPOSITORY_URL RUST_VERSION VERSION
 
-NAME := perky
-REF := main
+.PHONY: all build check check-cargo check-jq check-python clean docs docs-build-dir set-permissions set-timestamps clean-resources collect-resources
 
 FILTER_DIR := tools/pandoc-tools/filters
 TEMPLATE_DIR := tools/pandoc-tools/templates
 
 all: clean build
 
-build: docs README.md set-permissions set-timestamps
+build: check docs README.md set-permissions set-timestamps
+
+check: check-cargo-toml
+
+check-cargo-toml: Cargo.toml tools/toml-to-json.py | check-jq check-python
+	@set -eu; \
+	JSON=$$(python3 tools/toml-to-json.py Cargo.toml); \
+	FOUND_NAME=$$(printf '%s' "$$JSON" | jq -er '.package.name'); \
+	FOUND_REPOSITORY_URL=$$(printf '%s' "$$JSON" | jq -er '.package.repository'); \
+	FOUND_VERSION=$$(printf '%s' "$$JSON" | jq -er '.package.version'); \
+	FOUND_RUST_VERSION=$$(printf '%s' "$$JSON" | jq -r '.package["rust-version"] // empty'); \
+	if [ "$$FOUND_NAME" != "$$NAME" ]; then \
+		echo "Error: package.name mismatch: expected='$$NAME' found='$$FOUND_NAME'" >&2; \
+		exit 1; \
+	fi; \
+	if [ "$$FOUND_REPOSITORY_URL" != "$$REPOSITORY_URL" ]; then \
+		echo "Error: package.repository mismatch: expected='$$REPOSITORY_URL' found='$$FOUND_REPOSITORY_URL'" >&2; \
+		exit 1; \
+	fi; \
+	if [ "$$FOUND_RUST_VERSION" != "$$RUST_VERSION" ]; then \
+		echo "Error: package.rust-version mismatch: expected='$$RUST_VERSION' found='$$FOUND_RUST_VERSION'" >&2; \
+		exit 1; \
+	fi; \
+	if [ "$$FOUND_VERSION" != "$$VERSION" ]; then \
+		echo "Error: package.version mismatch: expected='$$VERSION' found='$$FOUND_VERSION'" >&2; \
+		exit 1; \
+	fi;
 
 check-jq:
 	@command -v jq >/dev/null 2>&1 || \
-	  { echo "Error: 'jq' is not installed or not in PATH."; exit 1; }
+		{ echo "Error: 'jq' is not installed or not in PATH."; exit 1; }
 
 check-python:
 	@command -v python3 >/dev/null 2>&1 || \
-	  { echo "Error: 'python3' is not installed or not in PATH."; exit 1; }
+		{ echo "Error: 'python3' is not installed or not in PATH."; exit 1; }
 	@python3 -c 'import sys; exit(0 if sys.version_info >= (3,11) else 1)' || \
-	  { echo "Error: Python 3.11 or higher is required."; exit 1; }
+		{ echo "Error: Python 3.11 or higher is required."; exit 1; }
 
 clean:
 	$(RM) -f README.md
@@ -41,7 +67,10 @@ docs/build/$(NAME)-standalone.html: docs/src/$(NAME).md docs/build/$(NAME).css |
 		--lua-filter=$(FILTER_DIR)/embed-stylesheet.lua \
 		--lua-filter=$(FILTER_DIR)/process-github-links.lua \
 		--lua-filter=$(FILTER_DIR)/toc.lua \
+		--metadata filter_embed_stylesheet_fpath=docs/build/$(NAME).css \
+		--metadata filter_link_stylesheet_fpath=$(NAME).css \
 		--metadata filter_process_github_links.ref=$(REF) \
+		--metadata filter_process_github_links.repo=$(NAME) \
 		--output $@ \
 		--template $(TEMPLATE_DIR)/default.html \
 		--to html \
@@ -58,7 +87,10 @@ docs/build/$(NAME).html: docs/src/$(NAME).md | docs-build-dir docs/build/$(NAME)
 		--lua-filter=$(FILTER_DIR)/link-stylesheet.lua \
 		--lua-filter=$(FILTER_DIR)/process-github-links.lua \
 		--lua-filter=$(FILTER_DIR)/toc.lua \
+		--metadata filter_embed_stylesheet_fpath=docs/build/$(NAME).css \
+		--metadata filter_link_stylesheet_fpath=$(NAME).css \
 		--metadata filter_process_github_links.ref=$(REF) \
+		--metadata filter_process_github_links.repo=$(NAME) \
 		--output $@ \
 		--template $(TEMPLATE_DIR)/default.html \
 		--to html \
