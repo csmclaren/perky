@@ -2,6 +2,8 @@
 filter_process_github_links:
   org: csmclaren
   root: docs/build
+filter_replace:
+  codeblocks: [toml]
 filter_toc_exclude_pattern: 'table%-of%-contents'
 title: 'Perky'
 ---
@@ -46,7 +48,7 @@ Perky can run on macOS, Linux, and Windows.
 
 To install Perky, first ensure that you have installed [Rust](https://www.rust-lang.org/tools/install), which includes [Cargo](https://doc.rust-lang.org/cargo/).
 
-> Note: Perky requires Rust version 1.89.0 or later.
+> Note: Perky requires Rust version {{rust-version}} or later.
 
 Then choose one of the following options based on the type of installation you prefer:
 
@@ -101,10 +103,8 @@ To include Perky as a library in your own Rust project, add the following to you
 
 ```toml
 [dependencies]
-perky = "0.1"  # Replace with the latest available version on crates.io
+perky = "{{version}}"
 ```
-
-The latest version can be found on [crates.io](https://crates.io/crates/perky).
 
 ## Usage
 

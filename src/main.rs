@@ -55,7 +55,7 @@ const DEFAULT_3_GRAMS: &[u8] = include_bytes!("../resources/charfreq-google/3-gr
 // Cli
 
 #[derive(Parser)]
-#[command(about, author, long_about = None, version)]
+#[command(about, author, long_about = None, next_line_help = true, version)]
 struct Cli {
     /// Path to layout table file. [default: 'default.lt.json']
     ///
@@ -112,7 +112,8 @@ struct Cli {
     ///
     /// Results within this tolerance of the best score will be retained.
     /// Permitted range is 0.0 to 1.0.
-    #[arg(long,
+    #[arg(
+        long,
         default_value_t = 1.0,
         hide = true,
         value_name = "TOLERANCE",

@@ -160,10 +160,8 @@ To include Perky as a library in your own Rust project, add the following to you
 
 ``` toml
 [dependencies]
-perky = "0.1"  # Replace with the latest available version on crates.io
+perky = "0.1.4"
 ```
-
-The latest version can be found on [crates.io](https://crates.io/crates/perky).
 
 ## Usage
 
