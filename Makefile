@@ -1,17 +1,57 @@
 include meta.mk
 export NAME REF REPOSITORY_URL RUST_VERSION VERSION
 
+export COPYFILE_DISABLE=1
+
+FIND_EXCLUDES  := \
+	\( \
+		-name '.DS_Store' -o \
+		-name '.Spotlight-*' -o \
+		-name '.Trashes' -o \
+		-name '._*' \
+	\) \
+	-prune -o \
+	-type f \
+	-print
+
+RSYNC_EXCLUDES := \
+	--exclude '.DS_Store' \
+	--exclude '.Spotlight-*' \
+	--exclude '.Trashes' \
+	--exclude '._*'
+
+RSYNC := rsync -a --delete --delete-excluded $(RSYNC_EXCLUDES)
+
+SHA256SUM := $(shell command -v sha256sum >/dev/null 2>&1 && printf '%s' 'sha256sum' || printf '%s' 'shasum -a 256')
+
+TAR := tar \
+	--format=ustar \
+	--group=0 \
+	--no-acls --no-mac-metadata --no-xattrs \
+	--numeric-owner \
+	--options gzip:!timestamp,gzip:compression-level=9 \
+	--owner=0 \
+	-czf
+
+ZIP := zip -X
+
+ZERO_TIMESTAMP := 197001010000
+
 FILTER_DIR := tools/pandoc-tools/filters
 TEMPLATE_DIR := tools/pandoc-tools/templates
 
-.PHONY: all build check check-cargo check-jq check-python clean docs docs-build-dir set-permissions set-timestamps clean-resources collect-resources
+.DELETE_ON_ERROR:
 
-all: clean build
+.PHONY: all
+all: build
 
-build: check docs set-permissions set-timestamps
+.PHONY: build
+build: check dist docs
 
-check: check-cargo-toml
+.PHONY: check
+check: check-cargo-toml check-jq check-pandoc check-python check-rsync
 
+.PHONY: check-cargo-toml
 check-cargo-toml: Cargo.toml tools/toml-to-json.py | check-jq check-python
 	@set -eu; \
 	JSON=$$(python3 tools/toml-to-json.py Cargo.toml); \
@@ -36,58 +76,161 @@ check-cargo-toml: Cargo.toml tools/toml-to-json.py | check-jq check-python
 		exit 1; \
 	fi;
 
+.PHONY: check-jq
 check-jq:
 	@command -v jq >/dev/null 2>&1 || \
-		{ echo "Error: 'jq' is not installed or not in PATH."; exit 1; }
+		{ echo "Error: 'jq' is not installed or not in PATH." >&2; exit 1; }
 
+.PHONY: check-pandoc
+check-pandoc:
+	@command -v pandoc >/dev/null 2>&1 || \
+		{ echo "Error: 'pandoc' is not installed or not in PATH." >&2; exit 1; }
+
+.PHONY: check-python
 check-python:
 	@command -v python3 >/dev/null 2>&1 || \
-		{ echo "Error: 'python3' is not installed or not in PATH."; exit 1; }
+		{ echo "Error: 'python3' is not installed or not in PATH." >&2; exit 1; }
 	@python3 -c 'import sys; exit(0 if sys.version_info >= (3,11) else 1)' || \
-		{ echo "Error: Python 3.11 or higher is required."; exit 1; }
+		{ echo "Error: Python 3.11 or higher is required." >&2; exit 1; }
 
+.PHONY: check-rsync
+check-rsync:
+	@command -v rsync >/dev/null 2>&1 || \
+		{ echo "Error: 'rsync' is not installed or not in PATH." >&2; exit 1; }
+
+.PHONY: clean
 clean:
 	$(RM) -f README.md
-	$(RM) -fr docs/build
+	$(RM) -fr dist docs/build
 
-docs: \
-	docs/build/$(NAME).css \
-	docs/build/$(NAME).html \
-	docs/build/$(NAME).md \
-	README.md
+.PHONY: dist
+dist: \
+	dist/$(NAME)-$(VERSION)-docs.tar.gz \
+	dist/$(NAME)-$(VERSION)-docs.zip \
+	dist/$(NAME)-$(VERSION)-examples.tar.gz \
+	dist/$(NAME)-$(VERSION)-examples.zip \
+	dist/$(NAME)-$(VERSION)-resources.tar.gz \
+	dist/$(NAME)-$(VERSION)-resources.zip
 
-docs-build-dir:
-	mkdir -p docs/build
+dist/$(NAME)-$(VERSION)-docs.tar.gz: dist/.stamps/docs.sha256
+	@mkdir -p $(@D)
+	cd dist && find docs $(FIND_EXCLUDES) | LC_ALL=C sort | $(TAR) $(abspath $@) -T -
 
-docs/build/$(NAME).css: tools/pandoc-tools/css/default.css | docs-build-dir
-	cp tools/pandoc-tools/css/default.css $@
+dist/$(NAME)-$(VERSION)-docs.zip: dist/.stamps/docs.sha256
+	@mkdir -p $(@D)
+	cd dist && find docs $(FIND_EXCLUDES) | LC_ALL=C sort | $(ZIP) -@ $(abspath $@)
 
-docs/build/$(NAME).html: docs/src/$(NAME).md | docs-build-dir docs/build/$(NAME).css
+dist/$(NAME)-$(VERSION)-examples.tar.gz: dist/.stamps/examples.sha256
+	@mkdir -p $(@D)
+	cd dist && find examples $(FIND_EXCLUDES) | LC_ALL=C sort | $(TAR) $(abspath $@) -T -
+
+dist/$(NAME)-$(VERSION)-examples.zip: dist/.stamps/examples.sha256
+	@mkdir -p $(@D)
+	cd dist && find examples $(FIND_EXCLUDES) | LC_ALL=C sort | $(ZIP) -@ $(abspath $@)
+
+dist/$(NAME)-$(VERSION)-resources.tar.gz: dist/.stamps/resources.sha256
+	@mkdir -p $(@D)
+	cd dist && find resources $(FIND_EXCLUDES) | LC_ALL=C sort | $(TAR) $(abspath $@) -T -
+
+dist/$(NAME)-$(VERSION)-resources.zip: dist/.stamps/resources.sha256
+	@mkdir -p $(@D)
+	cd dist && find resources $(FIND_EXCLUDES) | LC_ALL=C sort | $(ZIP) -@ $(abspath $@)
+
+.PHONY: dist-docs
+dist-docs: dist/.stamps/docs.sha256
+
+dist/.stamps/docs.sha256: \
+	$(wildcard $(FILTER_DIR)/*) \
+	$(wildcard $(TEMPLATE_DIR)/*) \
+	docs/src/$(NAME).md \
+	tools/pandoc-tools/css/default.css | check-pandoc
+	@mkdir -p $(@D)
+	@mkdir -p dist/docs/
+	cp tools/pandoc-tools/css/default.css dist/docs/$(NAME)-$(VERSION).css
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/append-html-footer.lua \
 		--lua-filter=$(FILTER_DIR)/link-stylesheet.lua \
 		--lua-filter=$(FILTER_DIR)/process-github-links.lua \
 		--lua-filter=$(FILTER_DIR)/replace.lua \
 		--lua-filter=$(FILTER_DIR)/toc.lua \
-		--metadata filter_embed_stylesheet_fpath=docs/build/$(NAME).css \
-		--metadata filter_link_stylesheet_fpath=$(NAME).css \
+		--metadata filter_link_stylesheet_fpath=$(NAME)-$(VERSION).css \
 		--metadata filter_process_github_links.ref=$(REF) \
 		--metadata filter_process_github_links.repo=$(NAME) \
+		--metadata name=$(NAME) \
+		--metadata repository-url=$(REPOSITORY_URL) \
 		--metadata rust-version=$(RUST_VERSION) \
 		--metadata version=$(VERSION) \
-		--output $@ \
+		--output dist/docs/$(NAME)-$(VERSION).html \
 		--template $(TEMPLATE_DIR)/default.html \
 		--to html \
 		--wrap none \
 		docs/src/$(NAME).md
+	find dist/docs -type d -exec chmod 755 {} +
+	find dist/docs -type f -exec chmod 644 {} +
+	TZ=UTC find dist/docs -exec touch -t $(ZERO_TIMESTAMP) {} +
+	HASH=$$(cd dist && \
+		find docs -type f -print0 \
+		| xargs -0 $(SHA256SUM) \
+		| LC_ALL=C sort \
+		| $(SHA256SUM) \
+		| awk '{print $$1}') ; \
+	NEW=$$(mktemp); printf '%s\n' "$$HASH" > "$$NEW"; \
+	if [ -f $@ ] && cmp -s "$$NEW" $@; then rm -f "$$NEW"; else mv -f "$$NEW" $@; fi
 
-docs/build/$(NAME).md: docs/src/$(NAME).md | docs-build-dir
+.PHONY: dist-examples
+dist-examples: dist/.stamps/examples.sha256
+
+dist/.stamps/examples.sha256: | check-rsync
+	@mkdir -p $(@D)
+	@mkdir -p dist/examples/
+	$(RSYNC) examples/ dist/examples/
+	find dist/examples -type d -exec chmod 755 {} +
+	find dist/examples -type f -exec chmod 644 {} +
+	TZ=UTC find dist/examples -exec touch -t $(ZERO_TIMESTAMP) {} +
+	HASH=$$(cd dist && \
+		find examples -type f -print0 \
+		| xargs -0 $(SHA256SUM) \
+		| LC_ALL=C sort \
+		| $(SHA256SUM) \
+		| awk '{print $$1}') ; \
+	NEW=$$(mktemp); printf '%s\n' "$$HASH" > "$$NEW"; \
+	if [ -f $@ ] && cmp -s "$$NEW" $@; then rm -f "$$NEW"; else mv -f "$$NEW" $@; fi
+
+.PHONY: dist-resources
+dist-resources: dist/.stamps/resources.sha256
+
+dist/.stamps/resources.sha256: | check-rsync
+	@mkdir -p $(@D)
+	@mkdir -p dist/resources/
+	$(RSYNC) resources/ dist/resources/
+	find dist/resources -type d -exec chmod 755 {} +
+	find dist/resources -type f -exec chmod 644 {} +
+	TZ=UTC find dist/resources -exec touch -t $(ZERO_TIMESTAMP) {} +
+	HASH=$$(cd dist && \
+		find resources -type f -print0 \
+		| xargs -0 $(SHA256SUM) \
+		| LC_ALL=C sort \
+		| $(SHA256SUM) \
+		| awk '{print $$1}') ; \
+	NEW=$$(mktemp); printf '%s\n' "$$HASH" > "$$NEW"; \
+	if [ -f $@ ] && cmp -s "$$NEW" $@; then rm -f "$$NEW"; else mv -f "$$NEW" $@; fi
+
+.PHONY: docs
+docs: \
+	dist-docs \
+	docs/build/$(NAME).md \
+	README.md
+
+docs/build/$(NAME).md: \
+	$(wildcard $(FILTER_DIR)/*) \
+	docs/src/$(NAME).md | check-pandoc
+	@mkdir -p $(@D)
 	pandoc \
 		--from gfm \
-		--lua-filter=$(FILTER_DIR)/append-default-footer.lua \
 		--lua-filter=$(FILTER_DIR)/replace.lua \
 		--lua-filter=$(FILTER_DIR)/toc.lua \
+		--metadata name=$(NAME) \
+		--metadata repository-url=$(REPOSITORY_URL) \
 		--metadata rust-version=$(RUST_VERSION) \
 		--metadata version=$(VERSION) \
 		--output $@ \
@@ -95,25 +238,36 @@ docs/build/$(NAME).md: docs/src/$(NAME).md | docs-build-dir
 		--wrap none \
 		docs/src/$(NAME).md
 
-README.md: docs/src/README.md | docs-build-dir
+README.md: \
+	$(wildcard $(FILTER_DIR)/*) \
+	docs/src/README.md | check-pandoc
 	pandoc \
 		--from gfm \
+		--lua-filter=$(FILTER_DIR)/replace.lua \
 		--lua-filter=$(FILTER_DIR)/toc.lua \
+		--metadata name=$(NAME) \
+		--metadata repository-url=$(REPOSITORY_URL) \
+		--metadata rust-version=$(RUST_VERSION) \
+		--metadata version=$(VERSION) \
 		--output $@ \
 		--to gfm \
 		--wrap none \
 		docs/src/README.md
 
+.PHONY: set-permissions
 set-permissions:
 	find . -type d -exec chmod 755 {} +
 	find . -type f -exec chmod 644 {} +
 
+.PHONY: set-timestamps
 set-timestamps:
-	find . -path './.git' -prune -o -exec touch {} +
+	find . -path './.git' -prune -o -path './dist' -prune -o -exec touch {} +
 
+.PHONY: clean-resources
 clean-resources:
 	$(RM) -fr resources
 
+.PHONY: collect-resources
 collect-resources: \
 	resources/charfreq-dfko/1-grams-uc.tsv \
 	resources/charfreq-dfko/1-grams.tsv \
@@ -132,35 +286,30 @@ collect-resources: \
 	resources/charfreq-shakespeare/3-grams-uc.tsv \
 	resources/charfreq-shakespeare/3-grams.tsv
 
-resources/charfreq-dfko:
-	mkdir -p $@
-
-resources/charfreq-dfko/%-grams.tsv: ../charfreq-dfko/output/%-grams.tsv | resources/charfreq-dfko
+resources/charfreq-dfko/%-grams.tsv: ../charfreq-dfko/output/%-grams.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-dfko/%-grams-uc.tsv: ../charfreq-dfko/output/%-grams-uc.tsv | resources/charfreq-dfko
+resources/charfreq-dfko/%-grams-uc.tsv: ../charfreq-dfko/output/%-grams-uc.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-google:
-	mkdir -p $@
-
-resources/charfreq-google/%-grams-uc.tsv: ../charfreq-google/output/%-grams-uc.tsv | resources/charfreq-google
+resources/charfreq-google/%-grams-uc.tsv: ../charfreq-google/output/%-grams-uc.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-linux:
-	mkdir -p $@
-
-resources/charfreq-linux/%-grams.tsv: ../charfreq-linux/output/%-grams.tsv | resources/charfreq-linux
+resources/charfreq-linux/%-grams.tsv: ../charfreq-linux/output/%-grams.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-linux/%-grams-uc.tsv: ../charfreq-linux/output/%-grams-uc.tsv | resources/charfreq-linux
+resources/charfreq-linux/%-grams-uc.tsv: ../charfreq-linux/output/%-grams-uc.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-shakespeare:
-	mkdir -p $@
-
-resources/charfreq-shakespeare/%-grams.tsv: ../charfreq-shakespeare/output/%-grams.tsv | resources/charfreq-shakespeare
+resources/charfreq-shakespeare/%-grams.tsv: ../charfreq-shakespeare/output/%-grams.tsv
+	@mkdir -p $(@D)
 	cp $< $@
 
-resources/charfreq-shakespeare/%-grams-uc.tsv: ../charfreq-shakespeare/output/%-grams-uc.tsv | resources/charfreq-shakespeare
+resources/charfreq-shakespeare/%-grams-uc.tsv: ../charfreq-shakespeare/output/%-grams-uc.tsv
+	@mkdir -p $(@D)
 	cp $< $@

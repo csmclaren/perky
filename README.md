@@ -32,10 +32,11 @@ Perky's unique feature is a high-performance, parallelized, and permutation-base
 
 This project includes a user manual which includes information on how to install this package.
 
-The user manual is available here, in two formats:
+The user manual is available here, in various formats:
 
+- [HTML (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-docs.tar.gz)
+- [HTML (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-docs.zip)
 - [Markdown](/docs/build/perky.md)
-- [HTML](/docs/build/perky.html)
 
 <!--
 ## Contributing

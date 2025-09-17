@@ -50,54 +50,65 @@ To install Perky, first ensure that you have installed [Rust](https://www.rust-l
 
 > Note: Perky requires Rust version {{rust-version}} or later.
 
-Then choose one of the following options based on the type of installation you prefer:
+Then choose one or more of the following options based on the type of installation you prefer:
 
-### Install the binary from crates.io
+### Install the binary (Typical)
 
-To install the binary from [crates.io](https://crates.io/crates/perky), follow these steps:
+- To install the binary from [crates.io](https://crates.io/crates/perky), follow these steps:
 
-1. Install the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
+  1. Install the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
 
-    ```sh
-    cargo install perky
-    ```
+      ```sh
+      cargo install perky
+      ```
 
-2. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
+  2. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
 
-    ```sh
-    perky --help
-    ```
+      ```sh
+      perky --help
+      ```
 
-### Install the binary from source
+- To install the binary from source, follow these steps:
 
-To install the binary from source, follow these steps:
+  1. Clone the [official repository](https://github.com/csmclaren/perky) from GitHub
 
-1. Clone the [official repository](https://github.com/csmclaren/perky) from GitHub
+      ```sh
+      git clone https://github.com/csmclaren/perky.git
+      cd perky
+      ```
 
-    ```sh
-    git clone https://github.com/csmclaren/perky.git
-    cd perky
-    ```
+  2. Build the binary, which will be placed in your target directory (typically `target/release/perky`):
 
-2. Build the binary, which will be placed in your target directory (typically `target/release/perky`):
+      ```sh
+      cargo build --release
+      ```
 
-    ```sh
-    cargo build --release
-    ```
+  3. (Optional) Copy the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
 
-3. (Optional) Copy the binary to your Cargo bin directory (typically `$HOME/.cargo/bin`):
+      ```sh
+      cp target/release/perky ~/.cargo/bin/
+      ```
 
-    ```sh
-    cp target/release/perky ~/.cargo/bin/
-    ```
+  4. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
 
-4. (Optional) Test that the installation was successful by running Perky (from the directory containing the binary) with the `--help` argument.
+      ```sh
+      perky --help
+      ```
 
-    ```sh
-    perky --help
-    ```
+### Install example files and resource files (Optional)
 
-### Add the library to another project as a dependency
+This document refers to example files and resource files that are  part of the [official repository](https://github.com/csmclaren/perky) but are not included when installing from [crates.io](https://crates.io/crates/perky).
+
+These can be downloaded here:
+
+- [Examples (.tar.gz)]({{repository-url}}/releases/download/v{{version}}/{{name}}-{{version}}-examples.tar.gz)
+- [Examples (.zip)]({{repository-url}}/releases/download/v{{version}}/{{name}}-{{version}}-examples.zip)
+- [Resources (.tar.gz)]({{repository-url}}/releases/download/v{{version}}/{{name}}-{{version}}-resources.tar.gz)
+- [Resources (.zip)]({{repository-url}}/releases/download/v{{version}}/{{name}}-{{version}}-resources.zip)
+
+Any references to example files or resource files in this document assume their respective `.tar.gz` or `.zip` file has been extracted to the current working directory.
+
+### Add the library to another project as a dependency (Advanced)
 
 To include Perky as a library in your own Rust project, add the following to your `Cargo.toml` file:
 
@@ -126,10 +137,10 @@ The format of these files will be explained in subsequent sections and there are
 
 - [example-introduction.kt.json](/examples/docs/example-introduction.kt.json) - A key table corresponding to the shape of the layout table and representing a standard [QWERTY](https://en.wikipedia.org/wiki/QWERTY) keyboard.
 
-After downloading these to your working directory, you can run Perky as follows:
+If you have [installed the examples](#install-example-files-and-resource-files-optional), you can run Perky as follows:
 
 ```sh
-perky -l example.lt.json -k example-introduction.kt.json
+perky -l examples/docs/example.lt.json -k examples/docs/example-introduction.kt.json
 ```
 
 > Note: If either or both of these arguments are omitted, Perky will look for the files `default.lt.json` and/or `default.kt.json`, respectively, in your working directory.
@@ -329,8 +340,8 @@ For example, to override all three tables to the (included) uppercase tables in 
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-introduction.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-introduction.kt.json \
   -u resources/charfreq-linux/1-grams-uc.tsv \
   -b resources/charfreq-linux/2-grams-uc.tsv \
   -t resources/charfreq-linux/3-grams-uc.tsv
@@ -571,8 +582,8 @@ Multiple detail reports are printed in the order defined in [Metrics](#metrics).
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-introduction.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-introduction.kt.json \
   --print-details irb \
   --print-summaries false
 ```
@@ -658,8 +669,8 @@ We also choose the scoring metric here to be `sfb` or "same finger bigrams" and 
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-permuting.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-permuting.kt.json \
   -1 "ASDFGHJKL" \
   -m sfb \
   -w effort
@@ -925,8 +936,8 @@ Using the example from the [Permuting](#permuting) section, but specifying `--pr
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-permuting.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-permuting.kt.json \
   -1 "ASDFGHJKL" \
   -m sfb \
   -w effort \
@@ -974,8 +985,8 @@ Using the example from the [Introduction](#introduction) section but specifying 
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-introduction.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-introduction.kt.json \
   --print-perc false
 ```
 
@@ -1018,8 +1029,8 @@ Using the example in the [Introduction](#introduction) section but with `--forma
 
 ```sh
 perky \
-  -l example.lt.json \
-  -k example-introduction.kt.json \
+  -l examples/docs/example.lt.json \
+  -k examples/docs/example-introduction.kt.json \
   --format json \
   --print-metadata true
 ```
