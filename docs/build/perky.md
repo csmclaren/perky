@@ -158,10 +158,10 @@ This document refers to example files and resource files that are part of the [o
 
 These can be downloaded here:
 
-- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-examples.tar.gz)
-- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-examples.zip)
-- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-resources.tar.gz)
-- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.5/perky-0.1.5-resources.zip)
+- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-examples.tar.gz)
+- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-examples.zip)
+- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-resources.tar.gz)
+- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-resources.zip)
 
 Any references to example files or resource files in this document assume their respective `.tar.gz` or `.zip` file has been extracted to the current working directory.
 
@@ -171,7 +171,7 @@ To include Perky as a library in your own Rust project, add the following to you
 
 ``` toml
 [dependencies]
-perky = "0.1.5"
+perky = "0.1.6"
 ```
 
 ## Usage
@@ -750,6 +750,7 @@ On the test machine, the permutation took about 206ms to run at a rate of about 
     elapsed duration:       205.881375ms
     efficiency:             567ns / permutation
     score:                  197912380083
+    truncated:              false
     total records:          1
     total unique records:   1
     total selected records: 1
@@ -959,11 +960,12 @@ If permuting, Perky will print the following metadata:
   - Elapsed duration
   - Efficiency
   - Score
+  - Truncated
   - Total records
   - Total unique records
   - Total selected records
 
-  Efficiency is the elapsed duration divided by the total permutations.
+  Efficiency is the elapsed duration divided by the total permutations. Truncated is true if (and only if) the records needed to be truncated.
 
 To force printing the metadata (even when not permuting), specify `--print-metadata true`. To suppress printing the metadata (even when permuting), specify `--print-metadata false`.
 
@@ -1108,6 +1110,7 @@ perky \
   "elapsed_duration": "280.583µs",
   "efficiency": "280.583µs",
   "score": 195686888871,
+  "truncated": false,
   "total_records": 1,
   "total_unique_records": 1,
   "total_selected_records": 1

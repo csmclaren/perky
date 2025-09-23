@@ -169,7 +169,7 @@ struct Cli {
     /// An unreasonably large number of results can cause the post-processing steps to take a long
     /// time to complete.
     #[arg(long, value_name = "N", default_value_t = 10000)]
-    truncate: u64,
+    truncate: u32,
 
     /// Metrics to sort in ascending order.
     ///
@@ -740,7 +740,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Duration::from_millis(200),
     );
 
-    let (mut key_table_matrices, score, total_permutations) = permute_and_substitute(
+    let (mut key_table_matrices, score, total_permutations, truncated) = permute_and_substitute(
         &key_table_matrix,
         (array1, length1, &coordinates1),
         (array2, length2, &coordinates2),
@@ -889,6 +889,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             total_permutations,
             elapsed_duration,
             score,
+            truncated,
             total_records,
             total_unique_records,
             total_selected_records,

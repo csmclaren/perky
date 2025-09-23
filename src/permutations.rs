@@ -41,11 +41,12 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
     goal: Goal,
     tolerance: f64,
     max_permutations: u64,
-    parallel: bool,
+    parallelize: bool,
     sleep_ns: u64,
-    opt_truncate: Option<u64>,
-) -> Result<(Vec<[[u8; C]; R]>, u64, u64), Box<dyn Error>> {
-    if parallel {
+    opt_truncate: Option<u32>,
+) -> Result<(Vec<[[u8; C]; R]>, u64, u64, bool), Box<dyn Error>> {
+    let opt_truncate = opt_truncate.map(|truncate: u32| truncate as u64 + 1);
+    let result = if parallelize {
         permute_and_substitute_parallel(
             &matrix,
             region1,
@@ -73,10 +74,16 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
             sleep_ns,
             opt_truncate,
         )
-    }
+    };
+    result.map(|(mut key_table_matrices, score, total_permutations)| {
+        let truncated = opt_truncate.map_or(false, |truncate| {
+            key_table_matrices.len() as u64 >= truncate && key_table_matrices.pop().is_some()
+        });
+        (key_table_matrices, score, total_permutations, truncated)
+    })
 }
 
-pub fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usize>(
+fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usize>(
     matrix: &[[u8; C]; R],
     region1: ([u8; N], usize, &[(usize, usize)]),
     region2: ([u8; N], usize, &[(usize, usize)]),
@@ -247,7 +254,7 @@ pub fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: 
     Ok((best_matrices, best_score, total_count))
 }
 
-pub fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: usize>(
+fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: usize>(
     matrix: &[[u8; C]; R],
     region1: ([u8; N], usize, &[(usize, usize)]),
     region2: ([u8; N], usize, &[(usize, usize)]),

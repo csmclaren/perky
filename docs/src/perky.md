@@ -692,6 +692,7 @@ On the test machine, the permutation took about 206ms to run at a rate of about 
     elapsed duration:       205.881375ms
     efficiency:             567ns / permutation
     score:                  197912380083
+    truncated:              false
     total records:          1
     total unique records:   1
     total selected records: 1
@@ -898,11 +899,13 @@ If permuting, Perky will print the following metadata:
   - Elapsed duration
   - Efficiency
   - Score
+  - Truncated
   - Total records
   - Total unique records
   - Total selected records
 
   Efficiency is the elapsed duration divided by the total permutations.
+  Truncated is true if (and only if) the records needed to be truncated.
 
 To force printing the metadata (even when not permuting), specify `--print-metadata true`. To suppress printing the metadata (even when permuting), specify `--print-metadata false`.
 
@@ -1047,6 +1050,7 @@ perky \
   "elapsed_duration": "280.583µs",
   "efficiency": "280.583µs",
   "score": 195686888871,
+  "truncated": false,
   "total_records": 1,
   "total_unique_records": 1,
   "total_selected_records": 1

@@ -23,6 +23,7 @@ pub struct Metadata {
     pub total_permutations: u64,
     pub elapsed_duration: Duration,
     pub score: u64,
+    pub truncated: bool,
     pub total_records: usize,
     pub total_unique_records: usize,
     pub total_selected_records: usize,
@@ -49,7 +50,6 @@ impl Display for Metadata {
 impl From<&Metadata> for Value {
     fn from(value: &Metadata) -> Self {
         // TODO add tolerance
-        let score = value.score;
         json!({
             "unigram_table_sum": value.unigram_table_sum,
             "bigram_table_sum": value.bigram_table_sum,
@@ -60,7 +60,8 @@ impl From<&Metadata> for Value {
             "total_permutations": value.total_permutations,
             "elapsed_duration": format_duration(value.elapsed_duration),
             "efficiency": format_opt_duration(value.efficiency()),
-            "score": score,
+            "score": value.score,
+            "truncated": value.truncated,
             "total_records": value.total_records,
             "total_unique_records": value.total_unique_records,
             "total_selected_records": value.total_selected_records
@@ -83,6 +84,7 @@ impl WriteStyled for Metadata {
              elapsed duration:       {:?}\n\
              efficiency:             {} / permutation\n\
              score:                  {}\n\
+             truncated:              {}\n\
              total records:          {}\n\
              total unique records:   {}\n\
              total selected records: {}",
@@ -96,6 +98,7 @@ impl WriteStyled for Metadata {
             self.elapsed_duration,
             format_opt_duration(self.efficiency()),
             self.score,
+            self.truncated,
             self.total_records,
             self.total_unique_records,
             self.total_selected_records,
