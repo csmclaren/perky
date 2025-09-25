@@ -31,7 +31,7 @@ use perky::{
         read_trigram_table_from_path, read_unigram_table_from_bytes, read_unigram_table_from_path,
         sum_ngram_table,
     },
-    permutations::{convert_option_vec_to_array, permute_and_substitute},
+    permutations::{convert_vec_opt_to_array, permute_and_substitute},
     records::{Record, filter_records, select_records, sort_records},
     scores::{
         ScoreMode, score_bfs, score_bfs_without_details_unsafe, score_tfs,
@@ -444,11 +444,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let key_table = KeyTable::read_from_path(&key_table_fpath)
         .map_err(|e| format!("Failed to load file '{}': {e}", key_table_fpath.display()))?;
 
-    let opt_unigram_table_fpath = cli.unigram_table_fpath;
-    let opt_bigram_table_fpath = cli.bigram_table_fpath;
-    let opt_trigram_table_fpath = cli.trigram_table_fpath;
+    let unigram_table_fpath_opt = cli.unigram_table_fpath;
+    let bigram_table_fpath_opt = cli.bigram_table_fpath;
+    let trigram_table_fpath_opt = cli.trigram_table_fpath;
 
-    let unigram_table = match &opt_unigram_table_fpath {
+    let unigram_table = match &unigram_table_fpath_opt {
         None => read_unigram_table_from_bytes(DEFAULT_1_GRAMS)?,
         Some(fname) => {
             let fpath = Path::new(fname);
@@ -457,7 +457,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let bigram_table = match &opt_bigram_table_fpath {
+    let bigram_table = match &bigram_table_fpath_opt {
         None => read_bigram_table_from_bytes(DEFAULT_2_GRAMS)?,
         Some(fname) => {
             let fpath = Path::new(fname);
@@ -466,7 +466,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let trigram_table = match &opt_trigram_table_fpath {
+    let trigram_table = match &trigram_table_fpath_opt {
         None => read_trigram_table_from_bytes(DEFAULT_3_GRAMS)?,
         Some(fname) => {
             let fpath = Path::new(fname);
@@ -487,7 +487,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Argument parsing (permuting)
 
-    let opt_vec1 = match &cli.region1 {
+    let region1_vec_opt = match &cli.region1 {
         None => None,
         Some(s) => {
             let s = unescape::<true>(s).map_err(|e| format!("Invalid -1 argument: {}", e))?;
@@ -500,7 +500,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let opt_vec2 = match &cli.region2 {
+    let region2_vec_opt = match &cli.region2 {
         None => None,
         Some(s) => {
             let s = unescape::<true>(s).map_err(|e| format!("Invalid -2 argument: {}", e))?;
@@ -513,7 +513,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let opt_vec3 = match &cli.region3 {
+    let region3_vec_opt = match &cli.region3 {
         None => None,
         Some(s) => {
             let s = unescape::<true>(s).map_err(|e| format!("Invalid -3 argument: {}", e))?;
@@ -526,9 +526,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let (array1, length1) = convert_option_vec_to_array::<256, _>(opt_vec1)?;
-    let (array2, length2) = convert_option_vec_to_array::<256, _>(opt_vec2)?;
-    let (array3, length3) = convert_option_vec_to_array::<256, _>(opt_vec3)?;
+    let (array1, length1) = convert_vec_opt_to_array::<256, _>(region1_vec_opt)?;
+    let (array2, length2) = convert_vec_opt_to_array::<256, _>(region2_vec_opt)?;
+    let (array3, length3) = convert_vec_opt_to_array::<256, _>(region3_vec_opt)?;
 
     let mut coordinates1 = Vec::new();
     let mut coordinates2 = Vec::new();
@@ -606,9 +606,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let opt_max_permutations = cli.max_permutations;
+    let max_permutations_opt = cli.max_permutations;
 
-    let opt_max_records = Some(cli.max_records);
+    let max_records_opt = Some(cli.max_records);
 
     let parallelize = cli.parallelize;
 
@@ -643,9 +643,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Argument parsing (selecting)
 
-    let opt_max_selections = cli.max_selections;
+    let max_selections_opt = cli.max_selections;
 
-    let opt_index = cli.index;
+    let index_opt = cli.index;
 
     // Argument parsing (printing)
 
@@ -707,7 +707,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         factorial(length1 as u64) * factorial(length2 as u64) * factorial(length3 as u64);
 
     let expected_permutations = cmp::min(
-        opt_max_permutations.unwrap_or(u64::MAX),
+        max_permutations_opt.unwrap_or(u64::MAX),
         possible_permutations,
     );
 
@@ -749,8 +749,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             scoring_fn,
             goal,
             tolerance,
-            opt_max_permutations,
-            opt_max_records,
+            max_permutations_opt,
+            max_records_opt,
             parallelize,
             sleep_ns,
         )?;
@@ -788,9 +788,9 @@ fn main() -> Result<(), Box<dyn Error>> {
                     } else {
                         ScoreMode::SummaryUnsafe
                     };
-                    let (opt_details, f_sum, f_sum_ew) =
+                    let (details_opt, f_sum, f_sum_ew) =
                         score_ufs(fs, &key_table_matrix, &unigram_table, score_mode);
-                    (metric, Measurement::new(opt_details, f_sum, f_sum_ew))
+                    (metric, Measurement::new(details_opt, f_sum, f_sum_ew))
                 })
                 .collect::<BTreeMap<_, _>>();
 
@@ -803,9 +803,9 @@ fn main() -> Result<(), Box<dyn Error>> {
                     } else {
                         ScoreMode::SummaryUnsafe
                     };
-                    let (opt_details, f_sum, f_sum_ew) =
+                    let (details_opt, f_sum, f_sum_ew) =
                         score_bfs(fs, &key_table_matrix, &bigram_table, score_mode);
-                    (metric, Measurement::new(opt_details, f_sum, f_sum_ew))
+                    (metric, Measurement::new(details_opt, f_sum, f_sum_ew))
                 })
                 .collect::<BTreeMap<_, _>>();
 
@@ -818,9 +818,9 @@ fn main() -> Result<(), Box<dyn Error>> {
                     } else {
                         ScoreMode::SummaryUnsafe
                     };
-                    let (opt_details, f_sum, f_sum_ew) =
+                    let (details_opt, f_sum, f_sum_ew) =
                         score_tfs(fs, &key_table_matrix, &trigram_table, score_mode);
-                    (metric, Measurement::new(opt_details, f_sum, f_sum_ew))
+                    (metric, Measurement::new(details_opt, f_sum, f_sum_ew))
                 })
                 .collect::<BTreeMap<_, _>>();
 
@@ -867,7 +867,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Selecting
 
-    let records = select_records(records, opt_max_selections, opt_index)?;
+    let records = select_records(records, max_selections_opt, index_opt)?;
 
     // Printing
 
@@ -876,14 +876,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let trigram_table_sum = sum_ngram_table(trigram_table.as_ref());
     let total_selected_records = records.len();
 
-    let opt_metadata = print_metadata
+    let metadata_opt = print_metadata
         .unwrap_or(total_permutations > 1)
         .then(|| Metadata {
             layout_table_fpath: &layout_table_fpath,
             key_table_fpath: &key_table_fpath,
-            opt_unigram_table_fpath: opt_unigram_table_fpath.as_deref(),
-            opt_bigram_table_fpath: opt_bigram_table_fpath.as_deref(),
-            opt_trigram_table_fpath: opt_trigram_table_fpath.as_deref(),
+            unigram_table_fpath_opt: unigram_table_fpath_opt.as_deref(),
+            bigram_table_fpath_opt: bigram_table_fpath_opt.as_deref(),
+            trigram_table_fpath_opt: trigram_table_fpath_opt.as_deref(),
             unigram_table_sum,
             bigram_table_sum,
             trigram_table_sum,
@@ -891,12 +891,12 @@ fn main() -> Result<(), Box<dyn Error>> {
             metric,
             tolerance,
             weight,
-            opt_max_permutations,
-            opt_max_records,
+            max_permutations_opt,
+            max_records_opt,
             sort_rules: &sort_rules,
             filters: &filters,
-            opt_max_selections,
-            opt_index,
+            max_selections_opt,
+            index_opt,
             total_permutations,
             permutations_truncated,
             total_records,
@@ -908,7 +908,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match format {
         Format::Json => {
-            if let Some(metadata) = opt_metadata {
+            if let Some(metadata) = metadata_opt {
                 write_json_flatten_primitive_arrays::<2, _>(
                     &mut stdout,
                     &Value::from(&metadata),
@@ -925,7 +925,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             )
         }
         Format::Text => {
-            if let Some(metadata) = opt_metadata {
+            if let Some(metadata) = metadata_opt {
                 writeln!(stdout)?;
                 metadata.write_styled(&mut stdout)?;
             }

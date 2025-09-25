@@ -34,8 +34,8 @@ This project includes a user manual which includes information on how to install
 
 The user manual is available here, in various formats:
 
-- [HTML (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-docs.tar.gz)
-- [HTML (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-docs.zip)
+- [HTML (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-docs.tar.gz)
+- [HTML (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-docs.zip)
 - [Markdown](/docs/build/perky.md)
 
 <!--

@@ -12,11 +12,11 @@ use crate::{
     util::math::{factorial, generate_permutations_to_limit, index_to_permutation_in_place},
 };
 
-pub fn convert_option_vec_to_array<const N: usize, T: Default + Copy>(
-    opt_vec: Option<Vec<T>>,
+pub fn convert_vec_opt_to_array<const N: usize, T: Default + Copy>(
+    vec_opt: Option<Vec<T>>,
 ) -> Result<([T; N], usize), Box<dyn Error>> {
     let mut array = [T::default(); N];
-    match opt_vec {
+    match vec_opt {
         None => Ok((array, 0)),
         Some(vec) => {
             let len = vec.len();
@@ -40,12 +40,12 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64 + Sync,
     goal: Goal,
     tolerance: f64,
-    opt_max_permutations: Option<u64>,
-    opt_max_records: Option<u32>,
+    max_permutations_opt: Option<u64>,
+    max_records_opt: Option<u32>,
     parallelize: bool,
     sleep_ns: u64,
 ) -> Result<(u64, bool, Vec<[[u8; C]; R]>, bool), Box<dyn Error>> {
-    let opt_max_records = opt_max_records.map(|max_records: u32| max_records as u64 + 1);
+    let max_records_opt = max_records_opt.map(|max_records: u32| max_records as u64 + 1);
     let result = if parallelize {
         permute_and_substitute_parallel(
             &matrix,
@@ -56,8 +56,8 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
             scoring_fn,
             goal,
             tolerance,
-            opt_max_permutations,
-            opt_max_records,
+            max_permutations_opt,
+            max_records_opt,
             sleep_ns,
         )
     } else {
@@ -70,14 +70,14 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
             scoring_fn,
             goal,
             tolerance,
-            opt_max_permutations,
-            opt_max_records,
+            max_permutations_opt,
+            max_records_opt,
             sleep_ns,
         )
     };
     result.map(
         |(total_permutations, permutations_truncated, mut records)| {
-            let records_truncated = opt_max_records.map_or(false, |max_records| {
+            let records_truncated = max_records_opt.map_or(false, |max_records| {
                 records.len() as u64 >= max_records && records.pop().is_some()
             });
             (
@@ -99,8 +99,8 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64 + Sync,
     goal: Goal,
     #[allow(unused_variables)] tolerance: f64,
-    opt_max_permutations: Option<u64>,
-    opt_max_records: Option<u64>,
+    max_permutations_opt: Option<u64>,
+    max_records_opt: Option<u64>,
     sleep_ns: u64,
 ) -> Result<(u64, bool, Vec<[[u8; C]; R]>), Box<dyn Error>> {
     const BATCH: u64 = 1000;
@@ -125,7 +125,7 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
     let total2 = factorial(n2);
     let total3 = factorial(n3);
     let total_permutations = total1.saturating_mul(total2).saturating_mul(total3);
-    let max_permutations = opt_max_permutations.unwrap_or(u64::MAX);
+    let max_permutations = max_permutations_opt.unwrap_or(u64::MAX);
     let permutations_truncated = max_permutations < total_permutations;
     let n_permutations = Arc::new(atomic::AtomicU64::new(0));
     let progress_fn = Arc::new(Mutex::new(progress_fn));
@@ -180,13 +180,13 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
                 if is_better {
                     local_best_score = score;
                     local_best_records.clear();
-                    if opt_max_records.map_or(true, |max_records| {
+                    if max_records_opt.map_or(true, |max_records| {
                         (local_best_records.len() as u64) < max_records
                     }) {
                         local_best_records.push(matrix);
                     }
                 } else if is_equal {
-                    if opt_max_records.map_or(true, |max_records| {
+                    if max_records_opt.map_or(true, |max_records| {
                         (local_best_records.len() as u64) < max_records
                     }) {
                         local_best_records.push(matrix);
@@ -223,7 +223,7 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
                     cmp::Ordering::Greater => (local_best_records1, local_best_score1),
                     cmp::Ordering::Less => (local_best_records2, local_best_score2),
                     cmp::Ordering::Equal => {
-                        if let Some(max_records) = opt_max_records {
+                        if let Some(max_records) = max_records_opt {
                             let remaining = max_records
                                 .saturating_sub(local_best_records1.len() as u64)
                                 as usize;
@@ -239,7 +239,7 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
                     cmp::Ordering::Less => (local_best_records1, local_best_score1),
                     cmp::Ordering::Greater => (local_best_records2, local_best_score2),
                     cmp::Ordering::Equal => {
-                        if let Some(max_records) = opt_max_records {
+                        if let Some(max_records) = max_records_opt {
                             let remaining = max_records
                                 .saturating_sub(local_best_records1.len() as u64)
                                 as usize;
@@ -269,8 +269,8 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64,
     goal: Goal,
     #[allow(unused_variables)] tolerance: f64,
-    opt_max_permutations: Option<u64>,
-    opt_max_records: Option<u64>,
+    max_permutations_opt: Option<u64>,
+    max_records_opt: Option<u64>,
     sleep_ns: u64,
 ) -> Result<(u64, bool, Vec<[[u8; C]; R]>), Box<dyn Error>> {
     const BATCH: u64 = 1000000;
@@ -295,7 +295,7 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
     let total2 = factorial(n2);
     let total3 = factorial(n3);
     let total_permutations = total1.saturating_mul(total2).saturating_mul(total3);
-    let max_permutations = opt_max_permutations.unwrap_or(u64::MAX);
+    let max_permutations = max_permutations_opt.unwrap_or(u64::MAX);
     let permutations_truncated = max_permutations < total_permutations;
     let mut n_permutations = 0u64;
     let mut best_records = Vec::new();
@@ -332,13 +332,13 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
                 if is_better {
                     best_score = score;
                     best_records.clear();
-                    if opt_max_records.map_or(true, |max_records| {
+                    if max_records_opt.map_or(true, |max_records| {
                         (best_records.len() as u64) < max_records
                     }) {
                         best_records.push(matrix);
                     }
                 } else if is_equal {
-                    if opt_max_records.map_or(true, |max_records| {
+                    if max_records_opt.map_or(true, |max_records| {
                         (best_records.len() as u64) < max_records
                     }) {
                         best_records.push(matrix);

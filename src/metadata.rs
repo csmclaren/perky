@@ -21,9 +21,9 @@ use crate::{
 pub struct Metadata<'a> {
     pub layout_table_fpath: &'a Path,
     pub key_table_fpath: &'a Path,
-    pub opt_unigram_table_fpath: Option<&'a Path>,
-    pub opt_bigram_table_fpath: Option<&'a Path>,
-    pub opt_trigram_table_fpath: Option<&'a Path>,
+    pub unigram_table_fpath_opt: Option<&'a Path>,
+    pub bigram_table_fpath_opt: Option<&'a Path>,
+    pub trigram_table_fpath_opt: Option<&'a Path>,
     pub unigram_table_sum: u64,
     pub bigram_table_sum: u64,
     pub trigram_table_sum: u64,
@@ -31,12 +31,12 @@ pub struct Metadata<'a> {
     pub metric: Metric,
     pub tolerance: f64,
     pub weight: Weight,
-    pub opt_max_permutations: Option<u64>,
-    pub opt_max_records: Option<u32>,
+    pub max_permutations_opt: Option<u64>,
+    pub max_records_opt: Option<u32>,
     pub sort_rules: &'a [SortRule],
     pub filters: &'a [Expression],
-    pub opt_max_selections: Option<usize>,
-    pub opt_index: Option<isize>,
+    pub max_selections_opt: Option<usize>,
+    pub index_opt: Option<isize>,
     pub total_permutations: u64,
     pub permutations_truncated: bool,
     pub total_records: usize,
@@ -69,17 +69,17 @@ impl From<&Metadata<'_>> for Value {
         json!({
             "layout_table_fpath": value.layout_table_fpath,
             "key_table_fpath": value.key_table_fpath,
-            "opt_unigram_table_fpath": value.opt_unigram_table_fpath,
-            "opt_bigram_table_fpath": value.opt_bigram_table_fpath,
-            "opt_trigram_table_fpath": value.opt_trigram_table_fpath,
+            "unigram_table_fpath": value.unigram_table_fpath_opt,
+            "bigram_table_fpath": value.bigram_table_fpath_opt,
+            "trigram_table_fpath": value.trigram_table_fpath_opt,
             "unigram_table_sum": value.unigram_table_sum,
             "bigram_table_sum": value.bigram_table_sum,
             "trigram_table_sum": value.trigram_table_sum,
             "goal": value.goal.to_string(),
             "metric": value.metric.to_string(),
             "weight": value.weight.to_string(),
-            "opt_max_permutations": value.opt_max_permutations,
-            "opt_max_records": value.opt_max_records,
+            "max_permutations": value.max_permutations_opt,
+            "max_records": value.max_records_opt,
             "sort_rules": value
                 .sort_rules
                 .iter()
@@ -90,8 +90,8 @@ impl From<&Metadata<'_>> for Value {
                 .iter()
                 .map(|expression| expression.to_string())
                 .collect::<Vec<String>>(),
-            "opt_max_selections": value.opt_max_selections,
-            "opt_index": value.opt_index,
+            "max_selections": value.max_selections_opt,
+            "index": value.index_opt,
             "total_permutations": value.total_permutations,
             "permutations_truncated": value.permutations_truncated,
             "total_records": value.total_records,
@@ -112,21 +112,21 @@ impl WriteStyled for Metadata<'_> {
             writer,
             "layout table fpath:         {:?}\n\
              key table fpath:            {:?}\n\
-             opt unigram table fpath:    {}\n\
-             opt bigram table fpath:     {}\n\
-             opt trigram table fpath:    {}\n\
+             unigram table fpath:        {}\n\
+             bigram table fpath:         {}\n\
+             trigram table fpath:        {}\n\
              unigram table sum:          {}\n\
              bigram table sum:           {}\n\
              trigram table sum:          {}\n\
              goal:                       {}\n\
              metric:                     {}\n\
              weight:                     {}\n\
-             opt max permutations:       {}\n\
-             opt max records:            {}\n\
+             max permutations:           {}\n\
+             max records:                {}\n\
              sort rules:                 {}\n\
              filters:                    {}\n\
-             opt max selections:         {}\n\
-             opt index:                  {}\n\
+             max selections:             {}\n\
+             index:                      {}\n\
              total permutations:         {}\n\
              permutations truncated:     {}\n\
              total records:              {}\n\
@@ -137,42 +137,42 @@ impl WriteStyled for Metadata<'_> {
              total selected records:     {}",
             self.layout_table_fpath,
             self.key_table_fpath,
-            format_opt_debug(self.opt_unigram_table_fpath),
-            format_opt_debug(self.opt_bigram_table_fpath),
-            format_opt_debug(self.opt_trigram_table_fpath),
+            format_debug_opt(self.unigram_table_fpath_opt),
+            format_debug_opt(self.bigram_table_fpath_opt),
+            format_debug_opt(self.trigram_table_fpath_opt),
             self.unigram_table_sum,
             self.bigram_table_sum,
             self.trigram_table_sum,
             self.goal.to_string(),
             self.metric.to_string(),
             self.weight.to_string(),
-            format_opt_display(self.opt_max_permutations),
-            format_opt_display(self.opt_max_records),
+            format_display_opt(self.max_permutations_opt),
+            format_display_opt(self.max_records_opt),
             DisplaySlice(self.sort_rules),
             DisplaySlice(self.filters),
-            format_opt_display(self.opt_max_selections),
-            format_opt_display(self.opt_index),
+            format_display_opt(self.max_selections_opt),
+            format_display_opt(self.index_opt),
             self.total_permutations,
             self.permutations_truncated,
             self.total_records,
             self.records_truncated,
             format_duration(self.elapsed_duration),
-            format_opt_duration(self.efficiency()),
+            format_duration_opt(self.efficiency()),
             self.total_unique_records,
             self.total_selected_records,
         )
     }
 }
 
-fn format_opt_debug<T: Debug>(opt_debug: Option<T>) -> String {
-    match opt_debug {
+fn format_debug_opt<T: Debug>(debug_opt: Option<T>) -> String {
+    match debug_opt {
         None => String::from("null"),
         Some(t) => format!("{:?}", t),
     }
 }
 
-fn format_opt_display<T: Display>(opt_display: Option<T>) -> String {
-    match opt_display {
+fn format_display_opt<T: Display>(display_opt: Option<T>) -> String {
+    match display_opt {
         None => String::from("null"),
         Some(t) => format!("{}", t),
     }
@@ -182,8 +182,8 @@ fn format_duration(duration: Duration) -> String {
     format!("{:?}", duration)
 }
 
-fn format_opt_duration(opt_duration: Option<Duration>) -> String {
-    format_opt_debug(opt_duration)
+fn format_duration_opt(duration_opt: Option<Duration>) -> String {
+    format_debug_opt(duration_opt)
 }
 
 struct DisplaySlice<'a, T>(&'a [T]);

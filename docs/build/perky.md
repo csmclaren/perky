@@ -158,10 +158,10 @@ This document refers to example files and resource files that are part of the [o
 
 These can be downloaded here:
 
-- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-examples.tar.gz)
-- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-examples.zip)
-- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-resources.tar.gz)
-- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.6/perky-0.1.6-resources.zip)
+- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-examples.tar.gz)
+- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-examples.zip)
+- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-resources.tar.gz)
+- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-resources.zip)
 
 Any references to example files or resource files in this document assume their respective `.tar.gz` or `.zip` file has been extracted to the current working directory.
 
@@ -171,7 +171,7 @@ To include Perky as a library in your own Rust project, add the following to you
 
 ``` toml
 [dependencies]
-perky = "0.1.6"
+perky = "0.1.7"
 ```
 
 ## Usage
@@ -742,26 +742,26 @@ On the test machine, this permutation finished so quickly that it wasn't able to
 
     layout table fpath:         "examples/docs/example.lt.json"
     key table fpath:            "examples/docs/example-permuting.kt.json"
-    opt unigram table fpath:    null
-    opt bigram table fpath:     null
-    opt trigram table fpath:    null
+    unigram table fpath:        null
+    bigram table fpath:         null
+    trigram table fpath:        null
     unigram table sum:          3563505777820
     bigram table sum:           2819662855499
     trigram table sum:          2098121156991
     goal:                       ↓
     metric:                     Sfb
     weight:                     Effort
-    opt max permutations:       null
-    opt max records:            10000
+    max permutations:           null
+    max records:                10000
     sort rules:                 []
     filters:                    []
-    opt max selections:         null
-    opt index:                  null
+    max selections:             null
+    index:                      null
     total permutations:         362880
     permutations truncated:     false
     total records:              1
     records truncated:          false
-    elapsed duration:           206.547833ms
+    elapsed duration:           206.356875ms
     efficiency:                 569ns / permutation
     total unique records:       1
     total selected records:     1
@@ -955,9 +955,9 @@ If permuting, Perky will print the following metadata:
 
   - layout table fpath
   - key table fpath
-  - opt unigram table fpath
-  - opt bigram table fpath
-  - opt trigram table fpath
+  - unigram table fpath
+  - bigram table fpath
+  - trigram table fpath
 
 - N‑gram table sums
 
@@ -973,12 +973,12 @@ If permuting, Perky will print the following metadata:
 
 - Permutation-specific metadata
 
-  - opt max permutations
-  - opt max records
+  - max permutations
+  - max records
   - sort rules
   - filters
-  - opt max selections
-  - opt index
+  - max selections
+  - index
   - total permutations
   - permutations truncated
   - total records
@@ -1125,32 +1125,32 @@ perky \
 {
   "layout_table_fpath": "examples/docs/example.lt.json",
   "key_table_fpath": "examples/docs/example-introduction.kt.json",
-  "opt_unigram_table_fpath": null,
-  "opt_bigram_table_fpath": null,
-  "opt_trigram_table_fpath": null,
+  "unigram_table_fpath": null,
+  "bigram_table_fpath": null,
+  "trigram_table_fpath": null,
   "unigram_table_sum": 3563505777820,
   "bigram_table_sum": 2819662855499,
   "trigram_table_sum": 2098121156991,
   "goal": "↓",
   "metric": "Sfb",
   "weight": "Raw",
-  "opt_max_permutations": null,
-  "opt_max_records": 10000,
+  "max_permutations": null,
+  "max_records": 10000,
   "sort_rules": [],
   "filters": [],
-  "opt_max_selections": null,
-  "opt_index": null,
+  "max_selections": null,
+  "index": null,
   "total_permutations": 1,
   "permutations_truncated": false,
   "total_records": 1,
   "records_truncated": false,
   "elapsed_duration": {
     "secs": 0,
-    "nanos": 465625
+    "nanos": 508541
   },
   "efficiency": {
     "secs": 0,
-    "nanos": 465625
+    "nanos": 508541
   },
   "total_unique_records": 1,
   "total_selected_records": 1

@@ -34,7 +34,7 @@ where
             .map(|row| {
                 let mut columns = row
                     .iter()
-                    .map(|opt_value| match opt_value {
+                    .map(|value_opt| match value_opt {
                         None => Value::Null,
                         Some(value) => Value::from(*value),
                     })

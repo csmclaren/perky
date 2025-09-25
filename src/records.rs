@@ -29,7 +29,7 @@ impl<'a, K: Clone> DetailIter<'a, K> {
         record_sum_ew: u64,
     ) -> Option<Self> {
         Some(Self {
-            iter: measurement.opt_details.as_deref()?.iter(),
+            iter: measurement.details_opt.as_deref()?.iter(),
             cum: 0,
             cum_ew: 0,
             measurement_sum: measurement.sum,

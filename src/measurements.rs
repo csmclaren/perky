@@ -3,28 +3,28 @@ use core::cmp::Reverse;
 use crate::{scores::Score, weights::Weight};
 
 pub struct Measurement<K> {
-    pub opt_details: Option<Vec<Score<K>>>,
+    pub details_opt: Option<Vec<Score<K>>>,
     pub sum: u64,
     pub sum_ew: u64,
 }
 
 impl<K> Measurement<K> {
-    pub fn new(opt_details: Option<Vec<Score<K>>>, sum: u64, sum_ew: u64) -> Self {
+    pub fn new(details_opt: Option<Vec<Score<K>>>, sum: u64, sum_ew: u64) -> Self {
         Self {
-            opt_details,
+            details_opt,
             sum,
             sum_ew,
         }
     }
 
     pub fn retain_non_zero_details(&mut self) {
-        if let Some(details) = self.opt_details.as_mut() {
+        if let Some(details) = self.details_opt.as_mut() {
             details.retain(|score| !score.is_zero());
         }
     }
 
     pub fn sort_details(&mut self, weight: Weight) {
-        if let Some(details) = self.opt_details.as_mut() {
+        if let Some(details) = self.details_opt.as_mut() {
             use Weight::*;
             match weight {
                 Effort => details.sort_by_key(|score| Reverse(score.value_ew)),

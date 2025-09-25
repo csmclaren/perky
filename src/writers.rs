@@ -72,14 +72,14 @@ pub fn is_printable(byte: u8) -> bool {
 pub fn write_matrix<const C: usize, const R: usize>(
     writer: &mut dyn WriteColor,
     matrix: &[[u8; C]; R],
-    opt_crop_rect_trbl: Option<(usize, usize, usize, usize)>,
+    crop_rect_trbl_opt: Option<(usize, usize, usize, usize)>,
     saturation_map: &[f64; 1 << 8],
 ) -> io::Result<()> {
     const CHAR_UNKNOWN: char = '?';
     const HUE: f32 = 0.0;
     const VALUE_MIN: f32 = 0.75;
     let mut color_spec = ColorSpec::new();
-    let (top, right, bottom, left) = opt_crop_rect_trbl.unwrap_or((0, 0, 0, 0));
+    let (top, right, bottom, left) = crop_rect_trbl_opt.unwrap_or((0, 0, 0, 0));
     for row in top..R.saturating_sub(bottom) {
         for col in left..C.saturating_sub(right) {
             let byte = matrix[row][col];
@@ -129,10 +129,10 @@ pub static STYLE_PERC: LazyLock<ColorSpec> = LazyLock::new(|| {
 pub fn write_perc(
     writer: &mut dyn WriteColor,
     decimal_places: usize,
-    opt_value: Option<f64>,
+    value_opt: Option<f64>,
 ) -> io::Result<()> {
     writer.set_color(&STYLE_PERC)?;
-    write!(writer, "{}", format_perc(decimal_places, opt_value))?;
+    write!(writer, "{}", format_perc(decimal_places, value_opt))?;
     writer.reset()
 }
 
@@ -162,20 +162,20 @@ pub static STYLE_DURATION_INCOMPLETE: LazyLock<ColorSpec> = LazyLock::new(|| {
 pub fn write_progress(
     writer: &mut dyn WriteColor,
     n: u64,
-    opt_total: Option<u64>,
-    opt_duration_complete: Option<Duration>,
+    total_opt: Option<u64>,
+    duration_complete_opt: Option<Duration>,
     estimate_duration_incomplete: bool,
     decimal_places: usize,
-    opt_carriage_width: Option<usize>,
-    opt_progress_bar_width: Option<usize>,
+    carriage_width_opt: Option<usize>,
+    progress_bar_width_opt: Option<usize>,
 ) -> io::Result<()> {
     const CARRIAGE_WIDTH: usize = 120;
     const PROGRESS_BAR_WIDTH: usize = 20;
-    let carriage_width = opt_carriage_width.unwrap_or(CARRIAGE_WIDTH);
-    let progress_bar_width = opt_progress_bar_width.unwrap_or(PROGRESS_BAR_WIDTH);
+    let carriage_width = carriage_width_opt.unwrap_or(CARRIAGE_WIDTH);
+    let progress_bar_width = progress_bar_width_opt.unwrap_or(PROGRESS_BAR_WIDTH);
     write!(writer, "\r{:<width$}\r", "", width = carriage_width)?;
-    let opt_frac_complete = opt_total.and_then(|t| calculate_frac(n, t));
-    if let Some(frac_complete) = opt_frac_complete {
+    let frac_complete_opt = total_opt.and_then(|t| calculate_frac(n, t));
+    if let Some(frac_complete) = frac_complete_opt {
         write!(
             writer,
             "[{}]  ",
@@ -187,10 +187,10 @@ pub fn write_progress(
         writer.reset()?;
     }
     write!(writer, "{}", n)?;
-    if let Some(total) = opt_total {
+    if let Some(total) = total_opt {
         write!(writer, " / {}", total)?;
     }
-    if let Some(duration_complete) = opt_duration_complete {
+    if let Some(duration_complete) = duration_complete_opt {
         writer.set_color(&STYLE_DURATION_COMPLETE)?;
         let duration_complete_seconds = duration_complete.as_secs_f64();
         write!(
@@ -200,7 +200,7 @@ pub fn write_progress(
         )?;
         writer.reset()?;
         if estimate_duration_incomplete {
-            if let Some(frac_complete) = opt_frac_complete {
+            if let Some(frac_complete) = frac_complete_opt {
                 if frac_complete > 0.0 {
                     let estimated_total_seconds = duration_complete_seconds / frac_complete;
                     let estimated_remaining_seconds =
@@ -334,7 +334,7 @@ pub fn write_summary_row_text(
 }
 
 pub fn write_record_json(
-    opt_index_and_total: Option<(usize, usize)>,
+    index_and_total_pair_opt: Option<(usize, usize)>,
     record: Record,
     print_summaries: bool,
     print_perc: bool,
@@ -444,7 +444,7 @@ pub fn write_record_json(
             .collect::<BTreeMap<_, _>>()
     });
     json!({
-        "index": opt_index_and_total.map(|(index, _total)| index),
+        "index": index_and_total_pair_opt.map(|(index, _total)| index),
         "key_table": key_table_json,
         "measurements": {
             "unigram": {
@@ -465,14 +465,14 @@ pub fn write_record_json(
 
 pub fn write_record_text(
     writer: &mut dyn WriteColor,
-    opt_index_and_total: Option<(usize, usize)>,
+    index_and_total_pair_opt: Option<(usize, usize)>,
     record: Record,
     unigram_table_normalized: [f64; 1 << 8],
     print_summaries: bool,
     print_perc: bool,
 ) -> io::Result<()> {
     const DECIMAL_PLACES: usize = 3;
-    if let Some((index, total)) = opt_index_and_total {
+    if let Some((index, total)) = index_and_total_pair_opt {
         write_index(writer, &format!("{} / {}", index, total))?;
         writeln!(writer)?;
     }
@@ -566,13 +566,13 @@ pub fn write_record_text(
 pub fn write_records_json(
     writer: &mut dyn WriteColor,
     records: impl Iterator<Item = Record>,
-    opt_total: Option<usize>,
+    total_opt: Option<usize>,
     print_summaries: bool,
     print_perc: bool,
 ) -> io::Result<()> {
     for (i, record) in records.enumerate() {
         let record_json = write_record_json(
-            opt_total.map(|total| (i + 1, total)),
+            total_opt.map(|total| (i + 1, total)),
             record,
             print_summaries,
             print_perc,
@@ -587,7 +587,7 @@ pub fn write_records_json(
 pub fn write_records_text(
     writer: &mut dyn WriteColor,
     records: impl Iterator<Item = Record>,
-    opt_total: Option<usize>,
+    total_opt: Option<usize>,
     unigram_table_normalized: [f64; 1 << 8],
     print_summaries: bool,
     print_perc: bool,
@@ -596,7 +596,7 @@ pub fn write_records_text(
         writeln!(writer)?;
         write_record_text(
             writer,
-            opt_total.map(|total| (i + 1, total)),
+            total_opt.map(|total| (i + 1, total)),
             record,
             unigram_table_normalized,
             print_summaries,
