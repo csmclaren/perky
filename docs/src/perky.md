@@ -40,7 +40,7 @@ Perky's unique feature is a high-performance, parallelized, and permutation-base
 
 - 📈 Rich output
 
-  Export human-readable (and colourful) text or structured [JSON Lines](https://jsonlines.org), with optional metadata, details, and summaries.
+  Export human-readable (and colourful) text or structured [JSON](https://ecma-international.org/publications-and-standards/standards/ecma-404/), with optional metadata, details, and summaries.
 
 ## Installation
 
@@ -678,24 +678,35 @@ perky \
 
 Perky will permute all 362,880, and in this case it has found a single record better than all others, one that reduces same finger bigrams from 6.315% to 4.590%.
 
-On the test machine, the permutation took about 206ms to run at a rate of about 567ns/permutation. Ironically, it finished so quickly that it wasn't able to reach its top speed (which often can be lower than 10ns/permutation).
+On the test machine, this permutation finished so quickly that it wasn't able to reach its top speed (which often can be lower than 10ns/permutation).
 
     [████████████████████]  100.0%  362880 / 362880  0.2s  (~ 0.0s remaining)
 
-    unigram table sum:      3563505777820
-    bigram table sum:       2819662855499
-    trigram table sum:      2098121156991
-    goal:                   ↓
-    metric:                 sfb
-    weight:                 effort
-    total permutations:     362880
-    elapsed duration:       205.881375ms
-    efficiency:             567ns / permutation
-    score:                  197912380083
-    truncated:              false
-    total records:          1
-    total unique records:   1
-    total selected records: 1
+    layout table fpath:         "examples/docs/example.lt.json"
+    key table fpath:            "examples/docs/example-permuting.kt.json"
+    opt unigram table fpath:    null
+    opt bigram table fpath:     null
+    opt trigram table fpath:    null
+    unigram table sum:          3563505777820
+    bigram table sum:           2819662855499
+    trigram table sum:          2098121156991
+    goal:                       ↓
+    metric:                     Sfb
+    weight:                     Effort
+    opt max permutations:       null
+    opt max records:            10000
+    sort rules:                 []
+    filters:                    []
+    opt max selections:         null
+    opt index:                  null
+    total permutations:         362880
+    permutations truncated:     false
+    total records:              1
+    records truncated:          false
+    elapsed duration:           206.547833ms
+    efficiency:                 569ns / permutation
+    total unique records:       1
+    total selected records:     1
 
     Q W E R T Y U I O P [ ] \
     S L J D K H F G A ; '
@@ -783,11 +794,11 @@ The permutation process will retain up to 10,000 records *with identical scores*
 
 This limit helps prevent running out of memory or slowing down the sorting and filtering steps (explained in subsequent sections) in pathological cases where too many records have identical scores for a given metric.
 
-The default limit should be more than sufficient for most analyses, but you can increase (or decrease) it using `--truncate <N>`.
+The default limit should be more than sufficient for most analyses, but you can increase (or decrease) it using `--max-records <MAX_RECORDS>`.
 
 ##### Examples
 
-To increase the truncation limit to 25,000, specify `--truncate 25000`.
+To increase the truncation limit to 25,000, specify `--max-records 25000`.
 
 #### Deduplicating
 
@@ -855,23 +866,21 @@ Selection allows you to extract specific records from the filtered set. By defau
 
 ##### Syntax
 
-Specify `--max-records <N>` to limit the records to the first *n*. `N` must fall within the bounds of the available records.
+Specify `--max-selections <MAX_SELECTIONS>` to limit the records to the first *MAX_SELECTIONS*. `MAX_SELECTIONS` must fall within the bounds of the available records.
 
-Specify `--index <N>` to select the record at the *nth* index. `N` must fall within the bounds of the available records.
-
-If both `--index` and `--max-records` are used, `--max-records` is applied first.
-
-Indices are 0-based, i.e., `--index 0` selects the first record. Negative indices count from the end, i.e., `--index=-1` selects the last record.
+Specify `--index <INDEX>` to select the record at the *INDEX*. `INDEX` must fall within the bounds of the available records. Indices are 0-based, i.e., `--index 0` selects the first record. Negative indices count from the end, i.e., `--index=-1` selects the last record.
 
 > Note: You should specify negative option arguments using the "=" syntax, such that your shell does not confuse a negative option argument with an option
+
+If both `--index` and `--max-selections` are used, `--max-selections` is applied first.
 
 ##### Examples
 
 To show only the first record, specify `--index 0`.
 
-To show only the first 10 records, specify `--max-records 10`.
+To show only the first 10 records, specify `--max-selections 10`.
 
-To show only the last record of the first 10, specify `--max-records 10 --index=-1`
+To show only the last record of the first 10, specify `--max-selections 10 --index=-1`
 
 ### Printing
 
@@ -884,28 +893,40 @@ After Perky loads its input files; permutes the key table (if requested); and sc
 
 If permuting, Perky will print the following metadata:
 
+- Input files
+  - layout table fpath
+  - key table fpath
+  - opt unigram table fpath
+  - opt bigram table fpath
+  - opt trigram table fpath
+
 - N&#8209;gram table sums
-  - Unigram table sum
-  - Bigram table sum
-  - Trigram table sum
+  - unigram table sum
+  - bigram table sum
+  - trigram table sum
 
 - Scoring options
-  - Goal
-  - Metric
-  - Weight
+  - goal
+  - metric
+  - weight
 
 - Permutation-specific metadata
-  - Total permutations
-  - Elapsed duration
-  - Efficiency
-  - Score
-  - Truncated
-  - Total records
-  - Total unique records
-  - Total selected records
+  - opt max permutations
+  - opt max records
+  - sort rules
+  - filters
+  - opt max selections
+  - opt index
+  - total permutations
+  - permutations truncated
+  - total records
+  - records truncated
+  - elapsed duration
+  - efficiency
+  - total unique records
+  - total selected records
 
   Efficiency is the elapsed duration divided by the total permutations.
-  Truncated is true if (and only if) the records needed to be truncated.
 
 To force printing the metadata (even when not permuting), specify `--print-metadata true`. To suppress printing the metadata (even when permuting), specify `--print-metadata false`.
 
@@ -923,13 +944,13 @@ By default, all scores include both raw and percentage representations (equivale
 
 By default, Perky will output text, which is easy to read. This is equivalent to specifying `--format text`.
 
-Perky can also output [JSON Lines](https://jsonlines.org), which is easy to analyze programmatically. For JSON Lines output, specify `--format json`.
+Perky can also output [JSON](https://ecma-international.org/publications-and-standards/standards/ecma-404/), which is easy to analyze programmatically. For JSON output, specify `--format json`.
 
 For the text format, output can be styled using colours and text effects to improve readability by specifying `--style <STYLE>`. By default, output will be styled when printed to a terminal but not when piped or redirected (equivalent to `--style auto`). To always style text (including when the output is piped or redirected), specify `--style always`. To never style text, specify `--style never`.
 
 When styles are enabled, key tables will be printed in colour, representing the relative unigram frequency for that key. Bright red indicates the highest frequency and darker, desaturated red represents the frequency.
 
-For JSON Lines format, `--style <STYLE>` is ignored.
+For JSON format, `--style <STYLE>` is ignored.
 
 With the exception of the colouring of the key tables in text format, both formats output the same information.
 
@@ -1040,18 +1061,35 @@ perky \
 
 ```json
 {
+  "layout_table_fpath": "examples/docs/example.lt.json",
+  "key_table_fpath": "examples/docs/example-introduction.kt.json",
+  "opt_unigram_table_fpath": null,
+  "opt_bigram_table_fpath": null,
+  "opt_trigram_table_fpath": null,
   "unigram_table_sum": 3563505777820,
   "bigram_table_sum": 2819662855499,
   "trigram_table_sum": 2098121156991,
   "goal": "↓",
-  "metric": "sfb",
-  "weight": "raw",
+  "metric": "Sfb",
+  "weight": "Raw",
+  "opt_max_permutations": null,
+  "opt_max_records": 10000,
+  "sort_rules": [],
+  "filters": [],
+  "opt_max_selections": null,
+  "opt_index": null,
   "total_permutations": 1,
-  "elapsed_duration": "280.583µs",
-  "efficiency": "280.583µs",
-  "score": 195686888871,
-  "truncated": false,
+  "permutations_truncated": false,
   "total_records": 1,
+  "records_truncated": false,
+  "elapsed_duration": {
+    "secs": 0,
+    "nanos": 465625
+  },
+  "efficiency": {
+    "secs": 0,
+    "nanos": 465625
+  },
   "total_unique_records": 1,
   "total_selected_records": 1
 }

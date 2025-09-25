@@ -31,7 +31,7 @@ Perky's unique feature is a high-performance, parallelized, and permutation-base
 
 - 📈 Rich output
 
-  Export human-readable (and colourful) text or structured [JSON Lines](https://jsonlines.org), with optional metadata, details, and summaries.
+  Export human-readable (and colourful) text or structured [JSON](https://ecma-international.org/publications-and-standards/standards/ecma-404/), with optional metadata, details, and summaries.
 
 ## Documentation
 

@@ -40,12 +40,12 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64 + Sync,
     goal: Goal,
     tolerance: f64,
-    max_permutations: u64,
+    opt_max_permutations: Option<u64>,
+    opt_max_records: Option<u32>,
     parallelize: bool,
     sleep_ns: u64,
-    opt_truncate: Option<u32>,
-) -> Result<(Vec<[[u8; C]; R]>, u64, u64, bool), Box<dyn Error>> {
-    let opt_truncate = opt_truncate.map(|truncate: u32| truncate as u64 + 1);
+) -> Result<(u64, bool, Vec<[[u8; C]; R]>, bool), Box<dyn Error>> {
+    let opt_max_records = opt_max_records.map(|max_records: u32| max_records as u64 + 1);
     let result = if parallelize {
         permute_and_substitute_parallel(
             &matrix,
@@ -56,9 +56,9 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
             scoring_fn,
             goal,
             tolerance,
-            max_permutations,
+            opt_max_permutations,
+            opt_max_records,
             sleep_ns,
-            opt_truncate,
         )
     } else {
         permute_and_substitute_sequential(
@@ -70,17 +70,24 @@ pub fn permute_and_substitute<const C: usize, const R: usize, const N: usize>(
             scoring_fn,
             goal,
             tolerance,
-            max_permutations,
+            opt_max_permutations,
+            opt_max_records,
             sleep_ns,
-            opt_truncate,
         )
     };
-    result.map(|(mut key_table_matrices, score, total_permutations)| {
-        let truncated = opt_truncate.map_or(false, |truncate| {
-            key_table_matrices.len() as u64 >= truncate && key_table_matrices.pop().is_some()
-        });
-        (key_table_matrices, score, total_permutations, truncated)
-    })
+    result.map(
+        |(total_permutations, permutations_truncated, mut records)| {
+            let records_truncated = opt_max_records.map_or(false, |max_records| {
+                records.len() as u64 >= max_records && records.pop().is_some()
+            });
+            (
+                total_permutations,
+                permutations_truncated,
+                records,
+                records_truncated,
+            )
+        },
+    )
 }
 
 fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usize>(
@@ -92,19 +99,16 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64 + Sync,
     goal: Goal,
     #[allow(unused_variables)] tolerance: f64,
-    max_permutations: u64,
+    opt_max_permutations: Option<u64>,
+    opt_max_records: Option<u64>,
     sleep_ns: u64,
-    opt_truncate: Option<u64>,
-) -> Result<(Vec<[[u8; C]; R]>, u64, u64), Box<dyn Error>> {
+) -> Result<(u64, bool, Vec<[[u8; C]; R]>), Box<dyn Error>> {
     const BATCH: u64 = 1000;
     use Goal::*;
     let initial_score = match goal {
         Max => 0,
         Min => u64::MAX,
     };
-    if max_permutations == 0 {
-        return Ok((Vec::new(), initial_score, 0));
-    }
     let (array1, length1, coordinates1) = region1;
     let (array2, length2, coordinates2) = region2;
     let (array3, length3, coordinates3) = region3;
@@ -120,17 +124,16 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
     let total1 = factorial(n1);
     let total2 = factorial(n2);
     let total3 = factorial(n3);
-    let total = total1
-        .saturating_mul(total2)
-        .saturating_mul(total3)
-        .min(max_permutations);
-    let count = Arc::new(atomic::AtomicU64::new(0));
+    let total_permutations = total1.saturating_mul(total2).saturating_mul(total3);
+    let max_permutations = opt_max_permutations.unwrap_or(u64::MAX);
+    let permutations_truncated = max_permutations < total_permutations;
+    let n_permutations = Arc::new(atomic::AtomicU64::new(0));
     let progress_fn = Arc::new(Mutex::new(progress_fn));
-    let (best_matrices, best_score) = (0..total)
+    let (best_records, _best_score) = (0..total_permutations.min(max_permutations))
         .into_par_iter()
         .fold(
             || (Vec::new(), initial_score, 0u64),
-            |(mut local_best_matrices, mut local_best_score, mut local_n_permutations), index| {
+            |(mut local_best_records, mut local_best_score, mut local_n_permutations), index| {
                 let mut matrix = *matrix;
                 let mut p1 = [0u8; N];
                 let mut p2 = [0u8; N];
@@ -176,22 +179,23 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
                 let is_equal = score == local_best_score;
                 if is_better {
                     local_best_score = score;
-                    local_best_matrices.clear();
-                    if opt_truncate.map_or(true, |truncate| {
-                        (local_best_matrices.len() as u64) < truncate
+                    local_best_records.clear();
+                    if opt_max_records.map_or(true, |max_records| {
+                        (local_best_records.len() as u64) < max_records
                     }) {
-                        local_best_matrices.push(matrix);
+                        local_best_records.push(matrix);
                     }
                 } else if is_equal {
-                    if opt_truncate.map_or(true, |truncate| {
-                        (local_best_matrices.len() as u64) < truncate
+                    if opt_max_records.map_or(true, |max_records| {
+                        (local_best_records.len() as u64) < max_records
                     }) {
-                        local_best_matrices.push(matrix);
+                        local_best_records.push(matrix);
                     }
                 }
                 local_n_permutations += 1;
                 if local_n_permutations % BATCH == 0 {
-                    let current = count.fetch_add(BATCH, atomic::Ordering::Relaxed) + BATCH;
+                    let current =
+                        n_permutations.fetch_add(BATCH, atomic::Ordering::Relaxed) + BATCH;
                     if let Ok(mut progress_fn) = progress_fn.lock() {
                         progress_fn(current, false);
                     }
@@ -199,59 +203,61 @@ fn permute_and_substitute_parallel<const C: usize, const R: usize, const N: usiz
                         sleep(Duration::from_nanos(sleep_ns));
                     }
                 }
-                (local_best_matrices, local_best_score, local_n_permutations)
+                (local_best_records, local_best_score, local_n_permutations)
             },
         )
         .map(
-            |(local_best_matrices, local_best_score, local_n_permutations)| {
+            |(local_best_records, local_best_score, local_n_permutations)| {
                 let remaining = local_n_permutations % BATCH;
                 if remaining != 0 {
-                    count.fetch_add(remaining, atomic::Ordering::Relaxed);
+                    n_permutations.fetch_add(remaining, atomic::Ordering::Relaxed);
                 }
-                (local_best_matrices, local_best_score)
+                (local_best_records, local_best_score)
             },
         )
         .reduce(
             || (Vec::new(), initial_score),
-            |(mut local_best_matrices1, local_best_score1),
-             (local_best_matrices2, local_best_score2)| match goal {
+            |(mut local_best_records1, local_best_score1),
+             (local_best_records2, local_best_score2)| match goal {
                 Max => match local_best_score1.cmp(&local_best_score2) {
-                    cmp::Ordering::Greater => (local_best_matrices1, local_best_score1),
-                    cmp::Ordering::Less => (local_best_matrices2, local_best_score2),
+                    cmp::Ordering::Greater => (local_best_records1, local_best_score1),
+                    cmp::Ordering::Less => (local_best_records2, local_best_score2),
                     cmp::Ordering::Equal => {
-                        if let Some(truncate) = opt_truncate {
-                            let remaining =
-                                truncate.saturating_sub(local_best_matrices1.len() as u64) as usize;
-                            local_best_matrices1
-                                .extend(local_best_matrices2.into_iter().take(remaining));
+                        if let Some(max_records) = opt_max_records {
+                            let remaining = max_records
+                                .saturating_sub(local_best_records1.len() as u64)
+                                as usize;
+                            local_best_records1
+                                .extend(local_best_records2.into_iter().take(remaining));
                         } else {
-                            local_best_matrices1.extend(local_best_matrices2);
+                            local_best_records1.extend(local_best_records2);
                         }
-                        (local_best_matrices1, local_best_score1)
+                        (local_best_records1, local_best_score1)
                     }
                 },
                 Min => match local_best_score1.cmp(&local_best_score2) {
-                    cmp::Ordering::Less => (local_best_matrices1, local_best_score1),
-                    cmp::Ordering::Greater => (local_best_matrices2, local_best_score2),
+                    cmp::Ordering::Less => (local_best_records1, local_best_score1),
+                    cmp::Ordering::Greater => (local_best_records2, local_best_score2),
                     cmp::Ordering::Equal => {
-                        if let Some(truncate) = opt_truncate {
-                            let remaining =
-                                truncate.saturating_sub(local_best_matrices1.len() as u64) as usize;
-                            local_best_matrices1
-                                .extend(local_best_matrices2.into_iter().take(remaining));
+                        if let Some(max_records) = opt_max_records {
+                            let remaining = max_records
+                                .saturating_sub(local_best_records1.len() as u64)
+                                as usize;
+                            local_best_records1
+                                .extend(local_best_records2.into_iter().take(remaining));
                         } else {
-                            local_best_matrices1.extend(local_best_matrices2);
+                            local_best_records1.extend(local_best_records2);
                         }
-                        (local_best_matrices1, local_best_score1)
+                        (local_best_records1, local_best_score1)
                     }
                 },
             },
         );
-    let total_count = count.load(atomic::Ordering::Relaxed);
+    let n_permutations = n_permutations.load(atomic::Ordering::Relaxed);
     if let Ok(mut progress_fn) = progress_fn.lock() {
-        progress_fn(total_count, true);
+        progress_fn(n_permutations, true);
     }
-    Ok((best_matrices, best_score, total_count))
+    Ok((n_permutations, permutations_truncated, best_records))
 }
 
 fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: usize>(
@@ -263,19 +269,16 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
     scoring_fn: impl Fn(&[[u8; C]; R]) -> u64,
     goal: Goal,
     #[allow(unused_variables)] tolerance: f64,
-    max_permutations: u64,
+    opt_max_permutations: Option<u64>,
+    opt_max_records: Option<u64>,
     sleep_ns: u64,
-    opt_truncate: Option<u64>,
-) -> Result<(Vec<[[u8; C]; R]>, u64, u64), Box<dyn Error>> {
+) -> Result<(u64, bool, Vec<[[u8; C]; R]>), Box<dyn Error>> {
     const BATCH: u64 = 1000000;
     use Goal::*;
     let initial_score = match goal {
         Max => 0,
         Min => u64::MAX,
     };
-    if max_permutations == 0 {
-        return Ok((Vec::new(), initial_score, 0));
-    }
     let (array1, length1, coordinates1) = region1;
     let (array2, length2, coordinates2) = region2;
     let (array3, length3, coordinates3) = region3;
@@ -285,9 +288,18 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
     let coordinates1 = &coordinates1[..length1];
     let coordinates2 = &coordinates2[..length2];
     let coordinates3 = &coordinates3[..length3];
-    let mut best_matrices = Vec::new();
-    let mut best_score = initial_score;
+    let n1 = length1 as u64;
+    let n2 = length2 as u64;
+    let n3 = length3 as u64;
+    let total1 = factorial(n1);
+    let total2 = factorial(n2);
+    let total3 = factorial(n3);
+    let total_permutations = total1.saturating_mul(total2).saturating_mul(total3);
+    let max_permutations = opt_max_permutations.unwrap_or(u64::MAX);
+    let permutations_truncated = max_permutations < total_permutations;
     let mut n_permutations = 0u64;
+    let mut best_records = Vec::new();
+    let mut best_score = initial_score;
     let mut matrix = *matrix;
     generate_permutations_to_limit::<N, u8>(array1, length1, |p1| {
         generate_permutations_to_limit::<N, u8>(array2, length2, |p2| {
@@ -319,13 +331,17 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
                 let is_equal = score == best_score;
                 if is_better {
                     best_score = score;
-                    best_matrices.clear();
-                    if opt_truncate.map_or(true, |t| (best_matrices.len() as u64) < t) {
-                        best_matrices.push(matrix);
+                    best_records.clear();
+                    if opt_max_records.map_or(true, |max_records| {
+                        (best_records.len() as u64) < max_records
+                    }) {
+                        best_records.push(matrix);
                     }
                 } else if is_equal {
-                    if opt_truncate.map_or(true, |t| (best_matrices.len() as u64) < t) {
-                        best_matrices.push(matrix);
+                    if opt_max_records.map_or(true, |max_records| {
+                        (best_records.len() as u64) < max_records
+                    }) {
+                        best_records.push(matrix);
                     }
                 }
                 if sleep_ns != 0 {
@@ -338,5 +354,5 @@ fn permute_and_substitute_sequential<const C: usize, const R: usize, const N: us
         n_permutations < max_permutations
     });
     progress_fn(n_permutations, true);
-    Ok((best_matrices, best_score, n_permutations))
+    Ok((n_permutations, permutations_truncated, best_records))
 }

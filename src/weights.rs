@@ -7,7 +7,7 @@ pub enum Weight {
 }
 
 impl Display for Weight {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Weight::Effort => write!(f, "Effort"),
             Weight::Raw => write!(f, "Raw"),

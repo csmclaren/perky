@@ -6,7 +6,7 @@ use core::{
 
 use std::collections::{HashMap, HashSet};
 
-#[derive(Clone, Debug, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, PartialEq)]
 enum Token {
     Number(f64),
     Identifier(String),
@@ -25,6 +25,31 @@ enum Token {
     Not,
     LeftParenthesis,
     RightParenthesis,
+}
+
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use Token::*;
+        match self {
+            Number(n) => write!(f, "number({})", n),
+            Identifier(s) => write!(f, "identifier({})", s),
+            Plus => write!(f, "+"),
+            Minus => write!(f, "-"),
+            Asterisk => write!(f, "*"),
+            Solidus => write!(f, "/"),
+            Eq => write!(f, "=="),
+            Neq => write!(f, "!="),
+            Lt => write!(f, "<"),
+            Le => write!(f, "<="),
+            Gt => write!(f, ">"),
+            Ge => write!(f, ">="),
+            And => write!(f, "&&"),
+            Or => write!(f, "||"),
+            Not => write!(f, "!"),
+            LeftParenthesis => write!(f, "("),
+            RightParenthesis => write!(f, ")"),
+        }
+    }
 }
 
 struct Lexer<'a> {
@@ -97,11 +122,19 @@ impl<'a> Lexer<'a> {
             }
             '&' => {
                 self.position += 1;
-                Some(Ok(And))
+                if self.consume('&') {
+                    Some(Ok(And))
+                } else {
+                    Some(Err(ParseError::UnexpectedToken("&".to_string())))
+                }
             }
             '|' => {
                 self.position += 1;
-                Some(Ok(Or))
+                if self.consume('|') {
+                    Some(Ok(Or))
+                } else {
+                    Some(Err(ParseError::UnexpectedToken("|".to_string())))
+                }
             }
             '(' => {
                 self.position += 1;
@@ -163,7 +196,7 @@ impl<'a> Lexer<'a> {
 
     fn skip_whitespace(&mut self) {
         while self.position < self.input.len()
-            && self.input.as_bytes()[self.position] as char == ' '
+            && (self.input.as_bytes()[self.position] as char).is_ascii_whitespace()
         {
             self.position += 1;
         }
@@ -215,11 +248,11 @@ impl Parser {
 
     fn parse_equality(&mut self) -> Result<Expression, ParseError> {
         let mut expression = self.parse_relational()?;
-        while let Some(op) = self.match_one_of(&[Token::Eq, Token::Neq]) {
+        if let Some(idx) = self.match_one_of(&[Token::Eq, Token::Neq]) {
             let right = self.parse_relational()?;
-            let bop = match op {
-                Token::Eq => BinaryOperator::Eq,
-                Token::Neq => BinaryOperator::Neq,
+            let bop = match idx {
+                0 => BinaryOperator::Eq,
+                1 => BinaryOperator::Neq,
                 _ => unreachable!(),
             };
             expression = Expression::Binary {
@@ -227,19 +260,22 @@ impl Parser {
                 operator: bop,
                 right: Box::new(right),
             };
+            if self.peek_one_of(&[Token::Eq, Token::Neq]).is_some() {
+                return Err(ParseError::ChainedNonAssociative("equality (==, !=)"));
+            }
         }
         Ok(expression)
     }
 
     fn parse_relational(&mut self) -> Result<Expression, ParseError> {
         let mut expression = self.parse_term()?;
-        while let Some(op) = self.match_one_of(&[Token::Lt, Token::Le, Token::Gt, Token::Ge]) {
+        if let Some(idx) = self.match_one_of(&[Token::Lt, Token::Le, Token::Gt, Token::Ge]) {
             let right = self.parse_term()?;
-            let bop = match op {
-                Token::Lt => BinaryOperator::Lt,
-                Token::Le => BinaryOperator::Le,
-                Token::Gt => BinaryOperator::Gt,
-                Token::Ge => BinaryOperator::Ge,
+            let bop = match idx {
+                0 => BinaryOperator::Lt,
+                1 => BinaryOperator::Le,
+                2 => BinaryOperator::Gt,
+                3 => BinaryOperator::Ge,
                 _ => unreachable!(),
             };
             expression = Expression::Binary {
@@ -247,17 +283,25 @@ impl Parser {
                 operator: bop,
                 right: Box::new(right),
             };
+            if self
+                .peek_one_of(&[Token::Lt, Token::Le, Token::Gt, Token::Ge])
+                .is_some()
+            {
+                return Err(ParseError::ChainedNonAssociative(
+                    "relational (<, <=, >, >=)",
+                ));
+            }
         }
         Ok(expression)
     }
 
     fn parse_term(&mut self) -> Result<Expression, ParseError> {
         let mut expression = self.parse_factor()?;
-        while let Some(op) = self.match_one_of(&[Token::Plus, Token::Minus]) {
+        while let Some(idx) = self.match_one_of(&[Token::Plus, Token::Minus]) {
             let right = self.parse_factor()?;
-            let bop = match op {
-                Token::Plus => BinaryOperator::Add,
-                Token::Minus => BinaryOperator::Sub,
+            let bop = match idx {
+                0 => BinaryOperator::Add,
+                1 => BinaryOperator::Sub,
                 _ => unreachable!(),
             };
             expression = Expression::Binary {
@@ -271,11 +315,11 @@ impl Parser {
 
     fn parse_factor(&mut self) -> Result<Expression, ParseError> {
         let mut expression = self.parse_unary()?;
-        while let Some(op) = self.match_one_of(&[Token::Asterisk, Token::Solidus]) {
+        while let Some(idx) = self.match_one_of(&[Token::Asterisk, Token::Solidus]) {
             let right = self.parse_unary()?;
-            let bop = match op {
-                Token::Asterisk => BinaryOperator::Mul,
-                Token::Solidus => BinaryOperator::Div,
+            let bop = match idx {
+                0 => BinaryOperator::Mul,
+                1 => BinaryOperator::Div,
                 _ => unreachable!(),
             };
             expression = Expression::Binary {
@@ -325,7 +369,7 @@ impl Parser {
                         Err(ParseError::UnmatchedParenthesis)
                     }
                 }
-                _ => Err(ParseError::UnexpectedToken(format!("{:?}", token))),
+                _ => Err(ParseError::UnexpectedToken(token.to_string())),
             }
         } else {
             Err(ParseError::UnexpectedEoi)
@@ -342,12 +386,23 @@ impl Parser {
         false
     }
 
-    fn match_one_of(&mut self, options: &[Token]) -> Option<Token> {
+    fn match_one_of(&mut self, options: &[Token]) -> Option<usize> {
         if let Some(t) = self.tokens.get(self.position) {
-            for option in options {
+            for (i, option) in options.iter().enumerate() {
                 if t == option {
                     self.position += 1;
-                    return Some(option.clone());
+                    return Some(i);
+                }
+            }
+        }
+        None
+    }
+
+    fn peek_one_of(&self, options: &[Token]) -> Option<usize> {
+        if let Some(t) = self.tokens.get(self.position) {
+            for (i, option) in options.iter().enumerate() {
+                if t == option {
+                    return Some(i);
                 }
             }
         }
@@ -355,10 +410,11 @@ impl Parser {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Expression {
     Name(String),
     Number(f64),
+    Boolean(bool),
     Unary {
         operator: UnaryOperator,
         expression: Box<Expression>,
@@ -370,13 +426,13 @@ pub enum Expression {
     },
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum UnaryOperator {
     Negate,
     Not,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum BinaryOperator {
     Add,
     Sub,
@@ -392,14 +448,15 @@ pub enum BinaryOperator {
     Or,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Value {
     Boolean(bool),
     Number(f64),
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ParseError {
+    ChainedNonAssociative(&'static str),
     EmptyInput,
     InvalidNumber(String),
     UnexpectedEoi,
@@ -408,14 +465,23 @@ pub enum ParseError {
 }
 
 impl Display for ParseError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "parse error occurred")
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ParseError::ChainedNonAssociative(kind) => {
+                write!(f, "chained non-associative operator in {kind} expression")
+            }
+            ParseError::EmptyInput => write!(f, "empty input"),
+            ParseError::InvalidNumber(s) => write!(f, "invalid number: '{s}'"),
+            ParseError::UnexpectedEoi => write!(f, "unexpected end of input"),
+            ParseError::UnexpectedToken(token) => write!(f, "unexpected token: '{token}'"),
+            ParseError::UnmatchedParenthesis => write!(f, "unmatched parenthesis"),
+        }
     }
 }
 
 impl Error for ParseError {}
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum EvalError {
     DivisionByZero,
     TypeMismatch,
@@ -423,8 +489,12 @@ pub enum EvalError {
 }
 
 impl Display for EvalError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "eval error occurred")
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            EvalError::DivisionByZero => write!(f, "division by zero"),
+            EvalError::TypeMismatch => write!(f, "type mismatch"),
+            EvalError::UndefinedVariable(name) => write!(f, "undefined variable: {}", name),
+        }
     }
 }
 
@@ -444,6 +514,7 @@ impl Expression {
                 set.insert(name.clone());
             }
             Number(_) => {}
+            Boolean(_) => {}
             Unary { expression, .. } => {
                 expression.collect_variables_impl(set);
             }
@@ -457,7 +528,7 @@ impl Expression {
     pub fn reduce(&self) -> Expression {
         use Expression::*;
         match self {
-            Name(_) | Number(_) => self.clone(),
+            Name(_) | Number(_) | Boolean(_) => self.clone(),
 
             Unary {
                 operator,
@@ -466,7 +537,8 @@ impl Expression {
                 let reduced = expression.reduce();
                 match (&operator, &reduced) {
                     (UnaryOperator::Negate, Number(n)) => Number(-n),
-                    (UnaryOperator::Not, Number(n)) => Number(if *n == 0.0 { 1.0 } else { 0.0 }),
+                    (UnaryOperator::Not, Number(n)) => Boolean(!truthy(&Value::Number(*n))),
+                    (UnaryOperator::Not, Boolean(b)) => Boolean(!b),
                     (
                         UnaryOperator::Not,
                         Unary {
@@ -475,7 +547,7 @@ impl Expression {
                         },
                     ) => *inner.clone(),
                     _ => Unary {
-                        operator: operator.clone(),
+                        operator: *operator,
                         expression: Box::new(reduced),
                     },
                 }
@@ -488,34 +560,70 @@ impl Expression {
             } => {
                 let left = left.reduce();
                 let right = right.reduce();
-
-                match (&left, &right, operator) {
-                    (Number(l), Number(r), op) => {
-                        let folded = match op {
-                            BinaryOperator::Add => Number(l + r),
-                            BinaryOperator::Sub => Number(l - r),
-                            BinaryOperator::Mul => Number(l * r),
-                            BinaryOperator::Div => Number(l / r),
-                            BinaryOperator::Eq => Number((*l == *r) as u8 as f64),
-                            BinaryOperator::Neq => Number((*l != *r) as u8 as f64),
-                            BinaryOperator::Lt => Number((*l < *r) as u8 as f64),
-                            BinaryOperator::Le => Number((*l <= *r) as u8 as f64),
-                            BinaryOperator::Gt => Number((*l > *r) as u8 as f64),
-                            BinaryOperator::Ge => Number((*l >= *r) as u8 as f64),
-                            BinaryOperator::And => {
-                                Number(((*l != 0.0) && (*r != 0.0)) as u8 as f64)
-                            }
-                            BinaryOperator::Or => Number(((*l != 0.0) || (*r != 0.0)) as u8 as f64),
-                        };
-                        folded
+                if *operator == BinaryOperator::Div {
+                    if let (Expression::Number(_), Expression::Number(r)) = (&left, &right) {
+                        if !r.is_finite() || *r == 0.0 {
+                            return Expression::Binary {
+                                left: Box::new(left),
+                                operator: *operator,
+                                right: Box::new(right),
+                            };
+                        }
                     }
-                    (Number(n), _, BinaryOperator::And) if *n == 0.0 => Number(0.0),
-                    (Number(n), _, BinaryOperator::Or) if *n != 0.0 => Number(1.0),
-                    (_, Number(n), BinaryOperator::And) if *n == 0.0 => Number(0.0),
-                    (_, Number(n), BinaryOperator::Or) if *n != 0.0 => Number(1.0),
+                }
+                match (&left, &right, operator) {
+                    (Number(l), Number(r), BinaryOperator::Add) => Number(l + r),
+                    (Number(l), Number(r), BinaryOperator::Sub) => Number(l - r),
+                    (Number(l), Number(r), BinaryOperator::Mul) => Number(l * r),
+                    (Number(l), Number(r), BinaryOperator::Div) => Number(l / r),
+
+                    (Number(l), Number(r), BinaryOperator::Eq) => Boolean(*l == *r),
+                    (Number(l), Number(r), BinaryOperator::Neq) => Boolean(*l != *r),
+                    (Number(l), Number(r), BinaryOperator::Lt) => Boolean(*l < *r),
+                    (Number(l), Number(r), BinaryOperator::Le) => Boolean(*l <= *r),
+                    (Number(l), Number(r), BinaryOperator::Gt) => Boolean(*l > *r),
+                    (Number(l), Number(r), BinaryOperator::Ge) => Boolean(*l >= *r),
+
+                    (Boolean(a), Boolean(b), BinaryOperator::And) => Boolean(*a && *b),
+                    (Boolean(a), Boolean(b), BinaryOperator::Or) => Boolean(*a || *b),
+                    (Boolean(a), Number(b), BinaryOperator::And) => {
+                        Boolean(*a && truthy(&Value::Number(*b)))
+                    }
+                    (Boolean(a), Number(b), BinaryOperator::Or) => {
+                        Boolean(*a || truthy(&Value::Number(*b)))
+                    }
+                    (Number(a), Boolean(b), BinaryOperator::And) => {
+                        Boolean(truthy(&Value::Number(*a)) && *b)
+                    }
+                    (Number(a), Boolean(b), BinaryOperator::Or) => {
+                        Boolean(truthy(&Value::Number(*a)) || *b)
+                    }
+                    (Number(n), _, BinaryOperator::And) if !truthy(&Value::Number(*n)) => {
+                        Boolean(false)
+                    }
+                    (Number(n), _, BinaryOperator::Or) if truthy(&Value::Number(*n)) => {
+                        Boolean(true)
+                    }
+                    (_, Number(n), BinaryOperator::And) if !truthy(&Value::Number(*n)) => {
+                        Boolean(false)
+                    }
+                    (_, Number(n), BinaryOperator::Or) if truthy(&Value::Number(*n)) => {
+                        Boolean(true)
+                    }
+                    (Boolean(false), _, BinaryOperator::And) => Boolean(false),
+                    (Boolean(true), _, BinaryOperator::Or) => Boolean(true),
+                    (_, Boolean(false), BinaryOperator::And) => Boolean(false),
+                    (_, Boolean(true), BinaryOperator::Or) => Boolean(true),
+                    (Number(l), Number(r), BinaryOperator::And) => {
+                        Boolean(truthy(&Value::Number(*l)) && truthy(&Value::Number(*r)))
+                    }
+                    (Number(l), Number(r), BinaryOperator::Or) => {
+                        Boolean(truthy(&Value::Number(*l)) || truthy(&Value::Number(*r)))
+                    }
+
                     _ => Binary {
                         left: Box::new(left),
-                        operator: operator.clone(),
+                        operator: *operator,
                         right: Box::new(right),
                     },
                 }
@@ -535,6 +643,8 @@ impl Expression {
 
             Number(n) => Ok(Value::Number(*n)),
 
+            Boolean(b) => Ok(Value::Boolean(*b)),
+
             Unary {
                 operator: op,
                 expression,
@@ -543,7 +653,7 @@ impl Expression {
                 match (op, val) {
                     (Negate, Value::Number(n)) => Ok(Value::Number(-n)),
                     (Not, Value::Boolean(b)) => Ok(Value::Boolean(!b)),
-                    (Not, Value::Number(n)) => Ok(Value::Boolean(n == 0.0)),
+                    (Not, Value::Number(n)) => Ok(Value::Boolean(!truthy(&Value::Number(n)))),
                     _ => Err(EvalError::TypeMismatch),
                 }
             }
@@ -552,37 +662,49 @@ impl Expression {
                 left,
                 operator: op,
                 right,
-            } => {
-                let l = left.evaluate(name_to_value)?;
-                let r = right.evaluate(name_to_value)?;
-                match (l, r, op) {
-                    (Value::Number(a), Value::Number(b), Add) => Ok(Value::Number(a + b)),
-                    (Value::Number(a), Value::Number(b), Sub) => Ok(Value::Number(a - b)),
-                    (Value::Number(a), Value::Number(b), Mul) => Ok(Value::Number(a * b)),
-                    (Value::Number(a), Value::Number(b), Div) => {
-                        if b == 0.0 {
-                            Err(EvalError::DivisionByZero)
-                        } else {
-                            Ok(Value::Number(a / b))
-                        }
+            } => match op {
+                And => {
+                    let lv = left.evaluate(name_to_value)?;
+                    let lb = truthy(&lv);
+                    if !lb {
+                        return Ok(Value::Boolean(false));
                     }
-                    (Value::Number(a), Value::Number(b), Eq) => Ok(Value::Boolean(a == b)),
-                    (Value::Number(a), Value::Number(b), Neq) => Ok(Value::Boolean(a != b)),
-                    (Value::Number(a), Value::Number(b), Lt) => Ok(Value::Boolean(a < b)),
-                    (Value::Number(a), Value::Number(b), Le) => Ok(Value::Boolean(a <= b)),
-                    (Value::Number(a), Value::Number(b), Gt) => Ok(Value::Boolean(a > b)),
-                    (Value::Number(a), Value::Number(b), Ge) => Ok(Value::Boolean(a >= b)),
-                    (Value::Boolean(a), Value::Boolean(b), And) => Ok(Value::Boolean(a && b)),
-                    (Value::Boolean(a), Value::Boolean(b), Or) => Ok(Value::Boolean(a || b)),
-                    (Value::Number(a), Value::Number(b), And) => {
-                        Ok(Value::Boolean((a != 0.0) && (b != 0.0)))
-                    }
-                    (Value::Number(a), Value::Number(b), Or) => {
-                        Ok(Value::Boolean((a != 0.0) || (b != 0.0)))
-                    }
-                    _ => Err(EvalError::TypeMismatch),
+                    let rv = right.evaluate(name_to_value)?;
+                    Ok(Value::Boolean(lb && truthy(&rv)))
                 }
-            }
+                Or => {
+                    let lv = left.evaluate(name_to_value)?;
+                    let lb = truthy(&lv);
+                    if lb {
+                        return Ok(Value::Boolean(true));
+                    }
+                    let rv = right.evaluate(name_to_value)?;
+                    Ok(Value::Boolean(lb || truthy(&rv)))
+                }
+                Add | Sub | Mul | Div | Eq | Neq | Lt | Le | Gt | Ge => {
+                    let l = left.evaluate(name_to_value)?;
+                    let r = right.evaluate(name_to_value)?;
+                    match (l, r, op) {
+                        (Value::Number(a), Value::Number(b), Add) => Ok(Value::Number(a + b)),
+                        (Value::Number(a), Value::Number(b), Sub) => Ok(Value::Number(a - b)),
+                        (Value::Number(a), Value::Number(b), Mul) => Ok(Value::Number(a * b)),
+                        (Value::Number(a), Value::Number(b), Div) => {
+                            if b == 0.0 {
+                                Err(EvalError::DivisionByZero)
+                            } else {
+                                Ok(Value::Number(a / b))
+                            }
+                        }
+                        (Value::Number(a), Value::Number(b), Eq) => Ok(Value::Boolean(a == b)),
+                        (Value::Number(a), Value::Number(b), Neq) => Ok(Value::Boolean(a != b)),
+                        (Value::Number(a), Value::Number(b), Lt) => Ok(Value::Boolean(a < b)),
+                        (Value::Number(a), Value::Number(b), Le) => Ok(Value::Boolean(a <= b)),
+                        (Value::Number(a), Value::Number(b), Gt) => Ok(Value::Boolean(a > b)),
+                        (Value::Number(a), Value::Number(b), Ge) => Ok(Value::Boolean(a >= b)),
+                        _ => Err(EvalError::TypeMismatch),
+                    }
+                }
+            },
         }
     }
 
@@ -616,11 +738,157 @@ impl TryFrom<&str> for Expression {
         let mut parser = Parser::new(tokens);
         let expression = parser.parse_expression()?;
         if parser.position != parser.tokens.len() {
-            return Err(ParseError::UnexpectedToken(format!(
-                "{:?}",
-                parser.tokens[parser.position]
-            )));
+            return Err(ParseError::UnexpectedToken(
+                parser.tokens[parser.position].to_string(),
+            ));
         }
         Ok(expression)
+    }
+}
+
+const fn binary_precedence(op: BinaryOperator) -> u8 {
+    use BinaryOperator::*;
+    match op {
+        Or => 1,
+        And => 2,
+        Eq | Neq => 3,
+        Lt | Le | Gt | Ge => 4,
+        Add | Sub => 5,
+        Mul | Div => 6,
+    }
+}
+
+const fn unary_precedence(_op: UnaryOperator) -> u8 {
+    7
+}
+
+const fn is_associative(op: BinaryOperator) -> bool {
+    use BinaryOperator::*;
+    matches!(op, Add | Mul | And | Or)
+}
+
+#[inline]
+fn truthy(v: &Value) -> bool {
+    match v {
+        Value::Boolean(b) => *b,
+        Value::Number(n) => n.is_finite() && *n != 0.0,
+    }
+}
+
+struct Pretty<'a>(&'a Expression);
+
+impl<'a> fmt::Display for Pretty<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use Expression::*;
+        match self.0 {
+            Name(s) => write!(f, "{}", s),
+
+            Number(n) => {
+                let n = if *n == 0.0 { 0.0 } else { *n };
+                let s = format!("{:.15}", n);
+                let s = s.trim_end_matches('0').trim_end_matches('.');
+                if s.is_empty() {
+                    write!(f, "0")
+                } else {
+                    write!(f, "{}", s)
+                }
+            }
+
+            Boolean(b) => write!(f, "{}", if *b { "true" } else { "false" }),
+
+            Unary {
+                operator,
+                expression,
+            } => {
+                let my_prec = unary_precedence(*operator);
+                let needs_parentheses = match &**expression {
+                    Binary {
+                        operator: child_op, ..
+                    } => binary_precedence(*child_op) < my_prec,
+                    Unary {
+                        operator: child_uop,
+                        ..
+                    } => unary_precedence(*child_uop) < my_prec,
+                    _ => false,
+                };
+                let op_str = match operator {
+                    UnaryOperator::Negate => "-",
+                    UnaryOperator::Not => "!",
+                };
+                write!(f, "{}", op_str)?;
+                if needs_parentheses {
+                    write!(f, "(")?;
+                }
+                Pretty(expression).fmt(f)?;
+                if needs_parentheses {
+                    write!(f, ")")?;
+                }
+                Ok(())
+            }
+
+            Binary {
+                left,
+                operator,
+                right,
+            } => {
+                let my_prec = binary_precedence(*operator);
+                let left_needs_parentheses = match &**left {
+                    Binary {
+                        operator: child_op, ..
+                    } => {
+                        let child_prec = binary_precedence(*child_op);
+                        child_prec < my_prec
+                            || (child_prec == my_prec && !is_associative(*operator))
+                    }
+                    _ => false,
+                };
+                let right_needs_parentheses = match &**right {
+                    Binary {
+                        operator: child_op, ..
+                    } => {
+                        let child_prec = binary_precedence(*child_op);
+                        child_prec < my_prec
+                            || (child_prec == my_prec && !is_associative(*operator))
+                    }
+                    _ => false,
+                };
+                if left_needs_parentheses {
+                    write!(f, "(")?;
+                }
+                Pretty(left).fmt(f)?;
+                if left_needs_parentheses {
+                    write!(f, ")")?;
+                }
+                let op_str = match operator {
+                    BinaryOperator::Add => "+",
+                    BinaryOperator::Sub => "-",
+                    BinaryOperator::Mul => "*",
+                    BinaryOperator::Div => "/",
+                    BinaryOperator::Eq => "==",
+                    BinaryOperator::Neq => "!=",
+                    BinaryOperator::Lt => "<",
+                    BinaryOperator::Le => "<=",
+                    BinaryOperator::Gt => ">",
+                    BinaryOperator::Ge => ">=",
+                    BinaryOperator::And => "&&",
+                    BinaryOperator::Or => "||",
+                };
+                write!(f, " {} ", op_str)?;
+                if right_needs_parentheses {
+                    write!(f, "(")?;
+                }
+                Pretty(right).fmt(f)?;
+                if right_needs_parentheses {
+                    write!(f, ")")?;
+                }
+                Ok(())
+            }
+        }
+    }
+}
+
+impl fmt::Display for Expression {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Pretty(self).fmt(f)
     }
 }

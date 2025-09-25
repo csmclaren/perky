@@ -7,7 +7,7 @@ pub enum Goal {
 }
 
 impl Display for Goal {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::Max => write!(f, "↑"),
             Self::Min => write!(f, "↓"),

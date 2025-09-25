@@ -249,7 +249,7 @@ impl UnigramMetric {
 }
 
 impl Display for UnigramMetric {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
     }
 }
@@ -310,7 +310,7 @@ impl BigramMetric {
 }
 
 impl Display for BigramMetric {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
     }
 }
@@ -359,7 +359,7 @@ impl TrigramMetric {
 }
 
 impl Display for TrigramMetric {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
     }
 }
@@ -395,7 +395,7 @@ impl Metric {
 }
 
 impl Display for Metric {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Metric::*;
         match self {
             Unigram(metric) => metric.fmt(f),
@@ -411,9 +411,22 @@ pub enum SortDirection {
     Descending,
 }
 
+impl Display for SortDirection {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SortRule {
     pub metric: Metric,
     pub sort_direction: SortDirection,
+}
+
+impl Display for SortRule {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} {}", self.metric, self.sort_direction)
+    }
 }
 
 pub fn partition_sort_rules(

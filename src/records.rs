@@ -314,11 +314,11 @@ pub fn filter_records(
 
 pub fn select_records(
     mut records: Vec<Record>,
-    max_records: Option<usize>,
+    max_selections: Option<usize>,
     index: Option<isize>,
 ) -> Result<Vec<Record>, String> {
-    if let Some(max_records) = max_records {
-        records.truncate(max_records);
+    if let Some(max_selections) = max_selections {
+        records.truncate(max_selections);
     }
     if let Some(index) = index {
         let length = records.len() as isize;

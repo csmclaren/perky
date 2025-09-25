@@ -52,7 +52,7 @@ impl UnigramKey {
 }
 
 impl Display for UnigramKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0 as char)
     }
 }
@@ -108,7 +108,7 @@ impl BigramKey {
 }
 
 impl Display for BigramKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let (b1, b2) = self.as_u8_pair();
         write!(f, "{}{}", b1 as char, b2 as char)
     }
@@ -166,7 +166,7 @@ impl TrigramKey {
 }
 
 impl Display for TrigramKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let (b1, b2, b3) = self.as_u8_triple();
         write!(f, "{}{}{}", b1 as char, b2 as char, b3 as char)
     }

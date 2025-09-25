@@ -26,7 +26,7 @@ impl Laterality {
 }
 
 impl Display for Laterality {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.as_char())
     }
 }
@@ -67,7 +67,7 @@ impl Position {
 }
 
 impl Display for Position {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.as_char())
     }
 }
@@ -92,7 +92,7 @@ impl TryFrom<char> for Position {
 pub struct Digit(pub Laterality, pub Position);
 
 impl Display for Digit {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}{}", self.0, self.1)
     }
 }

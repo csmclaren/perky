@@ -112,13 +112,7 @@ struct Cli {
     ///
     /// Results within this tolerance of the best score will be retained.
     /// Permitted range is 0.0 to 1.0.
-    #[arg(
-        long,
-        default_value_t = 1.0,
-        hide = true,
-        value_name = "TOLERANCE",
-        value_parser = validate_tolerance
-    )]
+    #[arg(long, default_value_t = 1.0, hide = true, value_parser = validate_tolerance)]
     tolerance: f64,
 
     /// Weighing method used for the selected metric.
@@ -143,6 +137,17 @@ struct Cli {
     #[arg(short = '3', long, value_name = "STRING")]
     region3: Option<String>,
 
+    /// Maximum number of permutations to consider.
+    #[arg(long)]
+    max_permutations: Option<u64>,
+
+    /// Maximum number of results to process before sorting, filtering, and selecting.
+    ///
+    /// An unreasonably large number of results can cause the post-processing steps to take a long
+    /// time to complete.
+    #[arg(long, default_value_t = 10000)]
+    max_records: u32,
+
     /// Use parallel execution algorithm.
     ///
     /// Setting this to false will force the use of a specialized
@@ -150,10 +155,6 @@ struct Cli {
     /// (which uses the parallel execution algorithm, but for a single thread).
     #[arg(long, action = ArgAction::Set, hide = true, default_value_t = true)]
     parallelize: bool,
-
-    /// Maximum number of permutations to consider.
-    #[arg(short = 'p', long)]
-    permutations: Option<u64>,
 
     /// Number of nanoseconds to yield threads per permutation batch.
     #[arg(long, default_value_t = 0)]
@@ -163,13 +164,6 @@ struct Cli {
     /// 0 means use all logical cores.
     #[arg(long, default_value_t = 0)]
     threads: usize,
-
-    /// Maximum number of results to process before sorting, filtering, and selecting.
-    ///
-    /// An unreasonably large number of results can cause the post-processing steps to take a long
-    /// time to complete.
-    #[arg(long, value_name = "N", default_value_t = 10000)]
-    truncate: u32,
 
     /// Metrics to sort in ascending order.
     ///
@@ -209,15 +203,15 @@ struct Cli {
     )]
     filters: Vec<String>,
 
+    /// Maximum number of records to print.
+    ///
+    /// This is similar to max_records, but occurs after sorting, filtering, and selecting.
+    #[arg(long)]
+    max_selections: Option<usize>,
+
     /// Select a specific record by index. Negative values count from the end.
     #[arg(short = 'i', long)]
     index: Option<isize>,
-
-    /// Maximum number of records to print.
-    ///
-    /// This is similar to truncate, but occurs after sorting, filtering, and selecting.
-    #[arg(short = 'r', long)]
-    max_records: Option<usize>,
 
     /// Format for printing.
     #[arg(long, default_value = "text", value_enum)]
@@ -450,28 +444,32 @@ fn main() -> Result<(), Box<dyn Error>> {
     let key_table = KeyTable::read_from_path(&key_table_fpath)
         .map_err(|e| format!("Failed to load file '{}': {e}", key_table_fpath.display()))?;
 
-    let unigram_table = match cli.unigram_table_fpath {
+    let opt_unigram_table_fpath = cli.unigram_table_fpath;
+    let opt_bigram_table_fpath = cli.bigram_table_fpath;
+    let opt_trigram_table_fpath = cli.trigram_table_fpath;
+
+    let unigram_table = match &opt_unigram_table_fpath {
         None => read_unigram_table_from_bytes(DEFAULT_1_GRAMS)?,
         Some(fname) => {
-            let fpath = Path::new(&fname);
+            let fpath = Path::new(fname);
             read_unigram_table_from_path(fpath)
                 .map_err(|e| format!("Failed to load file '{}': {e}", fpath.display()))?
         }
     };
 
-    let bigram_table = match cli.bigram_table_fpath {
+    let bigram_table = match &opt_bigram_table_fpath {
         None => read_bigram_table_from_bytes(DEFAULT_2_GRAMS)?,
         Some(fname) => {
-            let fpath = Path::new(&fname);
+            let fpath = Path::new(fname);
             read_bigram_table_from_path(fpath)
                 .map_err(|e| format!("Failed to load file '{}': {e}", fpath.display()))?
         }
     };
 
-    let trigram_table = match cli.trigram_table_fpath {
+    let trigram_table = match &opt_trigram_table_fpath {
         None => read_trigram_table_from_bytes(DEFAULT_3_GRAMS)?,
         Some(fname) => {
-            let fpath = Path::new(&fname);
+            let fpath = Path::new(fname);
             read_trigram_table_from_path(fpath)
                 .map_err(|e| format!("Failed to load file '{}': {e}", fpath.display()))?
         }
@@ -608,9 +606,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let parallelize = cli.parallelize;
+    let opt_max_permutations = cli.max_permutations;
 
-    let permutations = cli.permutations.unwrap_or(u64::MAX);
+    let opt_max_records = Some(cli.max_records);
+
+    let parallelize = cli.parallelize;
 
     let sleep_ns = cli.sleep_ns;
 
@@ -622,10 +622,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             .build_global()
             .map_err(|e| format!("Failed to initialize thread pool: {}", e))?;
     }
-
-    // Argument parsing (truncating)
-
-    let truncate = cli.truncate;
 
     // Argument parsing (sorting)
 
@@ -647,7 +643,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Argument parsing (selecting)
 
-    let opt_max_records = cli.max_records;
+    let opt_max_selections = cli.max_selections;
 
     let opt_index = cli.index;
 
@@ -707,9 +703,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let key_table_matrix = key_table.to_byte_matrix();
 
+    let possible_permutations =
+        factorial(length1 as u64) * factorial(length2 as u64) * factorial(length3 as u64);
+
     let expected_permutations = cmp::min(
-        permutations,
-        factorial(length1 as u64) * factorial(length2 as u64) * factorial(length3 as u64),
+        opt_max_permutations.unwrap_or(u64::MAX),
+        possible_permutations,
     );
 
     // Permuting (main)
@@ -740,20 +739,21 @@ fn main() -> Result<(), Box<dyn Error>> {
         Duration::from_millis(200),
     );
 
-    let (mut key_table_matrices, score, total_permutations, truncated) = permute_and_substitute(
-        &key_table_matrix,
-        (array1, length1, &coordinates1),
-        (array2, length2, &coordinates2),
-        (array3, length3, &coordinates3),
-        progress_fn,
-        scoring_fn,
-        goal,
-        tolerance,
-        permutations,
-        parallelize,
-        sleep_ns,
-        Some(truncate),
-    )?;
+    let (total_permutations, permutations_truncated, mut records, records_truncated) =
+        permute_and_substitute(
+            &key_table_matrix,
+            (array1, length1, &coordinates1),
+            (array2, length2, &coordinates2),
+            (array3, length3, &coordinates3),
+            progress_fn,
+            scoring_fn,
+            goal,
+            tolerance,
+            opt_max_permutations,
+            opt_max_records,
+            parallelize,
+            sleep_ns,
+        )?;
 
     let mut stderr = stderr.lock().unwrap();
 
@@ -766,17 +766,17 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Permuting (teardown)
 
-    let total_records = key_table_matrices.len();
+    let total_records = records.len();
 
     // Deduplicating
 
     let mut seen = HashSet::new();
-    key_table_matrices.retain(|k| seen.insert(k.clone()));
-    let total_unique_records = key_table_matrices.len();
+    records.retain(|k| seen.insert(k.clone()));
+    let total_unique_records = records.len();
 
     // Measuring
 
-    let mut records: Vec<_> = key_table_matrices
+    let mut records: Vec<_> = records
         .into_iter()
         .map(|key_table_matrix| {
             let unigram_measurements = metrics::UnigramMetric::VARIANT_ARRAY
@@ -867,7 +867,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Selecting
 
-    let records = select_records(records, opt_max_records, opt_index)?;
+    let records = select_records(records, opt_max_selections, opt_index)?;
 
     // Printing
 
@@ -879,6 +879,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let opt_metadata = print_metadata
         .unwrap_or(total_permutations > 1)
         .then(|| Metadata {
+            layout_table_fpath: &layout_table_fpath,
+            key_table_fpath: &key_table_fpath,
+            opt_unigram_table_fpath: opt_unigram_table_fpath.as_deref(),
+            opt_bigram_table_fpath: opt_bigram_table_fpath.as_deref(),
+            opt_trigram_table_fpath: opt_trigram_table_fpath.as_deref(),
             unigram_table_sum,
             bigram_table_sum,
             trigram_table_sum,
@@ -886,11 +891,17 @@ fn main() -> Result<(), Box<dyn Error>> {
             metric,
             tolerance,
             weight,
+            opt_max_permutations,
+            opt_max_records,
+            sort_rules: &sort_rules,
+            filters: &filters,
+            opt_max_selections,
+            opt_index,
             total_permutations,
-            elapsed_duration,
-            score,
-            truncated,
+            permutations_truncated,
             total_records,
+            records_truncated,
+            elapsed_duration,
             total_unique_records,
             total_selected_records,
         });
