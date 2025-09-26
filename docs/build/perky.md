@@ -50,30 +50,32 @@ Perky's unique feature is a high-performance, parallelized, and permutation-base
   - [Permuting](#permuting)
     - [Metric](#metric)
     - [Goal](#goal)
+    - [Tolerance](#tolerance)
+      - [Examples](#examples-5)
     - [Weight](#weight)
     - [Progress and metadata reporting](#progress-and-metadata-reporting)
-    - [Examples](#examples-5)
+    - [Examples](#examples-6)
     - [Parallelization](#parallelization)
-      - [Examples](#examples-6)
+      - [Examples](#examples-7)
     - [Practical limits](#practical-limits)
     - [Truncating](#truncating)
-      - [Examples](#examples-7)
+      - [Examples](#examples-8)
     - [Deduplicating](#deduplicating)
     - [Sorting](#sorting)
       - [Syntax](#syntax)
-      - [Examples](#examples-8)
+      - [Examples](#examples-9)
     - [Filtering](#filtering)
       - [Syntax](#syntax-1)
         - [Operators by precedence](#operators-by-precedence)
-      - [Examples](#examples-9)
+      - [Examples](#examples-10)
     - [Selecting](#selecting)
       - [Syntax](#syntax-2)
-      - [Examples](#examples-10)
+      - [Examples](#examples-11)
   - [Printing](#printing)
     - [Metadata](#metadata)
     - [Selected records](#selected-records)
     - [Format](#format-3)
-    - [Examples](#examples-11)
+    - [Examples](#examples-12)
 - [Author and copyright](#author-and-copyright)
 - [License](#license)
 
@@ -158,10 +160,10 @@ This document refers to example files and resource files that are part of the [o
 
 These can be downloaded here:
 
-- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-examples.tar.gz)
-- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-examples.zip)
-- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-resources.tar.gz)
-- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.1.7/perky-0.1.7-resources.zip)
+- [Examples (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.2.0/perky-0.2.0-examples.tar.gz)
+- [Examples (.zip)](https://github.com/csmclaren/perky/releases/download/v0.2.0/perky-0.2.0-examples.zip)
+- [Resources (.tar.gz)](https://github.com/csmclaren/perky/releases/download/v0.2.0/perky-0.2.0-resources.tar.gz)
+- [Resources (.zip)](https://github.com/csmclaren/perky/releases/download/v0.2.0/perky-0.2.0-resources.zip)
 
 Any references to example files or resource files in this document assume their respective `.tar.gz` or `.zip` file has been extracted to the current working directory.
 
@@ -171,7 +173,7 @@ To include Perky as a library in your own Rust project, add the following to you
 
 ``` toml
 [dependencies]
-perky = "0.1.7"
+perky = "0.2.0"
 ```
 
 ## Usage
@@ -692,7 +694,17 @@ For example, to score against `hsb` (Half scissor bigrams), specify `--metric hs
 
 When permuting, Perky scores the specified [metric](#metrics) by its direction, with the goal of finding the key tables generally considered better for that metric. To explicitly choose the goal for the metric, specify `--goal <GOAL>` (or `-g <GOAL>`), where `<GOAL>` is `max` or `min`. In this way, you can choose to find key tables generally considered *worse* for that metric.
 
-For example, one can score against `fsb` (Full scissor bigrams) to find the worse performing key tables by specifying `--metric fsb` and `--goal max`.
+For example, one can score against `fsb` (Full scissor bigrams) to find the worst performing key tables by specifying `--metric fsb` and `--goal max`.
+
+#### Tolerance
+
+By default, only the best records are retained. You can instruct perky to be more flexible about what it retains by specifying a value for `--tolerance <TOLERANCE>`. *TOLERANCE* must be a number between 0.0 and 1.0.
+
+To determine the threshold score that must be met for a record to be retained, when maximizing a metric, Perky multiplies the best score by *TOLERANCE* and, when minimizing a metric, Perky divides the best score by *TOLERANCE*.
+
+##### Examples
+
+To retain all records within 90% of the best score for the specified metric, specify `--tolerance 0.90`.
 
 #### Weight
 
@@ -750,6 +762,7 @@ On the test machine, this permutation finished so quickly that it wasn't able to
     trigram table sum:          2098121156991
     goal:                       ↓
     metric:                     Sfb
+    tolerance:                  1
     weight:                     Effort
     max permutations:           null
     max records:                10000
@@ -761,8 +774,8 @@ On the test machine, this permutation finished so quickly that it wasn't able to
     permutations truncated:     false
     total records:              1
     records truncated:          false
-    elapsed duration:           206.356875ms
-    efficiency:                 569ns / permutation
+    elapsed duration:           207.337334ms
+    efficiency:                 571ns / permutation
     total unique records:       1
     total selected records:     1
 
@@ -1133,6 +1146,7 @@ perky \
   "trigram_table_sum": 2098121156991,
   "goal": "↓",
   "metric": "Sfb",
+  "tolerance": 1.0,
   "weight": "Raw",
   "max_permutations": null,
   "max_records": 10000,
@@ -1146,11 +1160,11 @@ perky \
   "records_truncated": false,
   "elapsed_duration": {
     "secs": 0,
-    "nanos": 508541
+    "nanos": 761500
   },
   "efficiency": {
     "secs": 0,
-    "nanos": 508541
+    "nanos": 761500
   },
   "total_unique_records": 1,
   "total_selected_records": 1

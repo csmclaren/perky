@@ -112,7 +112,7 @@ struct Cli {
     ///
     /// Results within this tolerance of the best score will be retained.
     /// Permitted range is 0.0 to 1.0.
-    #[arg(long, default_value_t = 1.0, hide = true, value_parser = validate_tolerance)]
+    #[arg(long, default_value_t = 1.0, value_parser = validate_tolerance)]
     tolerance: f64,
 
     /// Weighing method used for the selected metric.

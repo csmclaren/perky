@@ -634,7 +634,17 @@ For example, to score against `hsb` (Half scissor bigrams), specify `--metric hs
 
 When permuting, Perky scores the specified [metric](#metrics) by its direction, with the goal of finding the key tables generally considered better for that metric. To explicitly choose the goal for the metric, specify `--goal <GOAL>` (or `-g <GOAL>`), where `<GOAL>` is `max` or `min`. In this way, you can choose to find key tables generally considered *worse* for that metric.
 
-For example, one can score against `fsb` (Full scissor bigrams) to find the worse performing key tables by specifying `--metric fsb` and `--goal max`.
+For example, one can score against `fsb` (Full scissor bigrams) to find the worst performing key tables by specifying `--metric fsb` and `--goal max`.
+
+#### Tolerance
+
+By default, only the best records are retained. You can instruct perky to be more flexible about what it retains by specifying a value for `--tolerance <TOLERANCE>`. *TOLERANCE* must be a number between 0.0 and 1.0.
+
+To determine the threshold score that must be met for a record to be retained, when maximizing a metric, Perky multiplies the best score by *TOLERANCE* and, when minimizing a metric, Perky divides the best score by *TOLERANCE*.
+
+##### Examples
+
+To retain all records within 90% of the best score for the specified metric, specify `--tolerance 0.90`.
 
 #### Weight
 
@@ -692,6 +702,7 @@ On the test machine, this permutation finished so quickly that it wasn't able to
     trigram table sum:          2098121156991
     goal:                       ↓
     metric:                     Sfb
+    tolerance:                  1
     weight:                     Effort
     max permutations:           null
     max records:                10000
@@ -703,8 +714,8 @@ On the test machine, this permutation finished so quickly that it wasn't able to
     permutations truncated:     false
     total records:              1
     records truncated:          false
-    elapsed duration:           206.356875ms
-    efficiency:                 569ns / permutation
+    elapsed duration:           207.337334ms
+    efficiency:                 571ns / permutation
     total unique records:       1
     total selected records:     1
 
@@ -1071,6 +1082,7 @@ perky \
   "trigram_table_sum": 2098121156991,
   "goal": "↓",
   "metric": "Sfb",
+  "tolerance": 1.0,
   "weight": "Raw",
   "max_permutations": null,
   "max_records": 10000,
@@ -1084,11 +1096,11 @@ perky \
   "records_truncated": false,
   "elapsed_duration": {
     "secs": 0,
-    "nanos": 508541
+    "nanos": 761500
   },
   "efficiency": {
     "secs": 0,
-    "nanos": 508541
+    "nanos": 761500
   },
   "total_unique_records": 1,
   "total_selected_records": 1

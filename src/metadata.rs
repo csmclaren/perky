@@ -64,8 +64,6 @@ impl Display for Metadata<'_> {
 
 impl From<&Metadata<'_>> for Value {
     fn from(value: &Metadata<'_>) -> Self {
-        // TODO add tolerance
-        // "tolerance": value.tolerance,
         json!({
             "layout_table_fpath": value.layout_table_fpath,
             "key_table_fpath": value.key_table_fpath,
@@ -77,6 +75,7 @@ impl From<&Metadata<'_>> for Value {
             "trigram_table_sum": value.trigram_table_sum,
             "goal": value.goal.to_string(),
             "metric": value.metric.to_string(),
+            "tolerance": value.tolerance,
             "weight": value.weight.to_string(),
             "max_permutations": value.max_permutations_opt,
             "max_records": value.max_records_opt,
@@ -106,8 +105,6 @@ impl From<&Metadata<'_>> for Value {
 
 impl WriteStyled for Metadata<'_> {
     fn write_styled(&self, writer: &mut dyn WriteColor) -> io::Result<()> {
-        // TODO add tolerance
-        // tolerance:                  {}\n\
         writeln!(
             writer,
             "layout table fpath:         {:?}\n\
@@ -120,6 +117,7 @@ impl WriteStyled for Metadata<'_> {
              trigram table sum:          {}\n\
              goal:                       {}\n\
              metric:                     {}\n\
+             tolerance:                  {}\n\
              weight:                     {}\n\
              max permutations:           {}\n\
              max records:                {}\n\
@@ -145,6 +143,7 @@ impl WriteStyled for Metadata<'_> {
             self.trigram_table_sum,
             self.goal.to_string(),
             self.metric.to_string(),
+            self.tolerance,
             self.weight.to_string(),
             format_display_opt(self.max_permutations_opt),
             format_display_opt(self.max_records_opt),
